@@ -73,19 +73,19 @@ const appRouter = createBrowserRouter([
 
 // jobs
 {
-  path:'admin/jobs',
+  path:'/admin/jobs',
   element:<AdminJobs/>
 },
 {
-  path:'admin/jobs/create',
+  path:'/admin/jobs/create',
   element:<PostJob/>
 },
 {
-  path:'admin/jobs/:id/applicants',
+  path:'/admin/jobs/:id/applicants',
   element:<Applicants/>
 },
 {
-  path:'admin/ApplicantsTable',
+  path:'/admin/ApplicantsTable',
   element:<ApplicantsTable/>
 },
 {

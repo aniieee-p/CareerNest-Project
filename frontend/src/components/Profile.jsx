@@ -5,6 +5,7 @@ import { Badge } from "./ui/badge";
 import AppliedJobTable from "./AppliedJobTable";
 import UpdateProfileDialog from "./UpdateProfileDialog";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import useGetAppliedJobs from "@/hooks/useGetAppliedJobs";
 import { motion } from "framer-motion";
 import {
@@ -24,10 +25,16 @@ const FadeUp = ({ children, delay = 0 }) => (
 );
 
 const Profile = () => {
+  const { user } = useSelector((store) => store.auth);
+  const navigate = useNavigate();
   useGetAppliedJobs();
   const [open, setOpen] = useState(false);
-  const { user } = useSelector((store) => store.auth);
   const { allAppliedJobs = [], savedJobs = [] } = useSelector((store) => store.job);
+
+  // Redirect to login if not authenticated
+  React.useEffect(() => {
+    if (!user) navigate("/login");
+  }, [user]);
 
   const stats = [
     { icon: Send, label: "Applications", value: allAppliedJobs.length, color: "#27bbd2", bg: "rgba(39,187,210,0.1)" },
@@ -203,9 +210,15 @@ const Profile = () => {
             >
               <div className="flex items-center gap-2 mb-5">
                 <Sparkles size={16} className="text-[#27bbd2]" />
-                <h2 className="font-bold text-gray-900">Recent Applications</h2>
+                <h2 className="font-bold text-gray-900">
+                  {user?.role === "recruiter" ? "Account Info" : "Recent Applications"}
+                </h2>
               </div>
-              <AppliedJobTable />
+              {user?.role === "recruiter" ? (
+                <p className="text-sm text-[#94a3b8]">Manage your job postings and company profiles from the admin panel.</p>
+              ) : (
+                <AppliedJobTable />
+              )}
             </div>
           </FadeUp>
         </div>

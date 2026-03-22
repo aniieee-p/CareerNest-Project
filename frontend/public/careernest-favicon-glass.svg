@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="50%" stop-color="#8b5cf6"/>
+      <stop offset="100%" stop-color="#06b6d4"/>
+    </linearGradient>
+    <linearGradient id="glassGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.08"/>
+    </linearGradient>
+    <linearGradient id="shimmer" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#ffffff" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="nestGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fde68a"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
+    <filter id="blur" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="1.5"/>
+    </filter>
+  </defs>
+
+  <!-- Background gradient pill -->
+  <rect width="64" height="64" rx="16" ry="16" fill="url(#bgGrad)"/>
+
+  <!-- Soft glow blob behind glass card -->
+  <ellipse cx="32" cy="30" rx="20" ry="18" fill="#a78bfa" opacity="0.4" filter="url(#blur)"/>
+
+  <!-- Glass card -->
+  <rect x="8" y="8" width="48" height="48" rx="12" ry="12" fill="url(#glassGrad)" stroke="white" stroke-opacity="0.3" stroke-width="1"/>
+
+  <!-- Top shimmer line (glass edge highlight) -->
+  <rect x="8" y="8" width="48" height="2" rx="1" fill="url(#shimmer)"/>
+
+  <!-- Nest strands (golden, inside glass) -->
+  <path d="M18 42 Q32 50 46 42" stroke="url(#nestGold)" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.95"/>
+  <path d="M15 38 Q32 47 49 38" stroke="url(#nestGold)" stroke-width="1.8" fill="none" stroke-linecap="round" opacity="0.75"/>
+  <path d="M20 46 Q32 52 44 46" stroke="url(#nestGold)" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.6"/>
+
+  <!-- Nest left wall -->
+  <path d="M18 42 Q14 32 21 22" stroke="url(#nestGold)" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.95"/>
+
+  <!-- Nest right wall -->
+  <path d="M46 42 Q50 32 43 22" stroke="url(#nestGold)" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.95"/>
+
+  <!-- Briefcase body (white glass) -->
+  <rect x="23" y="22" width="18" height="13" rx="3" fill="white" fill-opacity="0.25" stroke="white" stroke-opacity="0.8" stroke-width="1.2"/>
+  <!-- Briefcase handle -->
+  <path d="M27 22 L27 20 Q27 18 29 18 L35 18 Q37 18 37 20 L37 22" stroke="white" stroke-opacity="0.9" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+  <!-- Briefcase divider -->
+  <line x1="23" y1="28.5" x2="41" y2="28.5" stroke="white" stroke-opacity="0.6" stroke-width="1"/>
+  <!-- Center latch -->
+  <rect x="30" y="27" width="4" height="4" rx="1" fill="white" fill-opacity="0.85"/>
+
+</svg>

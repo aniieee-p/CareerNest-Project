@@ -33,6 +33,7 @@ const jobSlice = createSlice({
         },
         toggleSaveJob:(state, action) => {
             const job = action.payload;
+            if (!state.savedJobs) state.savedJobs = [];
             const exists = state.savedJobs.some(j => j._id === job._id);
             if (exists) {
                 state.savedJobs = state.savedJobs.filter(j => j._id !== job._id);
