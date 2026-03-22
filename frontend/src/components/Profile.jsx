@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Navbar from './shared/Navbar'
-import { Avatar, AvatarImage } from './ui/avatar'
+import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar'
 import { Button } from './ui/button'
 import { Contact, Mail, Pen } from 'lucide-react'
 import { Badge } from './ui/badge'
@@ -10,7 +10,6 @@ import UpdateProfileDialog from './UpdateProfileDialog'
 import { useSelector } from 'react-redux'
 import useGetAppliedJobs from '@/hooks/useGetAppliedJobs'
 
-// const skills = ["Html", "Css", "Javascript", "Reactjs"]
 const isResume = true;
 
 const Profile = () => {
@@ -25,7 +24,10 @@ const Profile = () => {
                 <div className='flex justify-between'>
                     <div className='flex items-center gap-4'>
                         <Avatar className="h-24 w-24">
-                            <AvatarImage src="https://img.freepik.com/free-vector/creative-professional-cn-logo-template_23-2149236613.jpg?semt=ais_hybrid&w=740&q=80" alt="profile" />
+                            <AvatarImage src={user?.profile?.profilephoto} alt="profile" />
+                            <AvatarFallback className="bg-[#e0f7fa] text-[#27bbd2] text-2xl font-bold">
+                                {user?.fullname?.charAt(0)?.toUpperCase()}
+                            </AvatarFallback>
                         </Avatar>
                         <div>
                             <h1 className='font-medium text-xl'>{user?.fullname}</h1>
@@ -61,7 +63,6 @@ const Profile = () => {
             </div>
             <div className='max-w-4xl mx-auto bg-white rounded-2xl'>
                 <h1 className='font-bold text-lg my-5'>Applied Jobs</h1>
-                {/* Applied Job Table   */}
                 <AppliedJobTable />
             </div>
             <UpdateProfileDialog open={open} setOpen={setOpen}/>

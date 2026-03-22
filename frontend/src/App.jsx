@@ -1,6 +1,8 @@
 import { createBrowserRouter , RouterProvider } from "react-router-dom";
 import Login from './components/auth/Login';
 import Signup from './components/auth/Signup'
+import ForgotPassword from './components/auth/ForgotPassword';
+import ResetPassword from './components/auth/ResetPassword';
 import Home from "./components/Home";
 import Jobs from "./components/Jobs";
 import Browse from "./components/Browse";
@@ -13,6 +15,10 @@ import AdminJobs from "./components/admin/AdminJobs";
 import PostJob from "./components/admin/PostJob";
 import Applicants from "./components/admin/Applicants";
 import ApplicantsTable from "./components/admin/ApplicantsTable";
+import CareerAdvice from "./components/CareerAdvice";
+import SavedJobs from "./components/SavedJobs";
+import RecruitmentSolutions from "./components/RecruitmentSolutions";
+import ContactSupport from "./components/ContactSupport";
 
 const appRouter = createBrowserRouter([
 {
@@ -26,6 +32,14 @@ const appRouter = createBrowserRouter([
 {
   path:'/signup',
   element:<Signup />
+},
+{
+  path:'/forgot-password',
+  element:<ForgotPassword />
+},
+{
+  path:'/reset-password/:token',
+  element:<ResetPassword />
 },
 {
   path:'/jobs',
@@ -73,6 +87,22 @@ const appRouter = createBrowserRouter([
 {
   path:'admin/ApplicantsTable',
   element:<ApplicantsTable/>
+},
+{
+  path:'/career-advice',
+  element:<CareerAdvice/>
+},
+{
+  path:'/saved-jobs',
+  element:<SavedJobs/>
+},
+{
+  path:'/recruitment',
+  element:<RecruitmentSolutions/>
+},
+{
+  path:'/contact',
+  element:<ContactSupport/>
 },
 
 
