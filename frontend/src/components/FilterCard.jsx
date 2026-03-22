@@ -1,88 +1,113 @@
-import React, { useEffect, useState } from 'react'
-import { RadioGroup, RadioGroupItem } from './ui/radio-group'
-import { Label } from './ui/label'
-import { useDispatch } from 'react-redux'
-import { setSearchedQuery } from '@/redux/jobSlice'
-import { MapPin, Briefcase, IndianRupee, X } from 'lucide-react'
-import { Button } from './ui/button'
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { setSearchedQuery } from "@/redux/jobSlice";
+import { MapPin, Briefcase, IndianRupee, X, SlidersHorizontal } from "lucide-react";
+import { motion } from "framer-motion";
 
 const filterData = [
-    {
-        filterType: "Location",
-        icon: MapPin,
-        color: "text-[#27bbd2]",
-        array: ["Delhi NCR", "Bangalore", "Hyderabad", "Pune", "Mumbai"]
-    },
-    {
-        filterType: "Industry",
-        icon: Briefcase,
-        color: "text-[#6366f1]",
-        array: ["Frontend Developer", "Backend Developer", "FullStack Developer"]
-    },
-    {
-        filterType: "Salary",
-        icon: IndianRupee,
-        color: "text-[#f59e0b]",
-        array: ["0-40k", "42k-1L", "1L-5L"]
-    },
+  {
+    filterType: "Location",
+    icon: MapPin,
+    color: "#27bbd2",
+    array: ["Delhi NCR", "Bangalore", "Hyderabad", "Pune", "Mumbai"],
+  },
+  {
+    filterType: "Industry",
+    icon: Briefcase,
+    color: "#6366f1",
+    array: ["Frontend Developer", "Backend Developer", "FullStack Developer"],
+  },
+  {
+    filterType: "Salary",
+    icon: IndianRupee,
+    color: "#f59e0b",
+    array: ["0-40k", "42k-1L", "1L-5L"],
+  },
 ];
 
 const FilterCard = () => {
-    const [selectedValue, setSelectedValue] = useState('');
-    const dispatch = useDispatch();
+  const [selectedValue, setSelectedValue] = useState("");
+  const dispatch = useDispatch();
 
-    const changeHandler = (value) => setSelectedValue(value);
-    const clearFilter = () => setSelectedValue('');
+  const changeHandler = (value) => {
+    setSelectedValue((prev) => (prev === value ? "" : value));
+  };
 
-    useEffect(() => {
-        dispatch(setSearchedQuery(selectedValue));
-    }, [selectedValue]);
+  useEffect(() => {
+    dispatch(setSearchedQuery(selectedValue));
+  }, [selectedValue]);
 
-    return (
-        <div className='w-full bg-white p-4 rounded-xl border shadow-sm' style={{ borderColor: "rgba(99,102,241,0.15)", boxShadow: "0 2px 16px rgba(39,187,210,0.07)" }}>
-            <div className='flex items-center justify-between mb-3'>
-                <h1 className='font-bold text-base text-gray-800'>Filter Jobs</h1>
-                {selectedValue && (
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={clearFilter}
-                        className="text-xs text-gray-400 hover:text-red-500 h-7 px-2 gap-1"
-                    >
-                        <X size={12} /> Clear
-                    </Button>
-                )}
-            </div>
-            <hr className='mb-4' style={{ borderColor: "rgba(99,102,241,0.1)" }} />
-            <RadioGroup value={selectedValue} onValueChange={changeHandler}>
-                {filterData.map((data, index) => {
-                    const Icon = data.icon;
-                    return (
-                        <div key={index} className='mb-5'>
-                            <h2 className={`font-semibold text-sm flex items-center gap-2 mb-2 ${data.color}`}>
-                                <Icon size={14} />
-                                {data.filterType}
-                            </h2>
-                            {data.array.map((item, idx) => {
-                                const itemId = `filter-${index}-${idx}`;
-                                return (
-                                    <div key={idx} className='flex items-center space-x-2 my-2 group'>
-                                        <RadioGroupItem value={item} id={itemId} />
-                                        <Label
-                                            htmlFor={itemId}
-                                            className='text-sm text-gray-500 cursor-pointer group-hover:text-[#27bbd2] transition-colors'
-                                        >
-                                            {item}
-                                        </Label>
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    );
-                })}
-            </RadioGroup>
+  return (
+    <div
+      className="w-full rounded-2xl p-5"
+      style={{
+        background: "rgba(255,255,255,0.75)",
+        backdropFilter: "blur(12px)",
+        border: "1px solid rgba(39,187,210,0.18)",
+        boxShadow: "0 4px 24px rgba(39,187,210,0.08)",
+      }}
+    >
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2">
+          <SlidersHorizontal size={16} className="text-[#27bbd2]" />
+          <h1 className="font-bold text-gray-900 text-sm">Filters</h1>
         </div>
-    );
+        {selectedValue && (
+          <button
+            onClick={() => setSelectedValue("")}
+            className="flex items-center gap-1 text-xs text-[#94a3b8] hover:text-red-400 transition-colors"
+          >
+            <X size={12} /> Clear
+          </button>
+        )}
+      </div>
+
+      <div className="space-y-5">
+        {filterData.map(({ filterType, icon: Icon, color, array }, index) => (
+          <div key={index}>
+            <div className="flex items-center gap-2 mb-3">
+              <Icon size={13} style={{ color }} />
+              <h2 className="text-xs font-bold uppercase tracking-wider" style={{ color }}>
+                {filterType}
+              </h2>
+            </div>
+            <div className="space-y-2">
+              {array.map((item, idx) => {
+                const active = selectedValue === item;
+                return (
+                  <motion.button
+                    key={idx}
+                    whileTap={{ scale: 0.97 }}
+                    onClick={() => changeHandler(item)}
+                    className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-left transition-all"
+                    style={{
+                      background: active ? `rgba(39,187,210,0.1)` : "transparent",
+                      color: active ? "#27bbd2" : "#475569",
+                      border: active ? "1px solid rgba(39,187,210,0.3)" : "1px solid transparent",
+                    }}
+                  >
+                    <span
+                      className="h-4 w-4 rounded-full border-2 flex items-center justify-center shrink-0 transition-all"
+                      style={{
+                        borderColor: active ? "#27bbd2" : "#cbd5e1",
+                        background: active ? "#27bbd2" : "transparent",
+                      }}
+                    >
+                      {active && <span className="h-1.5 w-1.5 rounded-full bg-white" />}
+                    </span>
+                    {item}
+                  </motion.button>
+                );
+              })}
+            </div>
+            {index < filterData.length - 1 && (
+              <div className="mt-4 border-t" style={{ borderColor: "rgba(39,187,210,0.1)" }} />
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 };
 
 export default FilterCard;
