@@ -57,7 +57,13 @@ export default function Navbar() {
   const logoutHandler = async () => {
     try {
       const res = await axios.get(`${USER_API_END_POINT}/logout`, { withCredentials: true });
-      if (res.data.success) { dispatch(setUser(null)); navigate("/login"); toast.success(res.data.message); }
+      if (res.data.success) {
+        dispatch(setUser(null));
+        localStorage.removeItem("rememberMe");
+        localStorage.removeItem("rememberedUser");
+        navigate("/login");
+        toast.success(res.data.message);
+      }
     } catch (e) { toast.error(e?.response?.data?.message || "Logout failed"); }
   };
 

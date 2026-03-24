@@ -1,87 +1,259 @@
-import React from 'react'
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '../ui/table'
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
-import { MoreHorizontal } from 'lucide-react';
-import { useSelector } from 'react-redux';
-import { toast } from 'sonner';
-import { APPLICATION_API_END_POINT } from '@/utils/constant';
-import axios from 'axios';
+import React, { useState } from 'react'
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
+import { MoreHorizontal, Users, CheckCircle2, XCircle, Clock,
+  ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, FileText, Mail, Phone } from 'lucide-react'
+import { Avatar, AvatarImage, AvatarFallback } from '../ui/avatar'
+import { useSelector, useDispatch } from 'react-redux'
+import { toast } from 'sonner'
+import { APPLICATION_API_END_POINT } from '@/utils/constant'
+import { updateApplicationStatus } from '@/redux/applicationSlice'
+import axios from 'axios'
+import { motion, AnimatePresence } from 'framer-motion'
 
-const shortlistingStatus = ["Accepted", "Rejected"];
+const PAGE_SIZE_OPTIONS = [5, 10, 20]
+
+const STATUS_STYLE = {
+  accepted: { bg: "#ecfdf5", color: "#059669", border: "#a7f3d0", label: "Accepted", icon: CheckCircle2 },
+  rejected: { bg: "#fef2f2", color: "#ef4444", border: "#fecaca", label: "Rejected",  icon: XCircle      },
+  pending:  { bg: "#fffbeb", color: "#d97706", border: "#fde68a", label: "Pending",   icon: Clock        },
+}
+
+const GRADIENTS = [
+  ["#6366f1","#8b5cf6"], ["#0ea5c9","#27bbd2"], ["#f59e0b","#f97316"],
+  ["#10b981","#059669"], ["#ec4899","#f43f5e"],
+]
+const getGradient = (name = "") => GRADIENTS[name.charCodeAt(0) % GRADIENTS.length]
+
+function Tip({ label, children }) {
+  const [show, setShow] = useState(false)
+  return (
+    <span className="relative inline-flex" onMouseEnter={() => setShow(true)} onMouseLeave={() => setShow(false)}>
+      {children}
+      <AnimatePresence>
+        {show && (
+          <motion.span initial={{ opacity: 0, y: 4, scale: 0.92 }} animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 4, scale: 0.92 }} transition={{ duration: 0.12 }}
+            className="absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap px-2 py-1 rounded-lg text-[11px] font-medium text-white pointer-events-none z-50"
+            style={{ background: "#1e293b", boxShadow: "0 4px 12px rgba(0,0,0,0.2)" }}>
+            {label}
+            <span className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent" style={{ borderTopColor: "#1e293b" }} />
+          </motion.span>
+        )}
+      </AnimatePresence>
+    </span>
+  )
+}
 
 const ApplicantsTable = () => {
-    const { applicants } = useSelector(store => store.application);
+  const { applicants } = useSelector(s => s.application)
+  const dispatch = useDispatch()
+  const [page,     setPage]     = useState(1)
+  const [pageSize, setPageSize] = useState(10)
 
-    const statusHandler = async (status, id) => {
-        console.log('called');
-        try {
-            axios.defaults.withCredentials = true;
-            const res = await axios.post(`${APPLICATION_API_END_POINT}/status/${id}/update`, { status });
-            console.log(res);
-            if (res.data.success) {
-                toast.success(res.data.message);
-            }
-        } catch (error) {
-            toast.error(error.response.data.message);
-        }
-    }
+  const statusHandler = async (status, id) => {
+    try {
+      axios.defaults.withCredentials = true
+      const res = await axios.post(`${APPLICATION_API_END_POINT}/status/${id}/update`, { status })
+      if (res.data.success) {
+        dispatch(updateApplicationStatus({ id, status }))
+        toast.success(res.data.message)
+      }
+    } catch (e) { toast.error(e.response?.data?.message || "Update failed") }
+  }
 
+  const items = applicants?.applications ?? []
+
+  if (!items.length) {
     return (
-        <div>
-            <Table>
-                <TableCaption>A list of your recent applied user</TableCaption>
-                <TableHeader>
-                    <TableRow>
-                        <TableHead>FullName</TableHead>
-                        <TableHead>Email</TableHead>
-                        <TableHead>Contact</TableHead>
-                        <TableHead>Resume</TableHead>
-                        <TableHead>Date</TableHead>
-                        <TableHead className="text-right">Action</TableHead>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    {
-                        applicants && applicants?.applications?.map((item) => (
-                            <tr key={item._id}>
-                                <TableCell>{item?.applicant?.fullname}</TableCell>
-                                <TableCell>{item?.applicant?.email}</TableCell>
-                                <TableCell>{item?.applicant?.phoneNumber}</TableCell>
-                                <TableCell >
-                                    {
-                                        item.applicant?.profile?.resume ? <a className="text-blue-600 cursor-pointer" href={item?.applicant?.profile?.resume} target="_blank" rel="noopener noreferrer">{item?.applicant?.profile?.resumeOriginalName}</a> : <span>NA</span>
-                                    }
-                                </TableCell>
-                                <TableCell>{item?.applicant?.createdAt?.split("T")[0]}</TableCell>
-                                <TableCell className="float-right cursor-pointer">
-                                    <Popover>
-                                        <PopoverTrigger>
-                                            <MoreHorizontal />
-                                        </PopoverTrigger>
-                                        <PopoverContent className="w-32">
-                                            {
-                                                shortlistingStatus.map((status, index) => {
-                                                    return (
-                                                        <div onClick={() => statusHandler(status, item?._id)} key={index} className='flex w-fit items-center my-2 cursor-pointer'>
-                                                            <span>{status}</span>
-                                                        </div>
-                                                    )
-                                                })
-                                            }
-                                        </PopoverContent>
-                                    </Popover>
-
-                                </TableCell>
-
-                            </tr>
-                        ))
-                    }
-
-                </TableBody>
-
-            </Table>
+      <div className="relative overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div className="absolute -top-16 -left-16 w-64 h-64 rounded-full opacity-[0.06]"
+            style={{ background: "radial-gradient(circle,#10b981,transparent 70%)" }} />
         </div>
+        <div className="relative flex flex-col items-center justify-center py-20 px-6 text-center">
+          <motion.div initial={{ opacity: 0, scale: 0.7 }} animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, ease: [0.34, 1.56, 0.64, 1] }}
+            className="w-20 h-20 rounded-3xl flex items-center justify-center mb-5"
+            style={{ background: "linear-gradient(145deg,#ecfdf5,#d1fae5)", boxShadow: "0 8px 32px rgba(16,185,129,0.15)" }}>
+            <Users size={32} strokeWidth={1.4} style={{ color: "#10b981" }} />
+          </motion.div>
+          <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.18 }}>
+            <h3 className="text-lg font-extrabold text-slate-800 mb-2">No applicants yet</h3>
+            <p className="text-sm text-slate-400 max-w-[260px] leading-relaxed mx-auto">
+              Applications will appear here once candidates start applying.
+            </p>
+          </motion.div>
+        </div>
+      </div>
     )
+  }
+
+  const totalPages = Math.max(1, Math.ceil(items.length / pageSize))
+  const paged = items.slice((page - 1) * pageSize, page * pageSize)
+  const from  = (page - 1) * pageSize + 1
+  const to    = Math.min(page * pageSize, items.length)
+
+  return (
+    <div>
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm border-collapse">
+          <thead>
+            <tr style={{ background: "linear-gradient(90deg,#f0fdf8 0%,#ecfdf5 100%)" }}>
+              <th className="px-6 py-3.5 text-left text-[11px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 w-8">#</th>
+              {["Applicant", "Contact", "Resume", "Applied", "Status", "Actions"].map((h, i) => (
+                <th key={h} className={`px-6 py-3.5 text-[11px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 ${i === 5 ? "text-right" : "text-left"}`}>
+                  {h}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            <AnimatePresence initial={false}>
+              {paged.map((item, i) => {
+                const globalIdx = (page - 1) * pageSize + i
+                const isEven    = i % 2 === 0
+                const name      = item?.applicant?.fullname || ""
+                const [g1, g2]  = getGradient(name)
+                const rawStatus = item?.status?.toLowerCase() || "pending"
+                const st        = STATUS_STYLE[rawStatus] || STATUS_STYLE.pending
+                const StatusIcon = st.icon
+                const dateStr   = item?.applicant?.createdAt?.split("T")[0]
+
+                return (
+                  <motion.tr key={item._id}
+                    initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, x: -16 }} transition={{ duration: 0.2, delay: i * 0.03 }}
+                    className="group border-b border-slate-100/70 cursor-default"
+                    style={{ background: isEven ? "#ffffff" : "#fafffe", transition: "background 0.15s ease, box-shadow 0.15s ease" }}
+                    onMouseEnter={e => { e.currentTarget.style.background = "#f0fdf8"; e.currentTarget.style.boxShadow = "inset 3px 0 0 #10b981" }}
+                    onMouseLeave={e => { e.currentTarget.style.background = isEven ? "#ffffff" : "#fafffe"; e.currentTarget.style.boxShadow = "none" }}
+                  >
+                    <td className="px-6 py-4 text-xs text-slate-300 font-mono select-none">{String(globalIdx + 1).padStart(2, "0")}</td>
+
+                    {/* Applicant */}
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-3">
+                        <Avatar className="w-9 h-9 rounded-xl border-2 border-white shrink-0"
+                          style={{ boxShadow: "0 2px 8px rgba(15,23,42,0.1)" }}>
+                          <AvatarImage src={item?.applicant?.profile?.profilephoto} className="object-cover rounded-xl" />
+                          <AvatarFallback className="rounded-xl text-white text-xs font-extrabold"
+                            style={{ background: `linear-gradient(135deg,${g1},${g2})` }}>
+                            {name?.[0]?.toUpperCase()}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <p className="font-bold text-slate-800 text-[0.875rem] leading-tight group-hover:text-emerald-700 transition-colors duration-150">{name}</p>
+                          <p className="text-xs text-slate-400 mt-0.5 flex items-center gap-1">
+                            <Mail size={10} />{item?.applicant?.email}
+                          </p>
+                        </div>
+                      </div>
+                    </td>
+
+                    {/* Contact */}
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-1.5 text-xs text-slate-500">
+                        <Phone size={11} className="text-slate-300 shrink-0" />
+                        {item?.applicant?.phoneNumber || <span className="text-slate-300">—</span>}
+                      </div>
+                    </td>
+
+                    {/* Resume */}
+                    <td className="px-6 py-4">
+                      {item.applicant?.profile?.resume
+                        ? <a href={item?.applicant?.profile?.resume} target="_blank" rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1.5 text-xs font-medium text-indigo-500 hover:text-indigo-700 transition-colors duration-150">
+                            <FileText size={12} />
+                            {item?.applicant?.profile?.resumeOriginalName?.length > 16
+                              ? item?.applicant?.profile?.resumeOriginalName?.slice(0, 16) + "…"
+                              : item?.applicant?.profile?.resumeOriginalName}
+                          </a>
+                        : <span className="text-slate-300 text-xs">No resume</span>
+                      }
+                    </td>
+
+                    {/* Date */}
+                    <td className="px-6 py-4 text-xs text-slate-500 font-medium">{dateStr}</td>
+
+                    {/* Status */}
+                    <td className="px-6 py-4">
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold border"
+                        style={{ background: st.bg, color: st.color, borderColor: st.border }}>
+                        <StatusIcon size={11} />
+                        {st.label}
+                      </span>
+                    </td>
+
+                    {/* Actions */}
+                    <td className="px-6 py-4 text-right">
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Tip label="Update status">
+                            <motion.button whileHover={{ scale: 1.12 }} whileTap={{ scale: 0.88 }}
+                              className="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-150"
+                              style={{ color: "#94a3b8" }}
+                              onMouseEnter={e => { e.currentTarget.style.background = "#f1f5f9"; e.currentTarget.style.color = "#475569" }}
+                              onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#94a3b8" }}>
+                              <MoreHorizontal size={15} />
+                            </motion.button>
+                          </Tip>
+                        </PopoverTrigger>
+                        <PopoverContent align="end" className="w-40 p-1.5 rounded-xl border border-slate-100"
+                          style={{ boxShadow: "0 8px 28px rgba(15,23,42,0.1)" }}>
+                          <button onClick={() => statusHandler("Accepted", item?._id)}
+                            className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] text-emerald-600 hover:bg-emerald-50 transition-colors duration-150">
+                            <CheckCircle2 size={13} /> Accept
+                          </button>
+                          <button onClick={() => statusHandler("Rejected", item?._id)}
+                            className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] text-red-500 hover:bg-red-50 transition-colors duration-150 mt-0.5">
+                            <XCircle size={13} /> Reject
+                          </button>
+                        </PopoverContent>
+                      </Popover>
+                    </td>
+                  </motion.tr>
+                )
+              })}
+            </AnimatePresence>
+          </tbody>
+        </table>
+      </div>
+
+      {/* Pagination */}
+      <div className="px-6 py-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3"
+        style={{ background: "linear-gradient(90deg,#f8fffe,#f8fafc)" }}>
+        <div className="flex items-center gap-3">
+          <p className="text-xs text-slate-400">
+            <span className="font-semibold text-slate-600">{from}–{to}</span> of <span className="font-semibold text-slate-600">{items.length}</span> applicants
+          </p>
+          <div className="flex items-center gap-1.5">
+            <span className="text-xs text-slate-400">Rows</span>
+            <select value={pageSize} onChange={e => { setPageSize(Number(e.target.value)); setPage(1) }}
+              className="text-xs font-semibold text-slate-600 border border-slate-200 rounded-lg px-2 py-1 outline-none bg-white cursor-pointer">
+              {PAGE_SIZE_OPTIONS.map(n => <option key={n} value={n}>{n}</option>)}
+            </select>
+          </div>
+        </div>
+        <div className="flex items-center gap-1">
+          {[
+            { icon: ChevronsLeft,  fn: () => setPage(1),                               dis: page === 1 },
+            { icon: ChevronLeft,   fn: () => setPage(p => Math.max(1, p - 1)),         dis: page === 1 },
+            { icon: ChevronRight,  fn: () => setPage(p => Math.min(totalPages, p + 1)),dis: page === totalPages },
+            { icon: ChevronsRight, fn: () => setPage(totalPages),                      dis: page === totalPages },
+          ].map(({ icon: Icon, fn, dis }, idx) => (
+            <motion.button key={idx} whileHover={{ scale: dis ? 1 : 1.1 }} whileTap={{ scale: dis ? 1 : 0.9 }}
+              onClick={fn} disabled={dis}
+              className="w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-150 disabled:opacity-30 disabled:cursor-not-allowed"
+              style={{ color: "#64748b" }}
+              onMouseEnter={e => !dis && (e.currentTarget.style.background = "#ecfdf5")}
+              onMouseLeave={e => (e.currentTarget.style.background = "transparent")}>
+              <Icon size={14} />
+            </motion.button>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
 }
 
 export default ApplicantsTable

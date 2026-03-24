@@ -26,6 +26,7 @@ const Job = ({ job }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { savedJobs } = useSelector((store) => store.job);
+  const { user } = useSelector((store) => store.auth);
   const isSaved = savedJobs?.some((j) => j._id === job?._id);
   const { cardRef, spotRef, onMove, onLeave } = useSpotlight();
 
@@ -36,6 +37,11 @@ const Job = ({ job }) => {
 
   const handleSave = (e) => {
     e.stopPropagation();
+    if (!user) {
+      toast.error("Please login to save jobs");
+      navigate("/login");
+      return;
+    }
     dispatch(toggleSaveJob(job));
     toast.success(isSaved ? "Removed from saved" : "Job saved");
   };

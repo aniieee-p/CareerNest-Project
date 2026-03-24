@@ -10,15 +10,24 @@ import {
     PERSIST,
     PURGE,
     REGISTER,
+    createTransform,
 } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import companySlice from "./companySlice";
 import applicationSlice from "./applicationSlice";
 
+// Strip savedJobs when writing to storage — they should not persist across sessions
+const jobTransform = createTransform(
+    (inboundState) => ({ ...inboundState, savedJobs: [] }),
+    (outboundState) => outboundState,
+    { whitelist: ['job'] }
+)
+
 const persistConfig = {
     key: 'root',
-    version: 2,
+    version: 3,
     storage,
+    transforms: [jobTransform],
 }
 
 const rootReducer = combineReducers({
