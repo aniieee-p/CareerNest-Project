@@ -37,15 +37,16 @@ const ResetPassword = () => {
   };
 
   return (
-    <div>
+    <div style={{ background: "var(--cn-page)", minHeight: "100vh" }}>
       <Navbar />
       <div className="flex items-center justify-center max-w-7xl mx-auto">
         <form
           onSubmit={submitHandler}
-          className="w-1/2 border border-gray-200 rounded-md p-8 my-10"
+          className="w-full sm:w-1/2 rounded-2xl p-8 my-10"
+          style={{ border: "1px solid var(--cn-border)", background: "var(--cn-card)" }}
         >
-          <h1 className="font-bold text-xl mb-2">Reset Password</h1>
-          <p className="text-gray-500 text-sm mb-6">Enter your new password below.</p>
+          <h1 className="font-bold text-xl mb-2" style={{ color: "var(--cn-text-1)" }}>Reset Password</h1>
+          <p className="text-sm mb-6" style={{ color: "var(--cn-text-3)" }}>Enter your new password below.</p>
 
           <div className="my-3">
             <Label>New Password</Label>

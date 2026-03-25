@@ -44,7 +44,7 @@ const Companies = () => {
       value:    total,
       icon:     Building2,
       accent:   "#6366f1",
-      bg:       "linear-gradient(135deg,#eef2ff,#e0e7ff)",
+      bg:       "rgba(99,102,241,0.12)",
       bar:      "#6366f1",
       barPct:   100,
       trend:    null,
@@ -55,7 +55,7 @@ const Companies = () => {
       value:    total,
       icon:     Layers,
       accent:   "#27bbd2",
-      bg:       "linear-gradient(135deg,#ecfeff,#cffafe)",
+      bg:       "rgba(39,187,210,0.12)",
       bar:      "#27bbd2",
       barPct:   total > 0 ? 100 : 0,
       trend:    null,
@@ -66,7 +66,7 @@ const Companies = () => {
       value:    thisWeek,
       icon:     TrendingUp,
       accent:   "#10b981",
-      bg:       "linear-gradient(135deg,#ecfdf5,#d1fae5)",
+      bg:       "rgba(16,185,129,0.12)",
       bar:      "#10b981",
       barPct:   total > 0 ? Math.round((thisWeek / total) * 100) : 0,
       trend:    weekTrend,
@@ -75,7 +75,7 @@ const Companies = () => {
   ]
 
   return (
-    <div className="min-h-screen" style={{ background: "linear-gradient(160deg,#f0f4ff 0%,#f8fafc 60%,#f0fdfa 100%)" }}>
+    <div className="min-h-screen" style={{ background: "linear-gradient(160deg,var(--cn-page) 0%,var(--cn-page-alt) 60%,var(--cn-page) 100%)" }}>
       <Navbar />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10">
@@ -93,8 +93,8 @@ const Companies = () => {
               <Building2 size={20} className="text-white" />
             </div>
             <div>
-              <h1 className="text-2xl font-extrabold text-slate-800 tracking-tight leading-none">Companies</h1>
-              <p className="text-xs text-slate-400 mt-1">Manage and monitor your registered companies</p>
+              <h1 className="text-2xl font-extrabold tracking-tight leading-none" style={{ color: "var(--cn-text-1)" }}>Companies</h1>
+              <p className="text-xs mt-1" style={{ color: "var(--cn-text-3)" }}>Manage and monitor your registered companies</p>
             </div>
           </div>
 
@@ -119,8 +119,8 @@ const Companies = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.08 + i * 0.08, ease: "easeOut" }}
               whileHover={{ y: -4, boxShadow: `0 16px 40px rgba(15,23,42,0.1), 0 0 0 1px ${accent}22` }}
-              className="relative bg-white rounded-2xl p-5 border border-slate-100 overflow-hidden cursor-default"
-              style={{ boxShadow: "0 2px 12px rgba(15,23,42,0.05)", transition: "box-shadow 0.2s ease, transform 0.2s ease" }}
+              className="relative rounded-2xl p-5 border overflow-hidden cursor-default"
+              style={{ background: "var(--cn-stat-bg)", borderColor: "var(--cn-stat-border)", boxShadow: "var(--cn-card-shadow)", transition: "box-shadow 0.2s ease, transform 0.2s ease" }}
             >
               {/* top accent line */}
               <div className="absolute top-0 left-0 right-0 h-[3px] rounded-t-2xl"
@@ -146,7 +146,7 @@ const Companies = () => {
                     transition={{ delay: 0.3 + i * 0.08 }}
                     className="flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold"
                     style={{
-                      background: trend >= 0 ? "#ecfdf5" : "#fef2f2",
+                      background: trend >= 0 ? "rgba(5,150,105,0.12)" : "rgba(239,68,68,0.12)",
                       color:      trend >= 0 ? "#059669" : "#ef4444",
                     }}
                   >
@@ -160,18 +160,18 @@ const Companies = () => {
               {/* value */}
               <motion.p
                 className="text-[2rem] font-extrabold leading-none tracking-tight"
-                style={{ color: "#0f172a" }}
+              style={{ color: "var(--cn-text-1)" }}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2 + i * 0.08 }}
               >
                 {value}
               </motion.p>
-              <p className="text-[0.8rem] font-semibold text-slate-600 mt-1">{label}</p>
-              <p className="text-[0.72rem] text-slate-400 mt-0.5">{sub}</p>
+              <p className="text-[0.8rem] font-semibold mt-1" style={{ color: "var(--cn-text-2)" }}>{label}</p>
+              <p className="text-[0.72rem] mt-0.5" style={{ color: "var(--cn-text-3)" }}>{sub}</p>
 
               {/* progress bar */}
-              <div className="mt-4 h-1.5 rounded-full bg-slate-100 overflow-hidden">
+              <div className="mt-4 h-1.5 rounded-full overflow-hidden" style={{ background: "var(--cn-tag-bg)" }}>
                 <motion.div
                   className="h-full rounded-full"
                   style={{ background: `linear-gradient(90deg,${accent},${accent}bb)` }}
@@ -180,7 +180,7 @@ const Companies = () => {
                   transition={{ duration: 0.8, delay: 0.35 + i * 0.08, ease: "easeOut" }}
                 />
               </div>
-              <p className="text-[0.68rem] text-slate-400 mt-1.5 text-right">{barPct}% of total</p>
+              <p className="text-[0.68rem] mt-1.5 text-right" style={{ color: "var(--cn-text-3)" }}>{barPct}% of total</p>
             </motion.div>
           ))}
         </div>
@@ -199,10 +199,10 @@ const Companies = () => {
               value={input}
               onChange={e => setInput(e.target.value)}
               placeholder="Search companies…"
-              className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-200 bg-white text-sm text-slate-700 placeholder-slate-400 outline-none transition-all duration-200"
-              style={{ boxShadow: "0 1px 4px rgba(15,23,42,0.04)" }}
-              onFocus={e => { e.target.style.borderColor = "#6366f1"; e.target.style.boxShadow = "0 0 0 3px rgba(99,102,241,0.12), 0 1px 4px rgba(15,23,42,0.04)" }}
-              onBlur={e  => { e.target.style.borderColor = "#e2e8f0"; e.target.style.boxShadow = "0 1px 4px rgba(15,23,42,0.04)" }}
+              className="w-full pl-9 pr-4 py-2.5 rounded-xl border text-sm placeholder-slate-400 outline-none transition-all duration-200"
+              style={{ borderColor: "var(--cn-border-input)", background: "var(--cn-sort-bg)", color: "var(--cn-text-1)", boxShadow: "0 1px 4px rgba(15,23,42,0.04)" }}
+              onFocus={e => { e.target.style.borderColor = "#6366f1"; e.target.style.boxShadow = "0 0 0 3px rgba(99,102,241,0.12)" }}
+              onBlur={e  => { e.target.style.borderColor = "var(--cn-border-input)"; e.target.style.boxShadow = "0 1px 4px rgba(15,23,42,0.04)" }}
             />
           </div>
 
@@ -212,8 +212,8 @@ const Companies = () => {
               whileHover={{ borderColor: "#6366f1" }}
               whileTap={{ scale: 0.97 }}
               onClick={() => setFilterOpen(v => !v)}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-sm font-medium text-slate-600 transition-colors duration-150"
-              style={{ boxShadow: "0 1px 4px rgba(15,23,42,0.04)" }}
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl border text-sm font-medium transition-colors duration-150"
+              style={{ borderColor: "var(--cn-sort-border)", background: "var(--cn-sort-bg)", color: "var(--cn-sort-text)", boxShadow: "0 1px 4px rgba(15,23,42,0.04)" }}
             >
               <SlidersHorizontal size={14} />
               {SORT_OPTIONS.find(o => o.value === sort)?.label}
@@ -226,8 +226,8 @@ const Companies = () => {
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 6, scale: 0.97 }}
                   transition={{ duration: 0.15 }}
-                  className="absolute right-0 top-full mt-2 w-44 bg-white rounded-xl border border-slate-100 p-1.5 z-20"
-                  style={{ boxShadow: "0 8px 28px rgba(15,23,42,0.1)" }}
+                  className="absolute right-0 top-full mt-2 w-44 rounded-xl border p-1.5 z-20"
+                  style={{ background: "var(--cn-sort-bg)", borderColor: "var(--cn-sort-border)", boxShadow: "0 8px 28px rgba(15,23,42,0.15)" }}
                 >
                   {SORT_OPTIONS.map(opt => (
                     <button
@@ -235,8 +235,8 @@ const Companies = () => {
                       onClick={() => { setSort(opt.value); setFilterOpen(false) }}
                       className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-[13px] transition-colors duration-150"
                       style={{
-                        color: sort === opt.value ? "#6366f1" : "#475569",
-                        background: sort === opt.value ? "#eef2ff" : "transparent",
+                        color: sort === opt.value ? "#6366f1" : "var(--cn-sort-text)",
+                        background: sort === opt.value ? "var(--cn-sort-item-active-bg2)" : "transparent",
                         fontWeight: sort === opt.value ? 600 : 400,
                       }}
                     >
@@ -255,8 +255,8 @@ const Companies = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.28 }}
-          className="bg-white rounded-2xl border border-slate-100 overflow-hidden"
-          style={{ boxShadow: "0 4px 28px rgba(15,23,42,0.07)" }}
+          className="rounded-2xl border overflow-hidden"
+          style={{ background: "var(--cn-table-bg)", borderColor: "var(--cn-table-border)", boxShadow: "var(--cn-card-shadow)" }}
         >
           <CompaniesTable sortOrder={sort} />
         </motion.div>

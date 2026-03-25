@@ -26,12 +26,22 @@ const ContactSupport = () => {
         }
     }
 
+    const inputStyle = {
+        background: "var(--cn-input-bg)",
+        borderColor: "var(--cn-input-border)",
+        color: "var(--cn-text-1)",
+        outline: "none",
+        transition: "border-color 0.2s",
+    }
+
     return (
-        <div>
+        <div style={{ background: "var(--cn-page)", minHeight: "100vh" }}>
             <Navbar />
             <div className='max-w-4xl mx-auto px-4 py-12'>
-                <h1 className='text-4xl font-bold text-gray-900 mb-2'>Contact <span className='text-[#27bbd2]'>Support</span></h1>
-                <p className='text-gray-500 mb-10'>Have a question? We're here to help.</p>
+                <h1 className='text-4xl font-bold mb-2' style={{ color: "var(--cn-text-1)" }}>
+                    Contact <span className='text-[#27bbd2]'>Support</span>
+                </h1>
+                <p className='mb-10' style={{ color: "var(--cn-text-2)" }}>Have a question? We're here to help.</p>
 
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-10'>
                     {/* Contact Info */}
@@ -42,12 +52,12 @@ const ContactSupport = () => {
                             { icon: Phone, label: "Phone", value: "+91 9119078783" },
                         ].map(({ icon: Icon, label, value }) => (
                             <div key={label} className='flex items-start gap-4'>
-                                <div className='bg-[#e0f7fa] p-3 rounded-full'>
+                                <div className='p-3 rounded-full' style={{ background: "rgba(39,187,210,0.1)" }}>
                                     <Icon size={18} className='text-[#27bbd2]' />
                                 </div>
                                 <div>
-                                    <p className='text-xs text-gray-400'>{label}</p>
-                                    <p className='text-sm font-medium text-gray-700'>{value}</p>
+                                    <p className='text-xs' style={{ color: "var(--cn-text-3)" }}>{label}</p>
+                                    <p className='text-sm font-medium' style={{ color: "var(--cn-text-1)" }}>{value}</p>
                                 </div>
                             </div>
                         ))}
@@ -61,7 +71,10 @@ const ContactSupport = () => {
                             value={form.name}
                             onChange={e => setForm({ ...form, name: e.target.value })}
                             required
-                            className='border border-gray-200 rounded-lg px-4 py-3 text-sm outline-none focus:border-[#27bbd2]'
+                            className='border rounded-lg px-4 py-3 text-sm'
+                            style={inputStyle}
+                            onFocus={e => e.target.style.borderColor = "#27bbd2"}
+                            onBlur={e => e.target.style.borderColor = "var(--cn-input-border)"}
                         />
                         <input
                             type="email"
@@ -69,7 +82,10 @@ const ContactSupport = () => {
                             value={form.email}
                             onChange={e => setForm({ ...form, email: e.target.value })}
                             required
-                            className='border border-gray-200 rounded-lg px-4 py-3 text-sm outline-none focus:border-[#27bbd2]'
+                            className='border rounded-lg px-4 py-3 text-sm'
+                            style={inputStyle}
+                            onFocus={e => e.target.style.borderColor = "#27bbd2"}
+                            onBlur={e => e.target.style.borderColor = "var(--cn-input-border)"}
                         />
                         <textarea
                             placeholder="Your Message"
@@ -77,12 +93,16 @@ const ContactSupport = () => {
                             value={form.message}
                             onChange={e => setForm({ ...form, message: e.target.value })}
                             required
-                            className='border border-gray-200 rounded-lg px-4 py-3 text-sm outline-none focus:border-[#27bbd2] resize-none'
+                            className='border rounded-lg px-4 py-3 text-sm resize-none'
+                            style={inputStyle}
+                            onFocus={e => e.target.style.borderColor = "#27bbd2"}
+                            onBlur={e => e.target.style.borderColor = "var(--cn-input-border)"}
                         />
                         <button
                             type="submit"
                             disabled={loading}
-                            className='bg-[#27bbd2] hover:bg-[#1fa8be] text-white px-6 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition-colors disabled:opacity-70'
+                            className='text-white px-6 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition-colors disabled:opacity-70'
+                            style={{ background: "linear-gradient(135deg,#27bbd2,#6366f1)" }}
                         >
                             {loading ? <><Loader2 size={16} className='animate-spin' /> Sending...</> : <><Send size={16} /> Send Message</>}
                         </button>

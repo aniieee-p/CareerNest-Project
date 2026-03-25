@@ -83,7 +83,7 @@ function GoogleIcon() {
 function InputField({ id, label, children }) {
   return (
     <div className="space-y-2">
-      <label htmlFor={id} className="block text-[0.8125rem] font-semibold text-slate-600 tracking-wide">
+      <label htmlFor={id} className="block text-[0.8125rem] font-semibold tracking-wide" style={{ color: "var(--cn-text-2)" }}>
         {label}
       </label>
       {children}
@@ -127,7 +127,11 @@ const Login = () => {
   useEffect(() => {
     const saved = localStorage.getItem("rememberedUser");
     if (saved) {
-      try { dispatch(setUser(JSON.parse(saved))); navigate("/"); } catch (_) {}
+      try {
+        const savedUser = JSON.parse(saved);
+        dispatch(setUser(savedUser));
+        navigate(savedUser?.role === "recruiter" ? "/admin/companies" : "/");
+      } catch (_) {}
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -173,7 +177,7 @@ const Login = () => {
           localStorage.removeItem("rememberedUser");
         }
         toast.success(res.data.message);
-        setTimeout(() => navigate("/"), 650);
+        setTimeout(() => navigate(res.data.user?.role === "recruiter" ? "/admin/companies" : "/"), 650);
       }
     } catch (err) {
       setBtnState("error");
@@ -186,8 +190,9 @@ const Login = () => {
 
   const inputStyle = (field) => ({
     paddingLeft: "2.6rem",
-    borderColor: focusedField === field ? "#6366f1" : "#e8edf4",
-    backgroundColor: focusedField === field ? "#fafbff" : "#ffffff",
+    borderColor: focusedField === field ? "#6366f1" : "var(--cn-input-border)",
+    backgroundColor: focusedField === field ? "var(--cn-input-focus)" : "var(--cn-input-bg)",
+    color: "var(--cn-text-1)",
     boxShadow: focusedField === field
       ? "0 0 0 3.5px rgba(99,102,241,0.11), 0 1px 6px rgba(99,102,241,0.07)"
       : "0 1px 2px rgba(15,23,42,0.04)",
@@ -313,8 +318,8 @@ const Login = () => {
 
       {/* ══ RIGHT PANEL ══ */}
       <motion.div
-        style={{ x: rightX, y: rightY }}
-        className="flex-1 flex items-center justify-center bg-[#f8fafc] px-8 py-14"
+        style={{ x: rightX, y: rightY, background: "var(--cn-auth-right)" }}
+        className="flex-1 flex items-center justify-center px-8 py-14"
         initial={{ opacity: 0, x: 40 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
@@ -329,17 +334,17 @@ const Login = () => {
             <div className="p-1.5 rounded-lg" style={{ background: "linear-gradient(135deg,#0ea5c9,#6366f1)" }}>
               <Briefcase size={16} className="text-white" />
             </div>
-            <span className="text-lg font-extrabold text-gray-900">
+            <span className="text-lg font-extrabold" style={{ color: "var(--cn-text-1)" }}>
               Career<span style={{ background: "linear-gradient(90deg,#0ea5c9,#6366f1)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Nest</span>
             </span>
           </Link>
 
           {/* Heading */}
           <div className="mb-8">
-            <h1 className="text-[1.65rem] font-extrabold text-slate-900 tracking-[-0.02em] leading-tight">
+            <h1 className="text-[1.65rem] font-extrabold tracking-[-0.02em] leading-tight" style={{ color: "var(--cn-text-1)" }}>
               Sign in to your account
             </h1>
-            <p className="text-[0.8125rem] text-slate-400 mt-2 leading-relaxed">
+            <p className="text-[0.8125rem] mt-2 leading-relaxed" style={{ color: "var(--cn-text-3)" }}>
               Don't have an account?{" "}
               <Link to="/signup"
                 className="font-semibold transition-colors duration-150 hover:opacity-80"
@@ -353,7 +358,7 @@ const Login = () => {
 
             {/* Role toggle */}
             <div className="relative flex gap-1.5 p-1 rounded-xl"
-              style={{ background: "#f0f1ff", border: "1px solid #e0e7ff" }}>
+              style={{ background: "var(--cn-role-bg)", border: "1px solid var(--cn-role-border)" }}>
               {[
                 { value: "student",   label: "Student",   Icon: GraduationCap },
                 { value: "recruiter", label: "Recruiter", Icon: Building2 },
@@ -402,7 +407,7 @@ const Login = () => {
                 <input id="email" type="email" name="email" value={input.email}
                   onChange={onChange} placeholder="you@example.com" required
                   onFocus={() => setFocused("email")} onBlur={() => setFocused(null)}
-                  className="w-full py-[0.72rem] pr-4 rounded-xl border text-[0.8125rem] text-slate-800 placeholder-slate-300 outline-none"
+                  className="w-full py-[0.72rem] pr-4 rounded-xl border text-[0.8125rem] placeholder-slate-300 outline-none"
                   style={inputStyle("email")} />
               </motion.div>
             </InputField>
@@ -424,7 +429,7 @@ const Login = () => {
                 <input id="password" type={showPass ? "text" : "password"} name="password"
                   value={input.password} onChange={onChange} placeholder="••••••••" required
                   onFocus={() => setFocused("password")} onBlur={() => setFocused(null)}
-                  className="w-full py-[0.72rem] pr-11 rounded-xl border text-[0.8125rem] text-slate-800 placeholder-slate-300 outline-none"
+                  className="w-full py-[0.72rem] pr-11 rounded-xl border text-[0.8125rem] placeholder-slate-300 outline-none"
                   style={inputStyle("password")} />
                 <motion.button type="button" onClick={() => setShowPass(!showPass)}
                   whileHover={{ color: "#475569" }}
@@ -585,9 +590,11 @@ const Login = () => {
             whileHover={{ y: -1.5, boxShadow: "0 6px 22px rgba(15,23,42,0.09)", borderColor: "#c7d2fe" }}
             whileTap={{ scale: 0.985, y: 0 }}
             onClick={() => toast.info("Google login coming soon")}
-            className="w-full flex items-center justify-center gap-3 py-[0.72rem] rounded-xl border bg-white text-[0.8125rem] font-semibold text-slate-700 mt-4"
+            className="w-full flex items-center justify-center gap-3 py-[0.72rem] rounded-xl border text-[0.8125rem] font-semibold mt-4"
             style={{
-              borderColor: "#e8edf4",
+              background: "var(--cn-input-bg)",
+              color: "var(--cn-text-1)",
+              borderColor: "var(--cn-input-border)",
               boxShadow: "0 1px 3px rgba(15,23,42,0.05)",
               transition: "box-shadow 0.18s ease, border-color 0.18s ease, transform 0.18s ease",
             }}
@@ -596,10 +603,10 @@ const Login = () => {
             Continue with Google
           </motion.button>
 
-          <p className="text-center text-[0.72rem] text-slate-400 mt-8 leading-relaxed">
+          <p className="text-center text-[0.72rem] mt-8 leading-relaxed" style={{ color: "var(--cn-text-3)" }}>
             By signing in you agree to our{" "}
-            <span className="underline cursor-pointer hover:text-slate-500 transition-colors duration-150">Terms</span>{" "}&{" "}
-            <span className="underline cursor-pointer hover:text-slate-500 transition-colors duration-150">Privacy Policy</span>.
+            <span className="underline cursor-pointer transition-colors duration-150" style={{ color: "var(--cn-text-2)" }}>Terms</span>{" "}&{" "}
+            <span className="underline cursor-pointer transition-colors duration-150" style={{ color: "var(--cn-text-2)" }}>Privacy Policy</span>.
           </p>
         </motion.div>
       </motion.div>

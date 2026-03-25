@@ -41,7 +41,7 @@ const LatestJobCards = ({ job }) => {
     >
       {/* inner surface */}
       <div ref={cardRef} className="relative rounded-[21px] p-5 overflow-hidden"
-        style={{ background: "linear-gradient(160deg,#ffffff 0%,rgba(39,187,210,0.03) 100%)", backdropFilter: "blur(16px)" }}
+        style={{ background: "var(--cn-card)", backdropFilter: "blur(16px)" }}
         onMouseMove={onMove} onMouseLeave={onLeave}>
 
         {/* spotlight */}
@@ -66,7 +66,7 @@ const LatestJobCards = ({ job }) => {
                 <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border-2 border-white bg-[#10b981]" />
               </div>
               <div className="min-w-0">
-                <p className="font-bold text-[#0f172a] text-[13px] leading-tight tracking-[-0.01em] truncate">{job?.company?.name}</p>
+                <p className="font-bold text-[13px] leading-tight tracking-[-0.01em] truncate" style={{ color: "var(--cn-text-1)" }}>{job?.company?.name}</p>
                 <p className="text-[11px] text-[#94a3b8] flex items-center gap-1 mt-0.5 font-medium">
                   <MapPin size={9} strokeWidth={2.5} /> India
                 </p>
@@ -85,10 +85,10 @@ const LatestJobCards = ({ job }) => {
           </div>
 
           {/* title */}
-          <h3 className="font-extrabold text-[#0f172a] text-[14.5px] tracking-[-0.02em] leading-snug mb-1.5 group-hover:text-[#0e7490] transition-colors duration-200">
+          <h3 className="font-extrabold text-[14.5px] tracking-[-0.02em] leading-snug mb-1.5 group-hover:text-[#0e7490] transition-colors duration-200" style={{ color: "var(--cn-text-1)" }}>
             {job?.title}
           </h3>
-          <p className="text-[12.5px] text-[#64748b] line-clamp-2 mb-4 leading-[1.65] font-[450]">{job?.description}</p>
+          <p className="text-[12.5px] line-clamp-2 mb-4 leading-[1.65] font-[450]" style={{ color: "var(--cn-text-2)" }}>{job?.description}</p>
 
           {/* badges */}
           <div className="flex flex-wrap gap-1.5">

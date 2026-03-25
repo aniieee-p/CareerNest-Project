@@ -15,7 +15,7 @@ const LatestJobs = () => {
       <div ref={ref} className="flex items-end justify-between mb-8">
         <div>
           <p className="text-xs font-bold tracking-widest text-[#27bbd2] uppercase mb-1">Latest Openings</p>
-          <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900">
+          <h2 className="text-3xl md:text-4xl font-extrabold" style={{ color: "var(--cn-text-1)" }}>
             <span style={{ background: "linear-gradient(90deg,#27bbd2,#6366f1)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
               Explore{" "}
             </span>

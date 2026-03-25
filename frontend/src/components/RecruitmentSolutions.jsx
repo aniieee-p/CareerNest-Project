@@ -14,28 +14,32 @@ const features = [
 const RecruitmentSolutions = () => {
     const navigate = useNavigate()
     return (
-        <div>
+        <div style={{ background: "var(--cn-page)", minHeight: "100vh" }}>
             <Navbar />
             <div className='max-w-4xl mx-auto px-4 py-12'>
-                <h1 className='text-4xl font-bold text-gray-900 mb-2'>Recruitment <span className='text-[#27bbd2]'>Solutions</span></h1>
-                <p className='text-gray-500 mb-10'>Everything you need to hire the right people, faster.</p>
+                <h1 className='text-4xl font-bold mb-2' style={{ color: "var(--cn-text-1)" }}>
+                    Recruitment <span className='text-[#27bbd2]'>Solutions</span>
+                </h1>
+                <p className='mb-10' style={{ color: "var(--cn-text-2)" }}>Everything you need to hire the right people, faster.</p>
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-6 mb-12'>
                     {features.map(({ icon: Icon, title, desc }) => (
-                        <div key={title} className='p-6 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all'>
-                            <div className='bg-[#e0f7fa] p-3 rounded-full w-fit mb-4'>
+                        <div key={title} className='p-6 rounded-xl shadow-sm hover:shadow-md transition-all'
+                          style={{ background: "var(--cn-card)", border: "1px solid var(--cn-border)" }}>
+                            <div className='p-3 rounded-full w-fit mb-4' style={{ background: "rgba(39,187,210,0.1)" }}>
                                 <Icon size={22} className='text-[#27bbd2]' />
                             </div>
-                            <h2 className='font-bold text-lg text-gray-800 mb-2'>{title}</h2>
-                            <p className='text-sm text-gray-500'>{desc}</p>
+                            <h2 className='font-bold text-lg mb-2' style={{ color: "var(--cn-text-1)" }}>{title}</h2>
+                            <p className='text-sm' style={{ color: "var(--cn-text-2)" }}>{desc}</p>
                         </div>
                     ))}
                 </div>
-                <div className='bg-[#e0f7fa] rounded-2xl p-8 text-center'>
-                    <h2 className='text-2xl font-bold text-gray-800 mb-2'>Ready to hire?</h2>
-                    <p className='text-gray-500 mb-6 text-sm'>Register your company and start posting jobs today.</p>
+                <div className='rounded-2xl p-8 text-center' style={{ background: "rgba(39,187,210,0.08)", border: "1px solid rgba(39,187,210,0.2)" }}>
+                    <h2 className='text-2xl font-bold mb-2' style={{ color: "var(--cn-text-1)" }}>Ready to hire?</h2>
+                    <p className='mb-6 text-sm' style={{ color: "var(--cn-text-2)" }}>Register your company and start posting jobs today.</p>
                     <button
                         onClick={() => navigate('/admin/companies/create')}
-                        className='bg-[#27bbd2] hover:bg-[#1fa8be] text-white px-8 py-3 rounded-full font-semibold transition-colors'
+                        className='text-white px-8 py-3 rounded-full font-semibold transition-colors'
+                        style={{ background: "linear-gradient(135deg,#27bbd2,#6366f1)" }}
                     >
                         Get Started
                     </button>

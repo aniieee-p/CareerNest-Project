@@ -27,13 +27,13 @@ const CategoryCarousel = () => {
 
   return (
     <div className="max-w-7xl mx-auto my-16 px-4">
-      <h2 className="text-3xl font-bold text-center mb-2 text-gray-800">
+      <h2 className="text-3xl font-bold text-center mb-2" style={{ color: "var(--cn-text-1)" }}>
         Browse by{" "}
         <span style={{ background: "linear-gradient(90deg,#27bbd2,#6366f1)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
           Category
         </span>
       </h2>
-      <p className="text-center text-gray-400 text-sm mb-8">Find jobs that match your expertise</p>
+      <p className="text-center text-sm mb-8" style={{ color: "var(--cn-text-3)" }}>Find jobs that match your expertise</p>
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         {categories.map(({ label, icon: Icon, bg, icon_color, border }, index) => (
@@ -44,12 +44,13 @@ const CategoryCarousel = () => {
             transition={{ delay: index * 0.05 }}
             whileHover={{ y: -4, scale: 1.02 }}
             onClick={() => searchJobHandler(label)}
-            className={`flex flex-col items-center gap-2 p-5 rounded-xl border ${border} bg-white shadow-sm hover:shadow-md transition-all cursor-pointer group`}
+            className={`flex flex-col items-center gap-2 p-5 rounded-xl border ${border} shadow-sm hover:shadow-md transition-all cursor-pointer group`}
+            style={{ background: "var(--cn-card)", backdropFilter: "blur(12px)" }}
           >
             <div className={`p-3 rounded-full ${bg} group-hover:scale-110 transition-transform`}>
               <Icon size={22} className={icon_color} />
             </div>
-            <span className="text-sm font-medium text-gray-700">{label}</span>
+            <span className="text-sm font-medium" style={{ color: "var(--cn-text-2)" }}>{label}</span>
           </motion.div>
         ))}
       </div>

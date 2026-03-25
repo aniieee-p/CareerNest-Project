@@ -44,7 +44,7 @@ const Applicants = () => {
   ]
 
   return (
-    <div className="min-h-screen" style={{ background: "linear-gradient(160deg,#f0fdfa 0%,#f8fafc 60%,#f0f4ff 100%)" }}>
+    <div className="min-h-screen" style={{ background: "linear-gradient(160deg,var(--cn-page) 0%,var(--cn-page-alt) 60%,var(--cn-page) 100%)" }}>
       <Navbar />
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10">
 
@@ -58,10 +58,10 @@ const Applicants = () => {
           <motion.button
             whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
             onClick={() => navigate("/admin/jobs")}
-            className="w-9 h-9 rounded-xl flex items-center justify-center border border-slate-200 bg-white text-slate-500 shrink-0 transition-all duration-150"
-            style={{ boxShadow: "0 1px 4px rgba(15,23,42,0.06)" }}
+            className="w-9 h-9 rounded-xl flex items-center justify-center border shrink-0 transition-all duration-150"
+            style={{ background: "var(--cn-back-btn-bg)", borderColor: "var(--cn-back-btn-border)", color: "var(--cn-back-btn-text)", boxShadow: "0 1px 4px rgba(15,23,42,0.06)" }}
             onMouseEnter={e => { e.currentTarget.style.borderColor = "#27bbd2"; e.currentTarget.style.color = "#27bbd2" }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = "#e2e8f0"; e.currentTarget.style.color = "#64748b" }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--cn-back-btn-border)"; e.currentTarget.style.color = "var(--cn-back-btn-text)" }}
           >
             <ArrowLeft size={16} />
           </motion.button>
@@ -74,7 +74,7 @@ const Applicants = () => {
               <Users size={20} className="text-white" />
             </div>
             <div>
-              <h1 className="text-2xl font-extrabold text-slate-800 tracking-tight leading-none">
+              <h1 className="text-2xl font-extrabold tracking-tight leading-none" style={{ color: "var(--cn-text-1)" }}>
                 Applicants
                 {total > 0 && (
                   <span className="ml-2.5 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-600 border border-emerald-100">
@@ -82,7 +82,7 @@ const Applicants = () => {
                   </span>
                 )}
               </h1>
-              <p className="text-xs text-slate-400 mt-1">People who applied for this position</p>
+              <p className="text-xs mt-1" style={{ color: "var(--cn-text-3)" }}>People who applied for this position</p>
             </div>
           </div>
         </motion.div>
@@ -96,8 +96,8 @@ const Applicants = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.08 + i * 0.07 }}
               whileHover={{ y: -3, boxShadow: "0 12px 32px rgba(15,23,42,0.09)" }}
-              className="relative bg-white rounded-2xl p-4 border border-slate-100 overflow-hidden cursor-default"
-              style={{ boxShadow: "0 2px 12px rgba(15,23,42,0.05)", transition: "box-shadow 0.2s ease, transform 0.2s ease" }}
+              className="relative rounded-2xl p-4 border overflow-hidden cursor-default"
+              style={{ background: "var(--cn-stat-bg)", borderColor: "var(--cn-stat-border)", boxShadow: "var(--cn-card-shadow)", transition: "box-shadow 0.2s ease, transform 0.2s ease" }}
             >
               <div
                 className="absolute top-0 left-0 right-0 h-[3px] rounded-t-2xl"
@@ -109,8 +109,8 @@ const Applicants = () => {
               >
                 <Icon size={17} style={{ color: accent }} strokeWidth={2} />
               </div>
-              <p className="text-[1.75rem] font-extrabold leading-none text-slate-900">{value}</p>
-              <p className="text-xs font-semibold text-slate-500 mt-1">{label}</p>
+              <p className="text-[1.75rem] font-extrabold leading-none" style={{ color: "var(--cn-text-1)" }}>{value}</p>
+              <p className="text-xs font-semibold mt-1" style={{ color: "var(--cn-text-2)" }}>{label}</p>
             </motion.div>
           ))}
         </div>
@@ -120,8 +120,8 @@ const Applicants = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.28 }}
-          className="bg-white rounded-2xl border border-slate-100 overflow-hidden"
-          style={{ boxShadow: "0 4px 28px rgba(15,23,42,0.07)" }}
+          className="rounded-2xl border overflow-hidden"
+          style={{ background: "var(--cn-table-bg)", borderColor: "var(--cn-table-border)", boxShadow: "var(--cn-card-shadow)" }}
         >
           <ApplicantsTable />
         </motion.div>

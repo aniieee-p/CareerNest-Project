@@ -33,7 +33,7 @@ const CompanyCreate = () => {
   }
 
   return (
-    <div className="min-h-screen" style={{ background: "linear-gradient(160deg,#f0f4ff 0%,#f8fafc 60%,#f0fdfa 100%)" }}>
+    <div className="min-h-screen" style={{ background: "linear-gradient(160deg,var(--cn-page) 0%,var(--cn-page-alt) 60%,var(--cn-page) 100%)" }}>
       <Navbar />
       <div className="max-w-lg mx-auto px-4 py-16">
 
@@ -43,13 +43,14 @@ const CompanyCreate = () => {
           {/* Back */}
           <motion.button whileHover={{ x: -3 }} whileTap={{ scale: 0.96 }}
             onClick={() => navigate("/admin/companies")}
-            className="flex items-center gap-2 text-sm text-slate-400 hover:text-slate-600 mb-8 transition-colors duration-150">
+            className="flex items-center gap-2 text-sm hover:text-[#27bbd2] mb-8 transition-colors duration-150"
+            style={{ color: "var(--cn-text-3)" }}>
             <ArrowLeft size={15} /> Back to Companies
           </motion.button>
 
           {/* Card */}
-          <div className="bg-white rounded-3xl p-8 border border-slate-100"
-            style={{ boxShadow: "0 8px 40px rgba(15,23,42,0.08)" }}>
+          <div className="rounded-3xl p-8 border"
+            style={{ background: "var(--cn-setup-bg)", borderColor: "var(--cn-stat-border)", boxShadow: "0 8px 40px rgba(15,23,42,0.08)" }}>
 
             {/* Icon */}
             <div className="flex justify-center mb-6">
@@ -64,15 +65,15 @@ const CompanyCreate = () => {
 
             {/* Heading */}
             <div className="text-center mb-8">
-              <h1 className="text-2xl font-extrabold text-slate-800 tracking-tight">Name your company</h1>
-              <p className="text-sm text-slate-400 mt-2 leading-relaxed">
+              <h1 className="text-2xl font-extrabold tracking-tight" style={{ color: "var(--cn-text-1)" }}>Name your company</h1>
+              <p className="text-sm mt-2 leading-relaxed" style={{ color: "var(--cn-text-3)" }}>
                 What's your company called? You can always update this later from the settings.
               </p>
             </div>
 
             {/* Input */}
             <div className="mb-6">
-              <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">
+              <label className="block text-xs font-bold uppercase tracking-widest mb-2" style={{ color: "var(--cn-text-3)" }}>
                 Company Name
               </label>
               <div className="relative">
@@ -87,14 +88,16 @@ const CompanyCreate = () => {
                   onFocus={() => setFocused(true)}
                   onBlur={() => setFocused(false)}
                   placeholder="e.g. Acme Corp, Microsoft…"
-                  className="w-full pl-10 pr-4 py-3 rounded-xl border text-sm text-slate-800 placeholder-slate-300 outline-none transition-all duration-200"
+                  className="w-full pl-10 pr-4 py-3 rounded-xl border text-sm placeholder-slate-300 outline-none transition-all duration-200"
                   style={{
-                    borderColor: focused ? "#6366f1" : "#e2e8f0",
+                    borderColor: focused ? "#6366f1" : "var(--cn-input-border)",
+                    background: "var(--cn-input-bg)",
+                    color: "var(--cn-text-1)",
                     boxShadow: focused ? "0 0 0 3px rgba(99,102,241,0.12)" : "0 1px 3px rgba(15,23,42,0.05)",
                   }}
                 />
               </div>
-              <p className="text-xs text-slate-400 mt-2">
+              <p className="text-xs mt-2" style={{ color: "var(--cn-text-3)" }}>
                 Use your official registered business name.
               </p>
             </div>
@@ -104,9 +107,9 @@ const CompanyCreate = () => {
               {["Acme Corp", "TechVentures", "BuildCo"].map(name => (
                 <button key={name} type="button" onClick={() => setCompanyName(name)}
                   className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-medium border transition-all duration-150"
-                  style={{ background: "#f8faff", color: "#6366f1", borderColor: "#e0e7ff" }}
-                  onMouseEnter={e => { e.currentTarget.style.background = "#eef2ff"; e.currentTarget.style.borderColor = "#6366f1" }}
-                  onMouseLeave={e => { e.currentTarget.style.background = "#f8faff"; e.currentTarget.style.borderColor = "#e0e7ff" }}>
+                  style={{ background: "var(--cn-hint-bg)", color: "var(--cn-hint-text)", borderColor: "var(--cn-hint-border)" }}
+                  onMouseEnter={e => { e.currentTarget.style.background = "var(--cn-sort-item-active-bg2)"; e.currentTarget.style.borderColor = "#6366f1" }}
+                  onMouseLeave={e => { e.currentTarget.style.background = "var(--cn-hint-bg)"; e.currentTarget.style.borderColor = "var(--cn-hint-border)" }}>
                   <Sparkles size={9} /> {name}
                 </button>
               ))}
@@ -116,9 +119,10 @@ const CompanyCreate = () => {
             <div className="flex gap-3">
               <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
                 onClick={() => navigate("/admin/companies")}
-                className="flex-1 py-3 rounded-xl text-sm font-semibold text-slate-500 border border-slate-200 bg-white transition-all duration-150"
+                className="flex-1 py-3 rounded-xl text-sm font-semibold border transition-all duration-150"
+                style={{ background: "var(--cn-cancel-bg)", borderColor: "var(--cn-cancel-border)", color: "var(--cn-cancel-text)" }}
                 onMouseEnter={e => { e.currentTarget.style.borderColor = "#6366f1"; e.currentTarget.style.color = "#6366f1" }}
-                onMouseLeave={e => { e.currentTarget.style.borderColor = "#e2e8f0"; e.currentTarget.style.color = "#64748b" }}>
+                onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--cn-cancel-border)"; e.currentTarget.style.color = "var(--cn-cancel-text)" }}>
                 Cancel
               </motion.button>
               <motion.button

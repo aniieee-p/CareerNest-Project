@@ -19,6 +19,7 @@ import CareerAdvice from "./components/CareerAdvice";
 import SavedJobs from "./components/SavedJobs";
 import RecruitmentSolutions from "./components/RecruitmentSolutions";
 import ContactSupport from "./components/ContactSupport";
+import ProtectedRoute from "./components/admin/ProtectedRoute";
 
 const appRouter = createBrowserRouter([
 {
@@ -60,33 +61,33 @@ const appRouter = createBrowserRouter([
 // for admin
 {
   path:'/admin/companies',
-  element:<Companies/>
+  element:<ProtectedRoute><Companies/></ProtectedRoute>
 },
 {
   path:'/admin/companies/create',
-  element:<CompanyCreate/>
+  element:<ProtectedRoute><CompanyCreate/></ProtectedRoute>
 },
 {
   path:'/admin/companies/:id',
-  element:<CompanySetup/>
+  element:<ProtectedRoute><CompanySetup/></ProtectedRoute>
 },
 
 // jobs
 {
   path:'/admin/jobs',
-  element:<AdminJobs/>
+  element:<ProtectedRoute><AdminJobs/></ProtectedRoute>
 },
 {
   path:'/admin/jobs/create',
-  element:<PostJob/>
+  element:<ProtectedRoute><PostJob/></ProtectedRoute>
 },
 {
   path:'/admin/jobs/:id/applicants',
-  element:<Applicants/>
+  element:<ProtectedRoute><Applicants/></ProtectedRoute>
 },
 {
   path:'/admin/ApplicantsTable',
-  element:<ApplicantsTable/>
+  element:<ProtectedRoute><ApplicantsTable/></ProtectedRoute>
 },
 {
   path:'/career-advice',
@@ -109,9 +110,8 @@ const appRouter = createBrowserRouter([
 ])
 function App() {
   return (
-    <div>
+    <div style={{ background: "var(--cn-page)", minHeight: "100vh" }}>
       <RouterProvider router ={appRouter} />
-
     </div>
   )
 }

@@ -417,7 +417,7 @@ const HeroSection = () => {
 
       {/* Bottom fade */}
       <div className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none"
-        style={{ background: "linear-gradient(to bottom,transparent,#ffffff)" }} />
+        style={{ background: "linear-gradient(to bottom,transparent,var(--cn-page))" }} />
     </section>
   );
 };

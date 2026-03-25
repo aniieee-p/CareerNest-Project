@@ -11,7 +11,7 @@ const useGetAllCompanies = () => {
       try {
         const res = await axios.get(`${COMPANY_API_END_POINT}/get`, { withCredentials: true });
         if (res.data.success) {
-          dispatch(setCompanies(res.companies));
+          dispatch(setCompanies(res.data.companies));
         }
       } catch (error) {
         console.log(error);

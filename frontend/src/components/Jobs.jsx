@@ -5,8 +5,10 @@ import Job from "./Job";
 import { useSelector, useDispatch } from "react-redux";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, MapPin, Briefcase, SlidersHorizontal, X, Tag } from "lucide-react";
-import { setSearchedQuery } from "@/redux/jobSlice";
+import { setSearchedQuery, setAllJobs } from "@/redux/jobSlice";
 import Footer from "./shared/Footer";
+import axios from "axios";
+import { JOB_API_END_POINT } from "@/utils/constant";
 
 const EMPTY_FILTERS = {
   location: null,
@@ -113,6 +115,17 @@ const Jobs = () => {
   const [localQuery, setLocalQuery] = useState(searchedQuery || "");
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  // Fetch all jobs on mount (no keyword — show everything)
+  useEffect(() => {
+    const fetchJobs = async () => {
+      try {
+        const res = await axios.get(`${JOB_API_END_POINT}/get`, { withCredentials: true });
+        if (res.data.success) dispatch(setAllJobs(res.data.jobs));
+      } catch (e) { console.log(e); }
+    };
+    fetchJobs();
+  }, []);
+
   const filterJobs = applyFilters(allJobs, filters, localQuery);
 
   // sync hero search bar → local query
@@ -138,7 +151,7 @@ const Jobs = () => {
   }, 0);
 
   return (
-    <div className="min-h-screen" style={{ background: "#f1f5f9" }}>
+    <div className="min-h-screen" style={{ background: "var(--cn-page-alt)" }}>
       <Navbar />
 
       {/* ── Hero bar ── */}
@@ -158,8 +171,8 @@ const Jobs = () => {
             initial={{ opacity: 0, scale: 0.97 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.1 }}
-            className="flex items-center gap-3 bg-white rounded-2xl p-2 max-w-2xl mx-auto"
-            style={{ boxShadow: "0 8px 32px rgba(0,0,0,0.15)" }}
+            className="flex items-center gap-3 rounded-2xl p-2 max-w-2xl mx-auto"
+            style={{ background: "var(--cn-surface)", boxShadow: "0 8px 32px rgba(0,0,0,0.15)" }}
           >
             <Search className="ml-2 h-5 w-5 text-[#94a3b8] shrink-0" />
             <input
@@ -168,14 +181,16 @@ const Jobs = () => {
               value={localQuery}
               onChange={(e) => setLocalQuery(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-              className="flex-1 outline-none text-gray-700 bg-transparent py-2 text-sm"
+              className="flex-1 outline-none py-2 text-sm"
+              style={{ background: "transparent", color: "var(--cn-text-1)" }}
             />
             <div className="flex items-center gap-2 border-l pl-3 mr-1" style={{ borderColor: "#e2e8f0" }}>
               <MapPin size={14} className="text-[#94a3b8]" />
               <input
                 type="text"
                 placeholder="Location"
-                className="outline-none text-gray-700 bg-transparent text-sm w-24"
+                className="outline-none py-2 text-sm w-24"
+              style={{ background: "transparent", color: "var(--cn-text-1)" }}
                 value={filters.location || ""}
                 onChange={(e) =>
                   handleFilterChange("location", e.target.value || null)
@@ -208,17 +223,17 @@ const Jobs = () => {
               transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
               className="mb-6 rounded-2xl overflow-hidden"
               style={{
-                background: "rgba(255,255,255,0.85)",
+                background: "var(--cn-surface-2)",
                 backdropFilter: "blur(16px)",
                 WebkitBackdropFilter: "blur(16px)",
-                border: "1px solid rgba(39,187,210,0.18)",
-                boxShadow: "0 4px 24px rgba(15,23,42,0.07), 0 1px 0 rgba(255,255,255,0.9) inset",
+                border: "1px solid var(--cn-border)",
+                boxShadow: "var(--cn-card-shadow)",
               }}
             >
               {/* header row */}
               <div
                 className="flex items-center justify-between px-4 py-3"
-                style={{ borderBottom: "1px solid rgba(15,23,42,0.05)" }}
+                style={{ borderBottom: "1px solid var(--cn-border-subtle)" }}
               >
                 <div className="flex items-center gap-2">
                   <div
@@ -227,7 +242,7 @@ const Jobs = () => {
                   >
                     <Tag size={11} className="text-white" />
                   </div>
-                  <span className="text-[12.5px] font-bold text-slate-700">Active Filters</span>
+                  <span className="text-[12.5px] font-bold" style={{ color: "var(--cn-text-1)" }}>Active Filters</span>
                   <motion.span
                     key={activeCount}
                     initial={{ scale: 0.7 }}
@@ -320,8 +335,8 @@ const Jobs = () => {
           {/* ── Jobs grid ── */}
           <div className="flex-1 min-w-0">
             <div className="flex items-center justify-between mb-5">
-              <p className="text-sm text-[#94a3b8]">
-                <span className="font-semibold text-gray-900">{filterJobs.length}</span>{" "}
+              <p className="text-sm" style={{ color: "var(--cn-text-3)" }}>
+                <span className="font-semibold" style={{ color: "var(--cn-text-1)" }}>{filterJobs.length}</span>{" "}
                 job{filterJobs.length !== 1 ? "s" : ""} found
               </p>
               <div className="flex items-center gap-3">
@@ -333,8 +348,8 @@ const Jobs = () => {
                   onClick={() => setMobileOpen(true)}
                   className="md:hidden flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold"
                   style={{
-                    background: activeCount > 0 ? "rgba(39,187,210,0.1)" : "white",
-                    color: activeCount > 0 ? "#27bbd2" : "#475569",
+                    background: activeCount > 0 ? "rgba(39,187,210,0.1)" : "var(--cn-surface)",
+                    color: activeCount > 0 ? "#27bbd2" : "var(--cn-text-2)",
                     border: "1px solid rgba(39,187,210,0.2)",
                   }}
                 >
@@ -352,8 +367,8 @@ const Jobs = () => {
                 >
                   <Search size={32} className="text-[#27bbd2]" />
                 </div>
-                <p className="font-semibold text-gray-700 mb-1">No jobs found</p>
-                <p className="text-sm text-[#94a3b8]">Try adjusting your filters or search terms</p>
+                <p className="font-semibold mb-1" style={{ color: "var(--cn-text-1)" }}>No jobs found</p>
+                <p className="text-sm" style={{ color: "var(--cn-text-3)" }}>Try adjusting your filters or search terms</p>
                 {activeCount > 0 && (
                   <button
                     onClick={handleClear}
@@ -398,12 +413,14 @@ const Jobs = () => {
               initial={{ x: "100%" }} animate={{ x: 0 }} exit={{ x: "100%" }}
               transition={{ type: "spring", stiffness: 320, damping: 30 }}
               className="fixed right-0 top-0 h-full w-80 z-50 md:hidden overflow-y-auto"
-              style={{ background: "#fff", boxShadow: "-8px 0 32px rgba(0,0,0,0.12)" }}
+              style={{ background: "var(--cn-mobile-drawer)", boxShadow: "-8px 0 32px rgba(0,0,0,0.2)" }}
             >
-              <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
-                <span className="font-extrabold text-slate-800">Filters</span>
-                <button onClick={() => setMobileOpen(false)} className="p-1.5 rounded-lg hover:bg-slate-100 transition-colors">
-                  <X size={18} className="text-slate-500" />
+              <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: "1px solid var(--cn-border-subtle)" }}>
+                <span className="font-extrabold" style={{ color: "var(--cn-text-1)" }}>Filters</span>
+                <button onClick={() => setMobileOpen(false)} className="p-1.5 rounded-lg transition-colors" style={{ color: "var(--cn-text-3)" }}
+                  onMouseEnter={e => e.currentTarget.style.background = "var(--cn-surface-hover)"}
+                  onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
+                  <X size={18} />
                 </button>
               </div>
               <div className="p-4">
@@ -413,7 +430,7 @@ const Jobs = () => {
                   onClear={handleClear}
                 />
               </div>
-              <div className="sticky bottom-0 p-4 bg-white border-t border-slate-100">
+              <div className="sticky bottom-0 p-4" style={{ background: "var(--cn-mobile-drawer)", borderTop: "1px solid var(--cn-border-subtle)" }}>
                 <button
                   onClick={() => setMobileOpen(false)}
                   className="w-full py-3 rounded-xl text-white font-bold text-sm"

@@ -46,15 +46,13 @@ const PostJob = () => {
     }
   };
 
-  const fieldStyle = {
-    borderColor: "#e2e8f0",
-    outline: "none",
-  };
+  const inputClass = "w-full px-4 py-3 rounded-xl border text-sm transition-all";
 
-  const inputClass = "w-full px-4 py-3 rounded-xl border text-sm transition-all bg-white";
+  const labelStyle = { color: "var(--cn-text-2)" };
+  const inputBaseStyle = { borderColor: "var(--cn-input-border)", background: "var(--cn-input-bg)", color: "var(--cn-text-1)", outline: "none" };
 
   return (
-    <div className="min-h-screen bg-[#f8fafc]">
+    <div className="min-h-screen" style={{ background: "var(--cn-page)" }}>
       <Navbar />
 
       <div className="max-w-7xl mx-auto px-4 py-10">
@@ -65,8 +63,8 @@ const PostJob = () => {
           className="mb-8"
         >
           <p className="text-xs font-bold tracking-widest text-[#27bbd2] uppercase mb-1">Recruiter</p>
-          <h1 className="text-3xl font-extrabold text-gray-900">Post a New Job</h1>
-          <p className="text-sm text-[#94a3b8] mt-1">Fill in the details below to publish your job listing</p>
+          <h1 className="text-3xl font-extrabold" style={{ color: "var(--cn-text-1)" }}>Post a New Job</h1>
+          <p className="text-sm mt-1" style={{ color: "var(--cn-text-3)" }}>Fill in the details below to publish your job listing</p>
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -81,110 +79,110 @@ const PostJob = () => {
               onSubmit={submitHandler}
               className="rounded-2xl p-8 space-y-5"
               style={{
-                background: "rgba(255,255,255,0.8)",
+                background: "var(--cn-form-bg)",
                 backdropFilter: "blur(12px)",
-                border: "1px solid rgba(39,187,210,0.18)",
+                border: "1px solid var(--cn-form-border)",
                 boxShadow: "0 8px 32px rgba(39,187,210,0.08)",
               }}
             >
               {/* Job Title */}
               <div>
-                <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-1.5">
+                <label className="flex items-center gap-2 text-sm font-semibold mb-1.5" style={labelStyle}>
                   <Briefcase size={14} className="text-[#27bbd2]" /> Job Title
                 </label>
                 <input
                   type="text" name="title" value={input.title}
                   onChange={changeEventHandler} placeholder="e.g. Senior React Developer"
-                  required className={inputClass} style={fieldStyle}
-                  onFocus={e => e.target.style.borderColor = "#27bbd2"}
-                  onBlur={e => e.target.style.borderColor = "#e2e8f0"}
+                  required className={inputClass} style={inputBaseStyle}
+                  onFocus={e => { e.target.style.borderColor = "#27bbd2"; e.target.style.boxShadow = "0 0 0 3px rgba(39,187,210,0.12)" }}
+                  onBlur={e => { e.target.style.borderColor = "var(--cn-input-border)"; e.target.style.boxShadow = "none" }}
                 />
               </div>
 
               {/* Description */}
               <div>
-                <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-1.5">
+                <label className="flex items-center gap-2 text-sm font-semibold mb-1.5" style={labelStyle}>
                   <FileText size={14} className="text-[#6366f1]" /> Job Description
                 </label>
                 <textarea
                   name="description" value={input.description}
                   onChange={changeEventHandler} placeholder="Describe the role, responsibilities..."
                   rows={4} required
-                  className={inputClass + " resize-none"} style={fieldStyle}
-                  onFocus={e => e.target.style.borderColor = "#27bbd2"}
-                  onBlur={e => e.target.style.borderColor = "#e2e8f0"}
+                  className={inputClass + " resize-none"} style={inputBaseStyle}
+                  onFocus={e => { e.target.style.borderColor = "#27bbd2"; e.target.style.boxShadow = "0 0 0 3px rgba(39,187,210,0.12)" }}
+                  onBlur={e => { e.target.style.borderColor = "var(--cn-input-border)"; e.target.style.boxShadow = "none" }}
                 />
               </div>
 
               {/* Requirements */}
               <div>
-                <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-1.5">
+                <label className="flex items-center gap-2 text-sm font-semibold mb-1.5" style={labelStyle}>
                   <Tag size={14} className="text-[#f59e0b]" /> Requirements
                 </label>
                 <input
                   type="text" name="requirements" value={input.requirements}
                   onChange={changeEventHandler} placeholder="e.g. React, Node.js, 3+ years experience"
-                  className={inputClass} style={fieldStyle}
-                  onFocus={e => e.target.style.borderColor = "#27bbd2"}
-                  onBlur={e => e.target.style.borderColor = "#e2e8f0"}
+                  className={inputClass} style={inputBaseStyle}
+                  onFocus={e => { e.target.style.borderColor = "#27bbd2"; e.target.style.boxShadow = "0 0 0 3px rgba(39,187,210,0.12)" }}
+                  onBlur={e => { e.target.style.borderColor = "var(--cn-input-border)"; e.target.style.boxShadow = "none" }}
                 />
               </div>
 
               {/* Grid fields */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-1.5">
+                  <label className="flex items-center gap-2 text-sm font-semibold mb-1.5" style={labelStyle}>
                     <MapPin size={14} className="text-[#27bbd2]" /> Location
                   </label>
                   <input
                     type="text" name="location" value={input.location}
                     onChange={changeEventHandler} placeholder="e.g. Bangalore, Remote"
-                    className={inputClass} style={fieldStyle}
-                    onFocus={e => e.target.style.borderColor = "#27bbd2"}
-                    onBlur={e => e.target.style.borderColor = "#e2e8f0"}
+                    className={inputClass} style={inputBaseStyle}
+                    onFocus={e => { e.target.style.borderColor = "#27bbd2"; e.target.style.boxShadow = "0 0 0 3px rgba(39,187,210,0.12)" }}
+                    onBlur={e => { e.target.style.borderColor = "var(--cn-input-border)"; e.target.style.boxShadow = "none" }}
                   />
                 </div>
                 <div>
-                  <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-1.5">
+                  <label className="flex items-center gap-2 text-sm font-semibold mb-1.5" style={labelStyle}>
                     <IndianRupee size={14} className="text-[#10b981]" /> Salary (LPA)
                   </label>
                   <input
                     type="text" name="salary" value={input.salary}
                     onChange={changeEventHandler} placeholder="e.g. 12"
-                    className={inputClass} style={fieldStyle}
-                    onFocus={e => e.target.style.borderColor = "#27bbd2"}
-                    onBlur={e => e.target.style.borderColor = "#e2e8f0"}
+                    className={inputClass} style={inputBaseStyle}
+                    onFocus={e => { e.target.style.borderColor = "#27bbd2"; e.target.style.boxShadow = "0 0 0 3px rgba(39,187,210,0.12)" }}
+                    onBlur={e => { e.target.style.borderColor = "var(--cn-input-border)"; e.target.style.boxShadow = "none" }}
                   />
                 </div>
                 <div>
-                  <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-1.5">
+                  <label className="flex items-center gap-2 text-sm font-semibold mb-1.5" style={labelStyle}>
                     <Clock size={14} className="text-[#6366f1]" /> Experience Level
                   </label>
                   <input
                     type="text" name="experience" value={input.experience}
                     onChange={changeEventHandler} placeholder="e.g. 2-4 years"
-                    className={inputClass} style={fieldStyle}
-                    onFocus={e => e.target.style.borderColor = "#27bbd2"}
-                    onBlur={e => e.target.style.borderColor = "#e2e8f0"}
+                    className={inputClass} style={inputBaseStyle}
+                    onFocus={e => { e.target.style.borderColor = "#27bbd2"; e.target.style.boxShadow = "0 0 0 3px rgba(39,187,210,0.12)" }}
+                    onBlur={e => { e.target.style.borderColor = "var(--cn-input-border)"; e.target.style.boxShadow = "none" }}
                   />
                 </div>
                 <div>
-                  <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-1.5">
+                  <label className="flex items-center gap-2 text-sm font-semibold mb-1.5" style={labelStyle}>
                     <Users size={14} className="text-[#f59e0b]" /> No. of Positions
                   </label>
                   <input
                     type="number" name="position" value={input.position}
                     onChange={changeEventHandler} min={1}
-                    className={inputClass} style={fieldStyle}
-                    onFocus={e => e.target.style.borderColor = "#27bbd2"}
-                    onBlur={e => e.target.style.borderColor = "#e2e8f0"}
+                    className={inputClass} style={inputBaseStyle}
+                    onFocus={e => { e.target.style.borderColor = "#27bbd2"; e.target.style.boxShadow = "0 0 0 3px rgba(39,187,210,0.12)" }}
+                    onBlur={e => { e.target.style.borderColor = "var(--cn-input-border)"; e.target.style.boxShadow = "none" }}
                   />
                 </div>
               </div>
 
               {/* Job Type chips */}
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Job Type</label>
+                <label className="block text-sm font-semibold mb-2" style={labelStyle}>Job Type</label>
                 <div className="flex flex-wrap gap-2">
                   {jobTypes.map((type) => (
                     <button
@@ -193,9 +191,9 @@ const PostJob = () => {
                       onClick={() => setInput({ ...input, jobType: type })}
                       className="px-4 py-2 rounded-xl text-sm font-medium transition-all border-2"
                       style={{
-                        borderColor: input.jobType === type ? "#27bbd2" : "#e2e8f0",
+                        borderColor: input.jobType === type ? "#27bbd2" : "var(--cn-input-border)",
                         background: input.jobType === type ? "rgba(39,187,210,0.1)" : "transparent",
-                        color: input.jobType === type ? "#27bbd2" : "#94a3b8",
+                        color: input.jobType === type ? "#27bbd2" : "var(--cn-text-3)",
                       }}
                     >
                       {type}
@@ -207,11 +205,11 @@ const PostJob = () => {
               {/* Company select */}
               {companies.length > 0 && (
                 <div>
-                  <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-1.5">
+                  <label className="flex items-center gap-2 text-sm font-semibold mb-1.5" style={labelStyle}>
                     <Building2 size={14} className="text-[#6366f1]" /> Company
                   </label>
                   <Select onValueChange={selectChangeHandler}>
-                    <SelectTrigger className="w-full rounded-xl border" style={{ borderColor: "#e2e8f0" }}>
+                    <SelectTrigger className="w-full rounded-xl border" style={{ borderColor: "var(--cn-input-border)", background: "var(--cn-input-bg)", color: "var(--cn-text-1)" }}>
                       <SelectValue placeholder="Select a company" />
                     </SelectTrigger>
                     <SelectContent>
@@ -258,9 +256,9 @@ const PostJob = () => {
               <div
                 className="rounded-2xl p-5"
                 style={{
-                  background: "rgba(255,255,255,0.8)",
+                  background: "var(--cn-preview-bg)",
                   backdropFilter: "blur(12px)",
-                  border: "1px solid rgba(39,187,210,0.2)",
+                  border: "1px solid var(--cn-form-border)",
                   boxShadow: "0 8px 32px rgba(39,187,210,0.1)",
                 }}
               >
@@ -272,11 +270,11 @@ const PostJob = () => {
                     {input.title?.charAt(0)?.toUpperCase() || "J"}
                   </div>
                   <div>
-                    <p className="font-bold text-gray-900 text-sm">{input.title || "Job Title"}</p>
-                    <p className="text-xs text-[#94a3b8]">{input.location || "Location"}</p>
+                    <p className="font-bold text-sm" style={{ color: "var(--cn-text-1)" }}>{input.title || "Job Title"}</p>
+                    <p className="text-xs" style={{ color: "var(--cn-text-3)" }}>{input.location || "Location"}</p>
                   </div>
                 </div>
-                <p className="text-xs text-[#475569] line-clamp-3 mb-3">
+                <p className="text-xs line-clamp-3 mb-3" style={{ color: "var(--cn-text-2)" }}>
                   {input.description || "Job description will appear here..."}
                 </p>
                 <div className="flex flex-wrap gap-2 mb-4">

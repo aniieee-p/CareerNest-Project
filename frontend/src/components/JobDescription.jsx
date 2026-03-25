@@ -57,8 +57,10 @@ const JobDescription = () => {
     return (
         <div>
             <Navbar />
-            <div className='max-w-4xl mx-auto my-10 px-4'>
-                <button onClick={() => navigate(-1)} className='flex items-center gap-1 text-sm text-gray-400 hover:text-[#27bbd2] mb-6 transition-colors'>
+            <div className='max-w-4xl mx-auto my-10 px-4' style={{ color: "var(--cn-text-1)" }}>
+                <button onClick={() => navigate(-1)} className='flex items-center gap-1 text-sm mb-6 transition-colors' style={{ color: "var(--cn-text-3)" }}
+                  onMouseEnter={e => e.currentTarget.style.color = "#27bbd2"}
+                  onMouseLeave={e => e.currentTarget.style.color = "var(--cn-text-3)"}>
                     <ArrowLeft size={16} /> Back to Jobs
                 </button>
 
@@ -69,19 +71,19 @@ const JobDescription = () => {
                 ) : (
                     <>
                         {/* Header Card */}
-                        <div className='bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6'>
+                        <div className='rounded-2xl border p-6 mb-6' style={{ background: "var(--cn-jd-card)", borderColor: "var(--cn-border-subtle)", boxShadow: "var(--cn-card-shadow)" }}>
                             <div className='flex items-start justify-between gap-4 flex-wrap'>
                                 <div className='flex items-center gap-4'>
-                                    <Avatar className="h-16 w-16 border border-gray-100 shadow-sm">
+                                    <Avatar className="h-16 w-16 border" style={{ borderColor: "var(--cn-border-subtle)" }}>
                                         <AvatarImage src={singleJob?.company?.logo} />
                                         <AvatarFallback className="font-bold text-xl text-white" style={{ background: "linear-gradient(135deg,#27bbd2,#6366f1)" }}>
                                             {singleJob?.company?.name?.charAt(0)}
                                         </AvatarFallback>
                                     </Avatar>
                                     <div>
-                                        <h1 className='font-bold text-2xl text-gray-900'>{singleJob?.title}</h1>
-                                        <p className='text-gray-500 text-sm mt-1'>{singleJob?.company?.name}</p>
-                                        <div className='flex items-center gap-1 text-xs text-gray-400 mt-1'>
+                                        <h1 className='font-bold text-2xl' style={{ color: "var(--cn-text-1)" }}>{singleJob?.title}</h1>
+                                        <p className='text-sm mt-1' style={{ color: "var(--cn-text-3)" }}>{singleJob?.company?.name}</p>
+                                        <div className='flex items-center gap-1 text-xs mt-1' style={{ color: "var(--cn-text-3)" }}>
                                             <MapPin size={12} /> {singleJob?.location}
                                         </div>
                                     </div>
@@ -89,8 +91,10 @@ const JobDescription = () => {
                                 <Button
                                     onClick={isApplied ? null : applyJobHandler}
                                     disabled={isApplied}
-                                    className={`px-8 py-5 rounded-xl font-semibold ${isApplied ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'text-white'}`}
-                                    style={!isApplied ? { background: "linear-gradient(135deg,#27bbd2,#6366f1)" } : {}}
+                                    className={`px-8 py-5 rounded-xl font-semibold ${isApplied ? 'cursor-not-allowed' : 'text-white'}`}
+                                    style={isApplied
+                                      ? { background: "var(--cn-tag-bg)", color: "var(--cn-text-3)" }
+                                      : { background: "linear-gradient(135deg,#27bbd2,#6366f1)" }}
                                 >
                                     {isApplied ? 'Already Applied' : 'Apply Now'}
                                 </Button>
@@ -106,8 +110,8 @@ const JobDescription = () => {
                         </div>
 
                         {/* Details Card */}
-                        <div className='bg-white rounded-2xl border border-gray-100 shadow-sm p-6'>
-                            <h2 className='font-bold text-lg text-gray-800 mb-4 pb-3 border-b border-gray-100'>Job Details</h2>
+                        <div className='rounded-2xl border p-6' style={{ background: "var(--cn-jd-card)", borderColor: "var(--cn-border-subtle)", boxShadow: "var(--cn-card-shadow)" }}>
+                            <h2 className='font-bold text-lg mb-4 pb-3' style={{ color: "var(--cn-text-1)", borderBottom: "1px solid var(--cn-border-subtle)" }}>Job Details</h2>
                             <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6'>
                                 {[
                                     { icon: Briefcase, label: "Role", value: singleJob?.title },
@@ -117,27 +121,27 @@ const JobDescription = () => {
                                     { icon: Users, label: "Applicants", value: singleJob?.applications?.length },
                                     { icon: Calendar, label: "Posted", value: singleJob?.createdAt?.split("T")[0] },
                                 ].map(({ icon: Icon, label, value }) => (
-                                    <div key={label} className='flex items-center gap-3 p-3 rounded-lg bg-gray-50'>
-                                        <div className='bg-[#27bbd2]/10 p-2 rounded-full'>
+                                    <div key={label} className='flex items-center gap-3 p-3 rounded-lg' style={{ background: "var(--cn-jd-detail-row)" }}>
+                                        <div className='p-2 rounded-full' style={{ background: "rgba(39,187,210,0.1)" }}>
                                             <Icon size={14} className='text-[#27bbd2]' />
                                         </div>
                                         <div>
-                                            <p className='text-xs text-gray-400'>{label}</p>
-                                            <p className='text-sm font-medium text-gray-800'>{value}</p>
+                                            <p className='text-xs' style={{ color: "var(--cn-text-3)" }}>{label}</p>
+                                            <p className='text-sm font-medium' style={{ color: "var(--cn-text-1)" }}>{value}</p>
                                         </div>
                                     </div>
                                 ))}
                             </div>
 
-                            <h2 className='font-bold text-base text-gray-800 mb-2'>Description</h2>
-                            <p className='text-sm text-gray-600 leading-relaxed'>{singleJob?.description}</p>
+                            <h2 className='font-bold text-base mb-2' style={{ color: "var(--cn-text-1)" }}>Description</h2>
+                            <p className='text-sm leading-relaxed' style={{ color: "var(--cn-text-2)" }}>{singleJob?.description}</p>
 
                             {singleJob?.requirements?.length > 0 && (
                                 <>
-                                    <h2 className='font-bold text-base text-gray-800 mt-5 mb-3'>Requirements</h2>
+                                    <h2 className='font-bold text-base mt-5 mb-3' style={{ color: "var(--cn-text-1)" }}>Requirements</h2>
                                     <div className='flex flex-wrap gap-2'>
                                         {singleJob.requirements.map((req, i) => (
-                                            <span key={i} className='bg-gray-100 text-gray-700 text-xs px-3 py-1 rounded-full'>{req}</span>
+                                            <span key={i} className='text-xs px-3 py-1 rounded-full' style={{ background: "var(--cn-req-tag-bg)", color: "var(--cn-req-tag-text)" }}>{req}</span>
                                         ))}
                                     </div>
                                 </>

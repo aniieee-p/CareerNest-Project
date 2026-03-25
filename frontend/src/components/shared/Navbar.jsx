@@ -12,6 +12,7 @@ import { USER_API_END_POINT } from "@/utils/constant";
 import { setUser } from "@/redux/authSlice";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTheme } from "next-themes";
 
 /* ── tiny hook: scroll position ── */
 const useScrolled = (threshold = 14) => {
@@ -44,15 +45,11 @@ export default function Navbar() {
   const [popoverOpen, setPopoverOpen] = useState(false);
   const [searchOpen,  setSearchOpen]  = useState(false);
   const [searchVal,   setSearchVal]   = useState("");
-  const [dark,        setDark]        = useState(false);
+  const { theme, setTheme } = useTheme();
+  const dark = theme === "dark";
 
   const searchRef = useRef(null);
   useClickOutside(searchRef, () => setSearchOpen(false));
-
-  /* dark-mode: toggle class on <html> */
-  useEffect(() => {
-    document.documentElement.classList.toggle("dark", dark);
-  }, [dark]);
 
   const logoutHandler = async () => {
     try {
@@ -89,13 +86,15 @@ export default function Navbar() {
 
   /* ── shared styles ── */
   const navBg = scrolled
-    ? "rgba(255,255,255,0.94)"
-    : "rgba(255,255,255,0.72)";
+    ? "var(--cn-nav-bg)"
+    : dark ? "rgba(8,14,26,0.72)" : "rgba(255,255,255,0.72)";
   const navShadow = scrolled
-    ? "0 4px 28px rgba(0,0,0,0.07), 0 1px 0 rgba(39,187,210,0.1)"
+    ? dark
+      ? "0 4px 28px rgba(0,0,0,0.4), 0 1px 0 rgba(39,187,210,0.08)"
+      : "0 4px 28px rgba(0,0,0,0.07), 0 1px 0 rgba(39,187,210,0.1)"
     : "none";
   const navBorder = scrolled
-    ? "1px solid rgba(39,187,210,0.18)"
+    ? "1px solid var(--cn-nav-border)"
     : "1px solid rgba(39,187,210,0.07)";
   const navHeight = scrolled ? "56px" : "64px";
 
@@ -129,7 +128,7 @@ export default function Navbar() {
           >
             <Briefcase size={16} className="text-white" />
           </motion.div>
-          <span className="text-[18px] font-extrabold text-gray-900 tracking-[-0.025em]">
+          <span className="text-[18px] font-extrabold tracking-[-0.025em]" style={{ color: "var(--cn-text-1)" }}>
             Career
             <span style={{ background: "linear-gradient(90deg,#27bbd2,#6366f1)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
               Nest
@@ -144,9 +143,9 @@ export default function Navbar() {
             return (
               <li key={to}>
                 <Link to={to} className="relative px-3.5 py-2 text-[13px] font-medium rounded-xl flex items-center transition-colors duration-150"
-                  style={{ color: active ? "#27bbd2" : "#475569" }}
-                  onMouseEnter={e => { if (!active) { e.currentTarget.style.color = "#0f172a"; e.currentTarget.style.background = "rgba(39,187,210,0.06)"; }}}
-                  onMouseLeave={e => { e.currentTarget.style.color = active ? "#27bbd2" : "#475569"; e.currentTarget.style.background = "transparent"; }}
+                  style={{ color: active ? "#27bbd2" : "var(--cn-text-2)" }}
+                  onMouseEnter={e => { if (!active) { e.currentTarget.style.color = "var(--cn-text-1)"; e.currentTarget.style.background = "rgba(39,187,210,0.06)"; }}}
+                  onMouseLeave={e => { e.currentTarget.style.color = active ? "#27bbd2" : "var(--cn-text-2)"; e.currentTarget.style.background = "transparent"; }}
                 >
                   {active && (
                     <motion.span layoutId="nav-pill" className="absolute inset-0 rounded-xl -z-10"
@@ -190,7 +189,8 @@ export default function Navbar() {
                     value={searchVal}
                     onChange={e => setSearchVal(e.target.value)}
                     placeholder="Search jobs…"
-                    className="flex-1 bg-transparent px-2 py-1.5 text-[12.5px] text-gray-700 outline-none placeholder:text-[#94a3b8]"
+                    className="flex-1 bg-transparent px-2 py-1.5 text-[12.5px] outline-none placeholder:text-[#94a3b8]"
+                  style={{ color: "var(--cn-text-1)" }}
                   />
                 </motion.form>
               ) : (
@@ -211,8 +211,11 @@ export default function Navbar() {
           <motion.button
             whileHover={{ scale: 1.08 }}
             whileTap={{ scale: 0.93 }}
-            onClick={() => setDark(!dark)}
-            className="p-2 rounded-xl text-[#94a3b8] transition-colors duration-150 hover:text-[#6366f1] hover:bg-[#6366f1]/6"
+            onClick={() => setTheme(dark ? "light" : "dark")}
+            className="p-2 rounded-xl transition-colors duration-150"
+            style={{ color: dark ? "#fbbf24" : "#94a3b8" }}
+            onMouseEnter={e => { e.currentTarget.style.color = dark ? "#f59e0b" : "#6366f1"; e.currentTarget.style.background = dark ? "rgba(245,158,11,0.1)" : "rgba(99,102,241,0.06)"; }}
+            onMouseLeave={e => { e.currentTarget.style.color = dark ? "#fbbf24" : "#94a3b8"; e.currentTarget.style.background = "transparent"; }}
           >
             <AnimatePresence mode="wait">
               <motion.span key={dark ? "sun" : "moon"}
@@ -277,7 +280,7 @@ export default function Navbar() {
                         {user?.fullname?.charAt(0)?.toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
-                    <span className="text-[13px] font-semibold text-gray-700 max-w-[80px] truncate">
+                    <span className="text-[13px] font-semibold max-w-[80px] truncate" style={{ color: "var(--cn-text-1)" }}>
                       {user?.fullname?.split(" ")[0]}
                     </span>
                     <motion.span animate={{ rotate: popoverOpen ? 180 : 0 }} transition={{ duration: 0.2 }}>
@@ -289,7 +292,7 @@ export default function Navbar() {
                 <AnimatePresence>
                   {popoverOpen && (
                     <PopoverContent forceMount asChild align="end" sideOffset={8}
-                      style={{ border: "1px solid rgba(39,187,210,0.15)", borderRadius: 18, padding: 8, boxShadow: "0 12px 40px rgba(0,0,0,0.12)", width: 232 }}
+                      style={{ border: "1px solid var(--cn-border)", borderRadius: 18, padding: 8, boxShadow: dark ? "0 12px 40px rgba(0,0,0,0.5)" : "0 12px 40px rgba(0,0,0,0.12)", width: 232, background: "var(--cn-popover)" }}
                     >
                       <motion.div
                         initial={{ opacity: 0, y: -8, scale: 0.96 }}
@@ -299,7 +302,7 @@ export default function Navbar() {
                       >
                         {/* user card */}
                         <div className="flex items-center gap-3 px-2.5 py-2.5 mb-1.5 rounded-xl"
-                          style={{ background: "linear-gradient(135deg,rgba(39,187,210,0.07),rgba(99,102,241,0.05))", border: "1px solid rgba(39,187,210,0.1)" }}
+                          style={{ background: dark ? "rgba(39,187,210,0.08)" : "linear-gradient(135deg,rgba(39,187,210,0.07),rgba(99,102,241,0.05))", border: "1px solid var(--cn-border)" }}
                         >
                           <Avatar className="h-9 w-9 shrink-0">
                             <AvatarImage src={user?.profile?.profilephoto} />
@@ -308,32 +311,37 @@ export default function Navbar() {
                             </AvatarFallback>
                           </Avatar>
                           <div className="min-w-0">
-                            <p className="text-[13px] font-bold text-gray-900 truncate">{user?.fullname}</p>
-                            <p className="text-[11px] text-[#94a3b8] truncate">{user?.email}</p>
+                            <p className="text-[13px] font-bold truncate" style={{ color: "var(--cn-text-1)" }}>{user?.fullname}</p>
+                            <p className="text-[11px] truncate" style={{ color: "var(--cn-text-3)" }}>{user?.email}</p>
                           </div>
                         </div>
 
                         {/* menu items */}
-                        {[
+                        {(user?.role === "recruiter" ? [
+                          { icon: User2,    label: "View Profile", action: () => { setPopoverOpen(false); setTimeout(() => navigate("/profile"), 50); }, color: "#27bbd2" },
+                          { icon: Settings, label: "Settings",     action: () => {},                                                                   color: "#94a3b8" },
+                        ] : [
                           { icon: User2,    label: "View Profile", action: () => { setPopoverOpen(false); setTimeout(() => navigate("/profile"), 50); }, color: "#27bbd2" },
                           { icon: Bookmark, label: "Saved Jobs",   action: () => { setPopoverOpen(false); navigate("/saved-jobs"); },                  color: "#6366f1" },
                           { icon: Settings, label: "Settings",     action: () => {},                                                                   color: "#94a3b8" },
-                        ].map(({ icon: Icon, label, action, color }) => (
+                        ]).map(({ icon: Icon, label, action, color }) => (
                           <button key={label} onClick={action}
-                            className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-[13px] text-gray-600 transition-all duration-150 group"
+                            className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-[13px] transition-all duration-150 group"
+                            style={{ color: "var(--cn-text-2)" }}
                             onMouseEnter={e => { e.currentTarget.style.background = `${color}0d`; e.currentTarget.style.color = color; }}
-                            onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#4b5563"; }}
+                            onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "var(--cn-text-2)"; }}
                           >
                             <Icon size={14} /> {label}
                           </button>
                         ))}
 
-                        <div className="my-1.5" style={{ borderTop: "1px solid rgba(0,0,0,0.06)" }} />
+                        <div className="my-1.5" style={{ borderTop: "1px solid var(--cn-border-subtle)" }} />
 
                         <button onClick={logoutHandler}
-                          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-[13px] text-gray-600 transition-all duration-150"
+                          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-[13px] transition-all duration-150"
+                          style={{ color: "var(--cn-text-2)" }}
                           onMouseEnter={e => { e.currentTarget.style.background = "rgba(239,68,68,0.07)"; e.currentTarget.style.color = "#ef4444"; }}
-                          onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#4b5563"; }}
+                          onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "var(--cn-text-2)"; }}
                         >
                           <LogOut size={14} /> Sign Out
                         </button>
@@ -348,7 +356,10 @@ export default function Navbar() {
 
         {/* ── Mobile toggle ── */}
         <motion.button whileTap={{ scale: 0.9 }}
-          className="md:hidden p-2 rounded-xl text-gray-500 hover:bg-gray-100 transition-colors"
+          className="md:hidden p-2 rounded-xl transition-colors duration-150"
+          style={{ color: "var(--cn-text-2)" }}
+          onMouseEnter={e => { e.currentTarget.style.background = "var(--cn-surface-hover)"; }}
+          onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}
           onClick={() => setMobileOpen(!mobileOpen)}
         >
           <AnimatePresence mode="wait">
@@ -371,7 +382,7 @@ export default function Navbar() {
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
             className="md:hidden overflow-hidden"
-            style={{ borderTop: "1px solid rgba(39,187,210,0.1)", background: "rgba(255,255,255,0.97)" }}
+            style={{ borderTop: "1px solid var(--cn-border)", background: "var(--cn-nav-bg)" }}
           >
             <div className="px-4 py-3 space-y-1">
               {/* mobile search */}
@@ -381,14 +392,15 @@ export default function Navbar() {
                 <Search size={13} className="text-[#27bbd2] shrink-0" />
                 <input value={searchVal} onChange={e => setSearchVal(e.target.value)}
                   placeholder="Search jobs…"
-                  className="flex-1 bg-transparent text-[13px] text-gray-700 outline-none placeholder:text-[#94a3b8]"
+                  className="flex-1 bg-transparent text-[13px] outline-none placeholder:text-[#94a3b8]"
+                  style={{ color: "var(--cn-text-1)" }}
                 />
               </form>
 
               {links.map(({ to, label }) => (
                 <Link key={to} to={to} onClick={() => setMobileOpen(false)}
                   className="flex items-center px-3 py-2.5 rounded-xl text-[13.5px] font-medium transition-colors duration-150"
-                  style={{ color: isActive(to) ? "#27bbd2" : "#475569", background: isActive(to) ? "rgba(39,187,210,0.07)" : "transparent" }}
+                  style={{ color: isActive(to) ? "#27bbd2" : "var(--cn-text-2)", background: isActive(to) ? "rgba(39,187,210,0.07)" : "transparent" }}
                 >
                   {label}
                 </Link>
@@ -406,7 +418,7 @@ export default function Navbar() {
                   </div>
                 ) : (
                   <div className="space-y-1 pt-1">
-                    <div className="flex items-center gap-3 px-3 py-2 mb-1 rounded-xl" style={{ background: "rgba(39,187,210,0.05)" }}>
+                    <div className="flex items-center gap-3 px-3 py-2 mb-1 rounded-xl" style={{ background: "var(--cn-surface-hover)" }}>
                       <Avatar className="h-8 w-8">
                         <AvatarImage src={user?.profile?.profilephoto} />
                         <AvatarFallback className="text-white text-xs font-bold" style={{ background: "linear-gradient(135deg,#27bbd2,#6366f1)" }}>
@@ -414,17 +426,28 @@ export default function Navbar() {
                         </AvatarFallback>
                       </Avatar>
                       <div>
-                        <p className="text-[13px] font-semibold text-gray-900">{user?.fullname}</p>
-                        <p className="text-[11px] text-[#94a3b8]">{user?.email}</p>
+                        <p className="text-[13px] font-semibold" style={{ color: "var(--cn-text-1)" }}>{user?.fullname}</p>
+                        <p className="text-[11px]" style={{ color: "var(--cn-text-3)" }}>{user?.email}</p>
                       </div>
                     </div>
-                    <Link to="/profile" onClick={() => setMobileOpen(false)} className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[13px] text-gray-600 hover:text-[#27bbd2] hover:bg-[#27bbd2]/6 transition-colors">
+                    <Link to="/profile" onClick={() => setMobileOpen(false)} className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[13px] transition-colors"
+                      style={{ color: "var(--cn-text-2)" }}
+                      onMouseEnter={e => { e.currentTarget.style.color = "#27bbd2"; e.currentTarget.style.background = "rgba(39,187,210,0.06)"; }}
+                      onMouseLeave={e => { e.currentTarget.style.color = "var(--cn-text-2)"; e.currentTarget.style.background = "transparent"; }}>
                       <User2 size={14} /> View Profile
                     </Link>
-                    <Link to="/saved-jobs" onClick={() => setMobileOpen(false)} className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[13px] text-gray-600 hover:text-[#6366f1] hover:bg-[#6366f1]/6 transition-colors">
-                      <Bookmark size={14} /> Saved Jobs
-                    </Link>
-                    <button onClick={logoutHandler} className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[13px] text-red-500 hover:bg-red-50 transition-colors">
+                    {user?.role !== "recruiter" && (
+                      <Link to="/saved-jobs" onClick={() => setMobileOpen(false)} className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[13px] transition-colors"
+                        style={{ color: "var(--cn-text-2)" }}
+                        onMouseEnter={e => { e.currentTarget.style.color = "#6366f1"; e.currentTarget.style.background = "rgba(99,102,241,0.06)"; }}
+                        onMouseLeave={e => { e.currentTarget.style.color = "var(--cn-text-2)"; e.currentTarget.style.background = "transparent"; }}>
+                        <Bookmark size={14} /> Saved Jobs
+                      </Link>
+                    )}
+                    <button onClick={logoutHandler} className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[13px] transition-colors"
+                      style={{ color: "#ef4444" }}
+                      onMouseEnter={e => e.currentTarget.style.background = "rgba(239,68,68,0.07)"}
+                      onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
                       <LogOut size={14} /> Sign Out
                     </button>
                   </div>

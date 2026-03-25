@@ -167,7 +167,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
                                     className='hidden'
                                     onChange={photoChangeHandler}
                                 />
-                                <span className='text-xs text-gray-400'>Click photo to change</span>
+                                <span className='text-xs' style={{ color: "var(--cn-text-3)" }}>Click photo to change</span>
                             </div>
                             <div className='grid grid-cols-4 items-center gap-4'>
                                 <Label htmlFor="name" className="text-right">Name</Label>
@@ -217,7 +217,8 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
                                     {/* Skill tags */}
                                     <div className="flex flex-wrap gap-1 mb-1">
                                         {skillTags.map(skill => (
-                                            <span key={skill} className="flex items-center gap-1 bg-[#e0f7fa] text-[#00838f] text-xs px-2 py-1 rounded-full">
+                                            <span key={skill} className="flex items-center gap-1 text-xs px-2 py-1 rounded-full"
+                                              style={{ background: "rgba(39,187,210,0.1)", color: "#27bbd2", border: "1px solid rgba(39,187,210,0.2)" }}>
                                                 {skill}
                                                 <X size={12} className="cursor-pointer" onClick={() => removeSkill(skill)} />
                                             </span>
@@ -236,11 +237,15 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
                                     />
                                     {/* Suggestions dropdown */}
                                     {showSuggestions && filteredSuggestions.length > 0 && (
-                                        <div className="absolute z-50 w-full bg-white border border-gray-200 rounded-md shadow-md mt-1 max-h-40 overflow-y-auto">
+                                        <div className="absolute z-50 w-full rounded-md shadow-md mt-1 max-h-40 overflow-y-auto"
+                                          style={{ background: "var(--cn-popover)", border: "1px solid var(--cn-border)" }}>
                                             {filteredSuggestions.map(s => (
                                                 <div
                                                     key={s}
-                                                    className="px-3 py-2 text-sm cursor-pointer hover:bg-[#e0f7fa] hover:text-[#00838f]"
+                                                    className="px-3 py-2 text-sm cursor-pointer transition-colors"
+                                                    style={{ color: "var(--cn-text-2)" }}
+                                                    onMouseEnter={e => { e.currentTarget.style.background = "var(--cn-surface-hover)"; e.currentTarget.style.color = "#27bbd2"; }}
+                                                    onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "var(--cn-text-2)"; }}
                                                     onMouseDown={() => addSkill(s)}
                                                 >
                                                     {s}

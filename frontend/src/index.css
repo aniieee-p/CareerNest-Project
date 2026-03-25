@@ -28,6 +28,75 @@
     --background: 0 0% 100%;
     --foreground: 222 47% 11%;
 
+    /* ── CareerNest semantic design tokens (light) ── */
+    --cn-page:          #f8fafc;
+    --cn-page-alt:      #f1f5f9;
+    --cn-surface:       #ffffff;
+    --cn-surface-2:     rgba(255,255,255,0.82);
+    --cn-surface-hover: rgba(39,187,210,0.06);
+    --cn-border:        rgba(39,187,210,0.18);
+    --cn-border-subtle: rgba(15,23,42,0.06);
+    --cn-border-input:  #e2e8f0;
+    --cn-text-1:        #0f172a;
+    --cn-text-2:        #475569;
+    --cn-text-3:        #94a3b8;
+    --cn-text-4:        #64748b;
+    --cn-input-bg:      #ffffff;
+    --cn-input-focus:   #fafbff;
+    --cn-input-border:  #e8edf4;
+    --cn-nav-bg:        rgba(255,255,255,0.94);
+    --cn-nav-border:    rgba(39,187,210,0.18);
+    --cn-card:          rgba(255,255,255,0.75);
+    --cn-card-solid:    #ffffff;
+    --cn-card-shadow:   0 4px 24px rgba(39,187,210,0.07);
+    --cn-popover:       #ffffff;
+    --cn-filter-bg:     rgba(255,255,255,0.82);
+    --cn-drawer-bg:     #ffffff;
+    --cn-divider:       #e2e8f0;
+    --cn-role-bg:       #f0f1ff;
+    --cn-role-border:   #e0e7ff;
+    --cn-auth-right:    #f8fafc;
+    --cn-stat-bg:       #ffffff;
+    --cn-stat-border:   #f1f5f9;
+    --cn-table-bg:      #ffffff;
+    --cn-table-border:  #f1f5f9;
+    --cn-table-row-hover: rgba(39,187,210,0.04);
+    --cn-badge-bg:      rgba(39,187,210,0.1);
+    --cn-tag-bg:        #f1f5f9;
+    --cn-tag-text:      #475569;
+    --cn-form-bg:       rgba(255,255,255,0.8);
+    --cn-form-border:   rgba(39,187,210,0.18);
+    --cn-preview-bg:    rgba(255,255,255,0.8);
+    --cn-setup-bg:      #ffffff;
+    --cn-upload-bg:     #f8faff;
+    --cn-upload-border: #e2e8f0;
+    --cn-hint-bg:       #f8faff;
+    --cn-hint-border:   #e0e7ff;
+    --cn-hint-text:     #6366f1;
+    --cn-cancel-bg:     #ffffff;
+    --cn-cancel-border: #e2e8f0;
+    --cn-cancel-text:   #64748b;
+    --cn-back-btn-bg:   #ffffff;
+    --cn-back-btn-border: #e2e8f0;
+    --cn-back-btn-text: #64748b;
+    --cn-sort-bg:       #ffffff;
+    --cn-sort-border:   #e2e8f0;
+    --cn-sort-text:     #475569;
+    --cn-sort-item-active-bg: #fffbeb;
+    --cn-sort-item-active-text: #f59e0b;
+    --cn-sort-item-active-bg2: #eef2ff;
+    --cn-sort-item-active-text2: #6366f1;
+    --cn-mobile-drawer: #ffffff;
+    --cn-filter-option-hover: rgba(15,23,42,0.035);
+    --cn-section-divider: rgba(15,23,42,0.07);
+    --cn-profile-bg:    #f8fafc;
+    --cn-profile-banner-dot: rgba(255,255,255,1);
+    --cn-jd-bg:         #f9fafb;
+    --cn-jd-card:       #ffffff;
+    --cn-jd-detail-row: #f9fafb;
+    --cn-req-tag-bg:    #f3f4f6;
+    --cn-req-tag-text:  #374151;
+
     --card: 0 0% 100%;
     --card-foreground: 222 47% 11%;
 
@@ -60,8 +129,77 @@
   }
 
   .dark {
-    --background: 185 50% 6%;
-    --foreground: 174 30% 95%;
+    --background: 222 47% 7%;
+    --foreground: 210 40% 92%;
+
+    /* ── CareerNest semantic design tokens (dark) ── */
+    --cn-page:          #080e1a;
+    --cn-page-alt:      #060b14;
+    --cn-surface:       #0f172a;
+    --cn-surface-2:     rgba(15,23,42,0.85);
+    --cn-surface-hover: rgba(39,187,210,0.08);
+    --cn-border:        rgba(39,187,210,0.14);
+    --cn-border-subtle: rgba(255,255,255,0.06);
+    --cn-border-input:  #1e293b;
+    --cn-text-1:        #e2e8f0;
+    --cn-text-2:        #94a3b8;
+    --cn-text-3:        #64748b;
+    --cn-text-4:        #475569;
+    --cn-input-bg:      #1e293b;
+    --cn-input-focus:   #1e293b;
+    --cn-input-border:  #334155;
+    --cn-nav-bg:        rgba(8,14,26,0.95);
+    --cn-nav-border:    rgba(39,187,210,0.12);
+    --cn-card:          rgba(15,23,42,0.8);
+    --cn-card-solid:    #0f172a;
+    --cn-card-shadow:   0 4px 24px rgba(0,0,0,0.4);
+    --cn-popover:       #1e293b;
+    --cn-filter-bg:     rgba(15,23,42,0.9);
+    --cn-drawer-bg:     #0f172a;
+    --cn-divider:       #1e293b;
+    --cn-role-bg:       #1e293b;
+    --cn-role-border:   #334155;
+    --cn-auth-right:    #060b14;
+    --cn-stat-bg:       #0f172a;
+    --cn-stat-border:   #1e293b;
+    --cn-table-bg:      #0f172a;
+    --cn-table-border:  #1e293b;
+    --cn-table-row-hover: rgba(39,187,210,0.06);
+    --cn-badge-bg:      rgba(39,187,210,0.15);
+    --cn-tag-bg:        #1e293b;
+    --cn-tag-text:      #94a3b8;
+    --cn-form-bg:       rgba(15,23,42,0.85);
+    --cn-form-border:   rgba(39,187,210,0.14);
+    --cn-preview-bg:    rgba(15,23,42,0.85);
+    --cn-setup-bg:      #0f172a;
+    --cn-upload-bg:     #1e293b;
+    --cn-upload-border: #334155;
+    --cn-hint-bg:       #1e293b;
+    --cn-hint-border:   #334155;
+    --cn-hint-text:     #818cf8;
+    --cn-cancel-bg:     #1e293b;
+    --cn-cancel-border: #334155;
+    --cn-cancel-text:   #94a3b8;
+    --cn-back-btn-bg:   #1e293b;
+    --cn-back-btn-border: #334155;
+    --cn-back-btn-text: #94a3b8;
+    --cn-sort-bg:       #1e293b;
+    --cn-sort-border:   #334155;
+    --cn-sort-text:     #94a3b8;
+    --cn-sort-item-active-bg: rgba(245,158,11,0.12);
+    --cn-sort-item-active-text: #fbbf24;
+    --cn-sort-item-active-bg2: rgba(99,102,241,0.12);
+    --cn-sort-item-active-text2: #818cf8;
+    --cn-mobile-drawer: #0f172a;
+    --cn-filter-option-hover: rgba(255,255,255,0.04);
+    --cn-section-divider: rgba(255,255,255,0.06);
+    --cn-profile-bg:    #080e1a;
+    --cn-profile-banner-dot: rgba(255,255,255,0.15);
+    --cn-jd-bg:         #080e1a;
+    --cn-jd-card:       #0f172a;
+    --cn-jd-detail-row: #1e293b;
+    --cn-req-tag-bg:    #1e293b;
+    --cn-req-tag-text:  #94a3b8;
 
     --card: 185 45% 9%;
     --card-foreground: 174 30% 95%;
@@ -98,6 +236,27 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  /* ── Smooth theme transition ── */
+  html {
+    color-scheme: light;
+  }
+  html.dark {
+    color-scheme: dark;
+  }
+
+  /* Apply transition to all elements except animations */
+  *:not([class*="animate"]):not(canvas) {
+    transition-property: background-color, border-color, color, box-shadow, fill, stroke;
+    transition-duration: 250ms;
+    transition-timing-function: ease;
+  }
+
+  /* Dark mode scrollbar */
+  .dark ::-webkit-scrollbar { width: 6px; height: 6px; }
+  .dark ::-webkit-scrollbar-track { background: #0f172a; }
+  .dark ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+  .dark ::-webkit-scrollbar-thumb:hover { background: #475569; }
 }
 
 @keyframes marquee {

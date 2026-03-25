@@ -99,10 +99,7 @@ const CompaniesTable = ({ sortOrder = "newest" }) => {
             />
             {/* icon tile */}
             <div className="relative w-24 h-24 rounded-3xl flex items-center justify-center"
-              style={{
-                background: "linear-gradient(145deg,#eef2ff 0%,#e0f2fe 100%)",
-                boxShadow: "0 8px 32px rgba(99,102,241,0.15), inset 0 1px 0 rgba(255,255,255,0.8)",
-              }}>
+              style={{ background: "rgba(99,102,241,0.1)", border: "1px solid rgba(99,102,241,0.2)" }}>
               {/* mini building SVG illustration */}
               <svg width="52" height="52" viewBox="0 0 52 52" fill="none">
                 {/* building body */}
@@ -151,12 +148,12 @@ const CompaniesTable = ({ sortOrder = "newest" }) => {
             transition={{ duration: 0.4, delay: 0.18 }}
             className="space-y-2 mb-7"
           >
-            <h3 className="text-lg font-extrabold text-slate-800 tracking-tight">
+            <h3 className="text-lg font-extrabold tracking-tight" style={{ color: "var(--cn-text-1)" }}>
               {isSearch ? "No results found" : "No companies added yet"}
             </h3>
-            <p className="text-sm text-slate-400 max-w-[280px] leading-relaxed mx-auto">
+            <p className="text-sm max-w-[280px] leading-relaxed mx-auto" style={{ color: "var(--cn-text-3)" }}>
               {isSearch
-                ? <>No companies match <span className="font-semibold text-slate-600">"{searchCompanyByText}"</span>. Try a different keyword.</>
+                ? <>No companies match <span className="font-semibold" style={{ color: "var(--cn-text-2)" }}>"{searchCompanyByText}"</span>. Try a different keyword.</>
                 : "Start building your recruiter profile by registering your first company. It only takes a minute."}
             </p>
           </motion.div>
@@ -187,8 +184,8 @@ const CompaniesTable = ({ sortOrder = "newest" }) => {
               whileHover={{ borderColor: "#6366f1", color: "#6366f1" }}
               whileTap={{ scale: 0.97 }}
               onClick={() => navigate(isSearch ? "#" : "/admin/companies/create")}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold border border-slate-200 text-slate-500 bg-white transition-colors duration-150"
-              style={{ boxShadow: "0 1px 4px rgba(15,23,42,0.05)" }}
+              className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold border transition-colors duration-150"
+              style={{ borderColor: "var(--cn-border-input)", color: "var(--cn-text-2)", background: "var(--cn-sort-bg)", boxShadow: "0 1px 4px rgba(15,23,42,0.05)" }}
             >
               {isSearch ? <><Search size={13}/> Clear search</> : "Learn more"}
             </motion.button>
@@ -209,7 +206,7 @@ const CompaniesTable = ({ sortOrder = "newest" }) => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.52 + i * 0.08 }}
                   className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-medium border"
-                  style={{ background: "#f8faff", color: "#6366f1", borderColor: "#e0e7ff" }}
+                  style={{ background: "var(--cn-surface-hover)", color: "#6366f1", borderColor: "rgba(99,102,241,0.3)" }}
                 >
                   <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 inline-block" />
                   {tip}
@@ -237,8 +234,9 @@ const CompaniesTable = ({ sortOrder = "newest" }) => {
 
           {/* Header */}
           <thead>
-            <tr style={{ background: "linear-gradient(90deg,#f8faff 0%,#f0f4ff 100%)" }}>
-              <th className="px-6 py-3.5 text-left text-[11px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 w-8">
+            <tr style={{ background: "var(--cn-page-alt)" }}>
+              <th className="px-6 py-3.5 text-left text-[11px] font-bold uppercase tracking-widest border-b w-8"
+                style={{ color: "var(--cn-text-3)", borderColor: "var(--cn-table-border)" }}>
                 #
               </th>
               {[
@@ -248,7 +246,8 @@ const CompaniesTable = ({ sortOrder = "newest" }) => {
                 { label: "Actions", right: true },
               ].map(({ label, icon, right }) => (
                 <th key={label}
-                  className={`px-6 py-3.5 text-[11px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 ${right ? "text-right" : "text-left"}`}>
+                  className={`px-6 py-3.5 text-[11px] font-bold uppercase tracking-widest border-b ${right ? "text-right" : "text-left"}`}
+                  style={{ color: "var(--cn-text-3)", borderColor: "var(--cn-table-border)" }}>
                   {icon}{label}
                 </th>
               ))}
@@ -273,22 +272,23 @@ const CompaniesTable = ({ sortOrder = "newest" }) => {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, x: -16 }}
                     transition={{ duration: 0.2, delay: i * 0.03 }}
-                    className="group border-b border-slate-100/70 cursor-default"
+                    className="group border-b cursor-default"
                     style={{
-                      background: isEven ? "#ffffff" : "#fafbff",
+                      background: isEven ? "var(--cn-table-bg)" : "var(--cn-page-alt)",
+                      borderColor: "var(--cn-table-border)",
                       transition: "background 0.15s ease, box-shadow 0.15s ease",
                     }}
                     onMouseEnter={e => {
-                      e.currentTarget.style.background = "#f0f4ff"
+                      e.currentTarget.style.background = "var(--cn-table-row-hover)"
                       e.currentTarget.style.boxShadow  = "inset 3px 0 0 #6366f1"
                     }}
                     onMouseLeave={e => {
-                      e.currentTarget.style.background = isEven ? "#ffffff" : "#fafbff"
+                      e.currentTarget.style.background = isEven ? "var(--cn-table-bg)" : "var(--cn-page-alt)"
                       e.currentTarget.style.boxShadow  = "none"
                     }}
                   >
                     {/* Row number */}
-                    <td className="px-6 py-4 text-xs text-slate-300 font-mono select-none">
+                    <td className="px-6 py-4 text-xs font-mono select-none" style={{ color: "var(--cn-text-3)" }}>
                       {String(globalIdx + 1).padStart(2, "0")}
                     </td>
 
@@ -296,8 +296,8 @@ const CompaniesTable = ({ sortOrder = "newest" }) => {
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3.5">
                         <div className="relative shrink-0">
-                          <Avatar className="w-10 h-10 rounded-xl border-2 border-white"
-                            style={{ boxShadow: "0 2px 8px rgba(15,23,42,0.1)" }}>
+                          <Avatar className="w-10 h-10 rounded-xl border-2"
+                            style={{ borderColor: "var(--cn-surface)", boxShadow: "0 2px 8px rgba(15,23,42,0.1)" }}>
                             <AvatarImage src={company.logo} className="object-cover rounded-xl" />
                             <AvatarFallback
                               className="rounded-xl text-white text-sm font-extrabold"
@@ -308,10 +308,10 @@ const CompaniesTable = ({ sortOrder = "newest" }) => {
                           <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-white bg-emerald-400" />
                         </div>
                         <div>
-                          <p className="font-bold text-slate-800 text-[0.875rem] leading-tight group-hover:text-indigo-700 transition-colors duration-150">
+                          <p className="font-bold text-[0.875rem] leading-tight" style={{ color: "var(--cn-text-1)" }}>
                             {company.name}
                           </p>
-                          <p className="text-xs text-slate-400 mt-0.5">{company.location || "Location not set"}</p>
+                          <p className="text-xs mt-0.5" style={{ color: "var(--cn-text-3)" }}>{company.location || "Location not set"}</p>
                         </div>
                       </div>
                     </td>
@@ -319,15 +319,15 @@ const CompaniesTable = ({ sortOrder = "newest" }) => {
                     {/* Date */}
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-1.5">
-                        <Calendar size={12} className="text-slate-300 shrink-0" />
-                        <span className="text-xs text-slate-500 font-medium">{dateStr}</span>
+                        <Calendar size={12} style={{ color: "var(--cn-text-3)" }} className="shrink-0" />
+                        <span className="text-xs font-medium" style={{ color: "var(--cn-text-2)" }}>{dateStr}</span>
                       </div>
                     </td>
 
                     {/* Status */}
                     <td className="px-6 py-4">
                       <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold border"
-                        style={{ background: "#ecfdf5", color: "#059669", borderColor: "#a7f3d0" }}>
+                        style={{ background: "rgba(16,185,129,0.1)", color: "#059669", borderColor: "rgba(16,185,129,0.25)" }}>
                         <motion.span
                           animate={{ opacity: [1, 0.4, 1] }}
                           transition={{ duration: 2, repeat: Infinity }}
@@ -347,7 +347,7 @@ const CompaniesTable = ({ sortOrder = "newest" }) => {
                             onClick={() => navigate(`/admin/companies/${company._id}`)}
                             className="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-150"
                             style={{ color: "#94a3b8" }}
-                            onMouseEnter={e => { e.currentTarget.style.background = "#eef2ff"; e.currentTarget.style.color = "#6366f1" }}
+                            onMouseEnter={e => { e.currentTarget.style.background = "rgba(99,102,241,0.1)"; e.currentTarget.style.color = "#6366f1" }}
                             onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#94a3b8" }}
                           >
                             <Edit2 size={14} />
@@ -360,7 +360,7 @@ const CompaniesTable = ({ sortOrder = "newest" }) => {
                             onClick={() => navigate(`/admin/companies/${company._id}`)}
                             className="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-150"
                             style={{ color: "#94a3b8" }}
-                            onMouseEnter={e => { e.currentTarget.style.background = "#ecfeff"; e.currentTarget.style.color = "#27bbd2" }}
+                            onMouseEnter={e => { e.currentTarget.style.background = "rgba(39,187,210,0.1)"; e.currentTarget.style.color = "#27bbd2" }}
                             onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#94a3b8" }}
                           >
                             <ExternalLink size={14} />
@@ -374,7 +374,7 @@ const CompaniesTable = ({ sortOrder = "newest" }) => {
                                 whileHover={{ scale: 1.12 }} whileTap={{ scale: 0.88 }}
                                 className="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-150"
                                 style={{ color: "#94a3b8" }}
-                                onMouseEnter={e => { e.currentTarget.style.background = "#f1f5f9"; e.currentTarget.style.color = "#475569" }}
+                                onMouseEnter={e => { e.currentTarget.style.background = "var(--cn-surface-hover)"; e.currentTarget.style.color = "var(--cn-text-2)"; }}
                                 onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#94a3b8" }}
                               >
                                 <MoreHorizontal size={15} />
@@ -382,19 +382,28 @@ const CompaniesTable = ({ sortOrder = "newest" }) => {
                             </Tip>
                           </PopoverTrigger>
                           <PopoverContent align="end"
-                            className="w-40 p-1.5 rounded-xl border border-slate-100"
-                            style={{ boxShadow: "0 8px 28px rgba(15,23,42,0.1)" }}>
+                            className="w-40 p-1.5 rounded-xl"
+                            style={{ background: "var(--cn-popover)", border: "1px solid var(--cn-border)", boxShadow: "0 8px 28px rgba(15,23,42,0.15)" }}>
                             <button onClick={() => navigate(`/admin/companies/${company._id}`)}
-                              className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 transition-colors duration-150">
+                              className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] transition-colors duration-150"
+                              style={{ color: "var(--cn-text-2)" }}
+                              onMouseEnter={e => { e.currentTarget.style.background = "rgba(99,102,241,0.1)"; e.currentTarget.style.color = "#6366f1"; }}
+                              onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "var(--cn-text-2)"; }}>
                               <Edit2 size={13} /> Edit details
                             </button>
                             <button onClick={() => navigate(`/admin/companies/${company._id}`)}
-                              className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] text-slate-600 hover:bg-sky-50 hover:text-sky-600 transition-colors duration-150">
+                              className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] transition-colors duration-150"
+                              style={{ color: "var(--cn-text-2)" }}
+                              onMouseEnter={e => { e.currentTarget.style.background = "rgba(39,187,210,0.1)"; e.currentTarget.style.color = "#27bbd2"; }}
+                              onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "var(--cn-text-2)"; }}>
                               <ExternalLink size={13} /> View profile
                             </button>
-                            <div className="my-1 border-t border-slate-100" />
+                            <div className="my-1" style={{ borderTop: "1px solid var(--cn-border-subtle)" }} />
                             <button onClick={() => toast.error("Delete coming soon")}
-                              className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] text-red-500 hover:bg-red-50 transition-colors duration-150">
+                              className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] transition-colors duration-150"
+                              style={{ color: "#ef4444" }}
+                              onMouseEnter={e => e.currentTarget.style.background = "rgba(239,68,68,0.08)"}
+                              onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
                               <Trash2 size={13} /> Delete
                             </button>
                           </PopoverContent>
@@ -411,24 +420,24 @@ const CompaniesTable = ({ sortOrder = "newest" }) => {
       </div>
 
       {/* ── Pagination footer ── */}
-      <div className="px-6 py-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3"
-        style={{ background: "linear-gradient(90deg,#fafbff,#f8fafc)" }}>
+      <div className="px-6 py-4 border-t flex flex-col sm:flex-row items-center justify-between gap-3"
+        style={{ background: "var(--cn-page-alt)", borderColor: "var(--cn-table-border)" }}>
 
         {/* left: count + rows-per-page */}
         <div className="flex items-center gap-3">
-          <p className="text-xs text-slate-400">
+          <p className="text-xs" style={{ color: "var(--cn-text-3)" }}>
             {rows.length === 0
               ? "No results"
-              : <><span className="font-semibold text-slate-600">{from}–{to}</span> of <span className="font-semibold text-slate-600">{rows.length}</span> companies</>
+              : <><span className="font-semibold" style={{ color: "var(--cn-text-2)" }}>{from}–{to}</span> of <span className="font-semibold" style={{ color: "var(--cn-text-2)" }}>{rows.length}</span> companies</>
             }
           </p>
           <div className="flex items-center gap-1.5">
-            <span className="text-xs text-slate-400">Rows</span>
+            <span className="text-xs" style={{ color: "var(--cn-text-3)" }}>Rows</span>
             <select
               value={pageSize}
               onChange={e => { setPageSize(Number(e.target.value)); setPage(1) }}
-              className="text-xs font-semibold text-slate-600 border border-slate-200 rounded-lg px-2 py-1 outline-none bg-white cursor-pointer"
-              style={{ boxShadow: "0 1px 3px rgba(15,23,42,0.05)" }}
+              className="text-xs font-semibold border rounded-lg px-2 py-1 outline-none cursor-pointer"
+              style={{ color: "var(--cn-text-2)", borderColor: "var(--cn-border-input)", background: "var(--cn-sort-bg)", boxShadow: "0 1px 3px rgba(15,23,42,0.05)" }}
             >
               {PAGE_SIZE_OPTIONS.map(n => <option key={n} value={n}>{n}</option>)}
             </select>
@@ -441,8 +450,8 @@ const CompaniesTable = ({ sortOrder = "newest" }) => {
           <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
             onClick={() => setPage(1)} disabled={page === 1}
             className="w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-150 disabled:opacity-30 disabled:cursor-not-allowed"
-            style={{ color: "#64748b" }}
-            onMouseEnter={e => !e.currentTarget.disabled && (e.currentTarget.style.background = "#eef2ff")}
+            style={{ color: "var(--cn-text-2)" }}
+            onMouseEnter={e => !e.currentTarget.disabled && (e.currentTarget.style.background = "var(--cn-table-row-hover)")}
             onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
           >
             <ChevronsLeft size={14} />
@@ -452,8 +461,8 @@ const CompaniesTable = ({ sortOrder = "newest" }) => {
           <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
             onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
             className="w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-150 disabled:opacity-30 disabled:cursor-not-allowed"
-            style={{ color: "#64748b" }}
-            onMouseEnter={e => !e.currentTarget.disabled && (e.currentTarget.style.background = "#eef2ff")}
+            style={{ color: "var(--cn-text-2)" }}
+            onMouseEnter={e => !e.currentTarget.disabled && (e.currentTarget.style.background = "var(--cn-table-row-hover)")}
             onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
           >
             <ChevronLeft size={14} />
@@ -469,14 +478,14 @@ const CompaniesTable = ({ sortOrder = "newest" }) => {
             }, [])
             .map((n, idx) =>
               n === "…"
-                ? <span key={`ellipsis-${idx}`} className="w-7 text-center text-xs text-slate-400">…</span>
+                ? <span key={`ellipsis-${idx}`} className="w-7 text-center text-xs" style={{ color: "var(--cn-text-3)" }}>…</span>
                 : (
                   <motion.button key={n} whileHover={{ scale: 1.08 }} whileTap={{ scale: 0.92 }}
                     onClick={() => setPage(n)}
                     className="w-7 h-7 rounded-lg text-xs font-semibold transition-all duration-150"
                     style={{
                       background: page === n ? "linear-gradient(135deg,#6366f1,#27bbd2)" : "transparent",
-                      color:      page === n ? "#fff" : "#64748b",
+                      color:      page === n ? "#fff" : "var(--cn-text-2)",
                       boxShadow:  page === n ? "0 2px 8px rgba(99,102,241,0.3)" : "none",
                     }}
                   >
@@ -490,8 +499,8 @@ const CompaniesTable = ({ sortOrder = "newest" }) => {
           <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
             onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}
             className="w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-150 disabled:opacity-30 disabled:cursor-not-allowed"
-            style={{ color: "#64748b" }}
-            onMouseEnter={e => !e.currentTarget.disabled && (e.currentTarget.style.background = "#eef2ff")}
+            style={{ color: "var(--cn-text-2)" }}
+            onMouseEnter={e => !e.currentTarget.disabled && (e.currentTarget.style.background = "var(--cn-table-row-hover)")}
             onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
           >
             <ChevronRight size={14} />
@@ -501,8 +510,8 @@ const CompaniesTable = ({ sortOrder = "newest" }) => {
           <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
             onClick={() => setPage(totalPages)} disabled={page === totalPages}
             className="w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-150 disabled:opacity-30 disabled:cursor-not-allowed"
-            style={{ color: "#64748b" }}
-            onMouseEnter={e => !e.currentTarget.disabled && (e.currentTarget.style.background = "#eef2ff")}
+            style={{ color: "var(--cn-text-2)" }}
+            onMouseEnter={e => !e.currentTarget.disabled && (e.currentTarget.style.background = "var(--cn-table-row-hover)")}
             onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
           >
             <ChevronsRight size={14} />

@@ -44,7 +44,7 @@ const Profile = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#f8fafc]">
+    <div className="min-h-screen" style={{ background: "var(--cn-profile-bg)" }}>
       <Navbar />
 
       {/* Banner */}
@@ -53,7 +53,7 @@ const Profile = () => {
         style={{ background: "linear-gradient(135deg,#27bbd2,#6366f1)" }}
       >
         <div className="absolute inset-0 opacity-10"
-          style={{ backgroundImage: "radial-gradient(circle at 20% 50%,white 1px,transparent 1px),radial-gradient(circle at 80% 20%,white 1px,transparent 1px)", backgroundSize: "40px 40px" }}
+          style={{ backgroundImage: "radial-gradient(circle at 20% 50%,var(--cn-profile-banner-dot) 1px,transparent 1px),radial-gradient(circle at 80% 20%,var(--cn-profile-banner-dot) 1px,transparent 1px)", backgroundSize: "40px 40px" }}
         />
       </div>
 
@@ -63,7 +63,7 @@ const Profile = () => {
           <div className="flex items-end justify-between mb-6">
             <div className="flex items-end gap-4">
               <div className="relative">
-                <Avatar className="h-28 w-28 border-4 border-white shadow-xl">
+                <Avatar className="h-28 w-28 border-4 shadow-xl" style={{ borderColor: "var(--cn-surface)" }}>
                   <AvatarImage src={user?.profile?.profilephoto} alt={user?.fullname} />
                   <AvatarFallback
                     className="text-3xl font-extrabold text-white"
@@ -74,8 +74,8 @@ const Profile = () => {
                 </Avatar>
               </div>
               <div className="mb-2">
-                <h1 className="text-2xl font-extrabold text-gray-900">{user?.fullname}</h1>
-                <p className="text-sm text-[#475569]">{user?.profile?.bio || "No bio added yet"}</p>
+                <h1 className="text-2xl font-extrabold" style={{ color: "var(--cn-text-1)" }}>{user?.fullname}</h1>
+                <p className="text-sm" style={{ color: "var(--cn-text-2)" }}>{user?.profile?.bio || "No bio added yet"}</p>
                 <Badge
                   className="mt-1 text-xs capitalize"
                   style={{ background: "rgba(39,187,210,0.1)", color: "#27bbd2", border: "1px solid rgba(39,187,210,0.2)" }}
@@ -88,8 +88,10 @@ const Profile = () => {
               whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.97 }}
               onClick={() => setOpen(true)}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold border-2 text-[#27bbd2] hover:bg-[#27bbd2]/5 transition-colors"
-              style={{ borderColor: "#27bbd2" }}
+              className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold border-2 transition-colors"
+              style={{ borderColor: "#27bbd2", color: "#27bbd2", background: "transparent" }}
+              onMouseEnter={e => e.currentTarget.style.background = "rgba(39,187,210,0.08)"}
+              onMouseLeave={e => e.currentTarget.style.background = "transparent"}
             >
               <Pen size={14} /> Edit Profile
             </motion.button>
@@ -104,18 +106,18 @@ const Profile = () => {
                 key={label}
                 className="rounded-2xl p-4 flex items-center gap-3"
                 style={{
-                  background: "rgba(255,255,255,0.75)",
+                  background: "var(--cn-card)",
                   backdropFilter: "blur(12px)",
-                  border: "1px solid rgba(39,187,210,0.15)",
-                  boxShadow: "0 4px 16px rgba(39,187,210,0.07)",
+                  border: "1px solid var(--cn-border)",
+                  boxShadow: "var(--cn-card-shadow)",
                 }}
               >
                 <div className="p-2.5 rounded-xl" style={{ background: bg }}>
                   <Icon size={18} style={{ color }} />
                 </div>
                 <div>
-                  <p className="text-xl font-extrabold text-gray-900">{value}</p>
-                  <p className="text-xs text-[#94a3b8]">{label}</p>
+                  <p className="text-xl font-extrabold" style={{ color: "var(--cn-text-1)" }}>{value}</p>
+                  <p className="text-xs" style={{ color: "var(--cn-text-3)" }}>{label}</p>
                 </div>
               </div>
             ))}
@@ -129,21 +131,21 @@ const Profile = () => {
             <div
               className="rounded-2xl p-6 md:col-span-1"
               style={{
-                background: "rgba(255,255,255,0.75)",
+                background: "var(--cn-card)",
                 backdropFilter: "blur(12px)",
-                border: "1px solid rgba(39,187,210,0.15)",
-                boxShadow: "0 4px 24px rgba(39,187,210,0.07)",
+                border: "1px solid var(--cn-border)",
+                boxShadow: "var(--cn-card-shadow)",
               }}
             >
-              <h2 className="font-bold text-gray-900 mb-4">Contact Info</h2>
+              <h2 className="font-bold mb-4" style={{ color: "var(--cn-text-1)" }}>Contact Info</h2>
               <div className="space-y-3">
-                <div className="flex items-center gap-3 text-sm text-[#475569]">
+                <div className="flex items-center gap-3 text-sm" style={{ color: "var(--cn-text-2)" }}>
                   <div className="p-2 rounded-lg" style={{ background: "rgba(39,187,210,0.08)" }}>
                     <Mail size={14} className="text-[#27bbd2]" />
                   </div>
                   <span className="truncate">{user?.email || "—"}</span>
                 </div>
-                <div className="flex items-center gap-3 text-sm text-[#475569]">
+                <div className="flex items-center gap-3 text-sm" style={{ color: "var(--cn-text-2)" }}>
                   <div className="p-2 rounded-lg" style={{ background: "rgba(99,102,241,0.08)" }}>
                     <Phone size={14} className="text-[#6366f1]" />
                   </div>
@@ -152,7 +154,7 @@ const Profile = () => {
               </div>
 
               <div className="mt-6">
-                <h2 className="font-bold text-gray-900 mb-3">Skills</h2>
+                <h2 className="font-bold mb-3" style={{ color: "var(--cn-text-1)" }}>Skills</h2>
                 <div className="flex flex-wrap gap-2">
                   {user?.profile?.skills?.length > 0
                     ? user.profile.skills.map((skill, i) => (
@@ -164,14 +166,14 @@ const Profile = () => {
                           {skill}
                         </span>
                       ))
-                    : <span className="text-sm text-[#94a3b8]">No skills added</span>
+                    : <span className="text-sm" style={{ color: "var(--cn-text-3)" }}>No skills added</span>
                   }
                 </div>
               </div>
 
               {/* Resume */}
               <div className="mt-6">
-                <h2 className="font-bold text-gray-900 mb-3">Resume</h2>
+                <h2 className="font-bold mb-3" style={{ color: "var(--cn-text-1)" }}>Resume</h2>
                 {user?.profile?.resume ? (
                   <a
                     href={user.profile.resume}
@@ -184,12 +186,14 @@ const Profile = () => {
                   </a>
                 ) : (
                   <div
-                    className="border-2 border-dashed rounded-xl p-4 text-center cursor-pointer hover:border-[#27bbd2] transition-colors"
+                    className="border-2 border-dashed rounded-xl p-4 text-center cursor-pointer transition-colors"
                     style={{ borderColor: "rgba(39,187,210,0.3)" }}
                     onClick={() => setOpen(true)}
+                    onMouseEnter={e => e.currentTarget.style.borderColor = "#27bbd2"}
+                    onMouseLeave={e => e.currentTarget.style.borderColor = "rgba(39,187,210,0.3)"}
                   >
                     <Upload size={20} className="text-[#27bbd2] mx-auto mb-1" />
-                    <p className="text-xs text-[#94a3b8]">Upload Resume</p>
+                    <p className="text-xs" style={{ color: "var(--cn-text-3)" }}>Upload Resume</p>
                     <p className="text-xs text-[#27bbd2] font-medium mt-1">AI Parse Resume</p>
                   </div>
                 )}
@@ -202,20 +206,20 @@ const Profile = () => {
             <div
               className="rounded-2xl p-6 md:col-span-2"
               style={{
-                background: "rgba(255,255,255,0.75)",
+                background: "var(--cn-card)",
                 backdropFilter: "blur(12px)",
-                border: "1px solid rgba(39,187,210,0.15)",
-                boxShadow: "0 4px 24px rgba(39,187,210,0.07)",
+                border: "1px solid var(--cn-border)",
+                boxShadow: "var(--cn-card-shadow)",
               }}
             >
               <div className="flex items-center gap-2 mb-5">
                 <Sparkles size={16} className="text-[#27bbd2]" />
-                <h2 className="font-bold text-gray-900">
+                <h2 className="font-bold" style={{ color: "var(--cn-text-1)" }}>
                   {user?.role === "recruiter" ? "Account Info" : "Recent Applications"}
                 </h2>
               </div>
               {user?.role === "recruiter" ? (
-                <p className="text-sm text-[#94a3b8]">Manage your job postings and company profiles from the admin panel.</p>
+                <p className="text-sm" style={{ color: "var(--cn-text-3)" }}>Manage your job postings and company profiles from the admin panel.</p>
               ) : (
                 <AppliedJobTable />
               )}

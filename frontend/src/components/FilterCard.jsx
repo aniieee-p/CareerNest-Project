@@ -91,7 +91,7 @@ const OptionRow = ({ opt, active, color, grad, type, onClick }) => {
         background: active
           ? `${color}14`
           : hovered
-          ? "rgba(15,23,42,0.035)"
+          ? "var(--cn-filter-option-hover)"
           : "transparent",
         border: active
           ? `1px solid ${color}30`
@@ -153,7 +153,7 @@ const OptionRow = ({ opt, active, color, grad, type, onClick }) => {
       <span
         className="text-[13px] font-medium leading-none"
         style={{
-          color: active ? color : hovered ? "#1e293b" : "#475569",
+          color: active ? color : hovered ? "var(--cn-text-1)" : "var(--cn-text-2)",
           fontWeight: active ? 600 : 500,
           transition: "color 0.15s ease",
         }}
@@ -217,7 +217,7 @@ const Section = ({ section, values, onChange }) => {
             <Icon size={13} className="text-white" />
           </div>
 
-          <span className="text-[12px] font-bold text-slate-600 tracking-widest uppercase">
+          <span className="text-[12px] font-bold tracking-widest uppercase" style={{ color: "var(--cn-text-2)" }}>
             {label}
           </span>
 
@@ -286,12 +286,11 @@ const FilterCard = ({ filters, onChange, onClear }) => {
     <div
       className="w-full rounded-2xl overflow-hidden relative"
       style={{
-        background: "rgba(255,255,255,0.82)",
+        background: "var(--cn-filter-bg)",
         backdropFilter: "blur(20px)",
         WebkitBackdropFilter: "blur(20px)",
-        border: "1px solid rgba(255,255,255,0.7)",
-        boxShadow:
-          "0 8px 32px rgba(15,23,42,0.08), 0 1px 0 rgba(255,255,255,0.9) inset, 0 -1px 0 rgba(39,187,210,0.08) inset",
+        border: "1px solid var(--cn-border)",
+        boxShadow: "var(--cn-card-shadow)",
       }}
     >
       {/* top gradient accent line */}
@@ -312,7 +311,7 @@ const FilterCard = ({ filters, onChange, onClear }) => {
       {/* ── Header ── */}
       <div
         className="relative flex items-center justify-between px-5 py-4"
-        style={{ borderBottom: "1px solid rgba(15,23,42,0.06)" }}
+        style={{ borderBottom: "1px solid var(--cn-border-subtle)" }}
       >
         <div className="flex items-center gap-2.5">
           <div
@@ -324,7 +323,7 @@ const FilterCard = ({ filters, onChange, onClear }) => {
           >
             <SlidersHorizontal size={14} className="text-white" />
           </div>
-          <span className="font-extrabold text-slate-800 text-[14.5px] tracking-tight">
+          <span className="font-extrabold text-[14.5px] tracking-tight" style={{ color: "var(--cn-text-1)" }}>
             Filters
           </span>
           <AnimatePresence>
@@ -385,8 +384,7 @@ const FilterCard = ({ filters, onChange, onClear }) => {
               <div
                 style={{
                   height: 1,
-                  background:
-                    "linear-gradient(90deg,transparent,rgba(15,23,42,0.07),transparent)",
+                  background: "linear-gradient(90deg,transparent,var(--cn-section-divider),transparent)",
                   margin: "0 4px",
                 }}
               />
@@ -398,10 +396,10 @@ const FilterCard = ({ filters, onChange, onClear }) => {
       {/* ── Footer hint ── */}
       <div
         className="relative flex items-center gap-1.5 px-5 py-3"
-        style={{ borderTop: "1px solid rgba(15,23,42,0.05)" }}
+        style={{ borderTop: "1px solid var(--cn-border-subtle)" }}
       >
         <Sparkles size={11} className="text-[#27bbd2]" />
-        <span className="text-[11px] text-slate-400 font-medium">
+        <span className="text-[11px] font-medium" style={{ color: "var(--cn-text-3)" }}>
           {activeTotal === 0
             ? "Select filters to narrow results"
             : `${activeTotal} filter${activeTotal > 1 ? "s" : ""} applied`}

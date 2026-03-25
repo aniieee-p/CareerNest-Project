@@ -78,8 +78,8 @@ const ApplicantsTable = () => {
             <Users size={32} strokeWidth={1.4} style={{ color: "#10b981" }} />
           </motion.div>
           <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.18 }}>
-            <h3 className="text-lg font-extrabold text-slate-800 mb-2">No applicants yet</h3>
-            <p className="text-sm text-slate-400 max-w-[260px] leading-relaxed mx-auto">
+            <h3 className="text-lg font-extrabold mb-2" style={{ color: "var(--cn-text-1)" }}>No applicants yet</h3>
+            <p className="text-sm max-w-[260px] leading-relaxed mx-auto" style={{ color: "var(--cn-text-3)" }}>
               Applications will appear here once candidates start applying.
             </p>
           </motion.div>
@@ -98,10 +98,11 @@ const ApplicantsTable = () => {
       <div className="overflow-x-auto">
         <table className="w-full text-sm border-collapse">
           <thead>
-            <tr style={{ background: "linear-gradient(90deg,#f0fdf8 0%,#ecfdf5 100%)" }}>
-              <th className="px-6 py-3.5 text-left text-[11px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 w-8">#</th>
+            <tr style={{ background: "var(--cn-page-alt)" }}>
+              <th className="px-6 py-3.5 text-left text-[11px] font-bold uppercase tracking-widest border-b w-8" style={{ color: "var(--cn-text-3)", borderColor: "var(--cn-table-border)" }}>#</th>
               {["Applicant", "Contact", "Resume", "Applied", "Status", "Actions"].map((h, i) => (
-                <th key={h} className={`px-6 py-3.5 text-[11px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 ${i === 5 ? "text-right" : "text-left"}`}>
+                <th key={h} className={`px-6 py-3.5 text-[11px] font-bold uppercase tracking-widest border-b ${i === 5 ? "text-right" : "text-left"}`}
+                  style={{ color: "var(--cn-text-3)", borderColor: "var(--cn-table-border)" }}>
                   {h}
                 </th>
               ))}
@@ -123,18 +124,18 @@ const ApplicantsTable = () => {
                   <motion.tr key={item._id}
                     initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, x: -16 }} transition={{ duration: 0.2, delay: i * 0.03 }}
-                    className="group border-b border-slate-100/70 cursor-default"
-                    style={{ background: isEven ? "#ffffff" : "#fafffe", transition: "background 0.15s ease, box-shadow 0.15s ease" }}
-                    onMouseEnter={e => { e.currentTarget.style.background = "#f0fdf8"; e.currentTarget.style.boxShadow = "inset 3px 0 0 #10b981" }}
-                    onMouseLeave={e => { e.currentTarget.style.background = isEven ? "#ffffff" : "#fafffe"; e.currentTarget.style.boxShadow = "none" }}
+                    className="group border-b cursor-default"
+                    style={{ background: isEven ? "var(--cn-table-bg)" : "var(--cn-page-alt)", borderColor: "var(--cn-table-border)", transition: "background 0.15s ease, box-shadow 0.15s ease" }}
+                    onMouseEnter={e => { e.currentTarget.style.background = "var(--cn-table-row-hover)"; e.currentTarget.style.boxShadow = "inset 3px 0 0 #10b981" }}
+                    onMouseLeave={e => { e.currentTarget.style.background = isEven ? "var(--cn-table-bg)" : "var(--cn-page-alt)"; e.currentTarget.style.boxShadow = "none" }}
                   >
-                    <td className="px-6 py-4 text-xs text-slate-300 font-mono select-none">{String(globalIdx + 1).padStart(2, "0")}</td>
+                    <td className="px-6 py-4 text-xs font-mono select-none" style={{ color: "var(--cn-text-3)" }}>{String(globalIdx + 1).padStart(2, "0")}</td>
 
                     {/* Applicant */}
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <Avatar className="w-9 h-9 rounded-xl border-2 border-white shrink-0"
-                          style={{ boxShadow: "0 2px 8px rgba(15,23,42,0.1)" }}>
+                        <Avatar className="w-9 h-9 rounded-xl border-2 shrink-0"
+                          style={{ borderColor: "var(--cn-surface)", boxShadow: "0 2px 8px rgba(15,23,42,0.1)" }}>
                           <AvatarImage src={item?.applicant?.profile?.profilephoto} className="object-cover rounded-xl" />
                           <AvatarFallback className="rounded-xl text-white text-xs font-extrabold"
                             style={{ background: `linear-gradient(135deg,${g1},${g2})` }}>
@@ -142,8 +143,8 @@ const ApplicantsTable = () => {
                           </AvatarFallback>
                         </Avatar>
                         <div>
-                          <p className="font-bold text-slate-800 text-[0.875rem] leading-tight group-hover:text-emerald-700 transition-colors duration-150">{name}</p>
-                          <p className="text-xs text-slate-400 mt-0.5 flex items-center gap-1">
+                          <p className="font-bold text-[0.875rem] leading-tight" style={{ color: "var(--cn-text-1)" }}>{name}</p>
+                          <p className="text-xs mt-0.5 flex items-center gap-1" style={{ color: "var(--cn-text-3)" }}>
                             <Mail size={10} />{item?.applicant?.email}
                           </p>
                         </div>
@@ -152,9 +153,9 @@ const ApplicantsTable = () => {
 
                     {/* Contact */}
                     <td className="px-6 py-4">
-                      <div className="flex items-center gap-1.5 text-xs text-slate-500">
-                        <Phone size={11} className="text-slate-300 shrink-0" />
-                        {item?.applicant?.phoneNumber || <span className="text-slate-300">—</span>}
+                      <div className="flex items-center gap-1.5 text-xs" style={{ color: "var(--cn-text-2)" }}>
+                        <Phone size={11} style={{ color: "var(--cn-text-3)" }} className="shrink-0" />
+                        {item?.applicant?.phoneNumber || <span style={{ color: "var(--cn-text-3)" }}>—</span>}
                       </div>
                     </td>
 
@@ -168,12 +169,12 @@ const ApplicantsTable = () => {
                               ? item?.applicant?.profile?.resumeOriginalName?.slice(0, 16) + "…"
                               : item?.applicant?.profile?.resumeOriginalName}
                           </a>
-                        : <span className="text-slate-300 text-xs">No resume</span>
+                        : <span className="text-xs" style={{ color: "var(--cn-text-3)" }}>No resume</span>
                       }
                     </td>
 
                     {/* Date */}
-                    <td className="px-6 py-4 text-xs text-slate-500 font-medium">{dateStr}</td>
+                    <td className="px-6 py-4 text-xs font-medium" style={{ color: "var(--cn-text-2)" }}>{dateStr}</td>
 
                     {/* Status */}
                     <td className="px-6 py-4">
@@ -220,16 +221,17 @@ const ApplicantsTable = () => {
       </div>
 
       {/* Pagination */}
-      <div className="px-6 py-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3"
-        style={{ background: "linear-gradient(90deg,#f8fffe,#f8fafc)" }}>
+      <div className="px-6 py-4 border-t flex flex-col sm:flex-row items-center justify-between gap-3"
+        style={{ background: "var(--cn-page-alt)", borderColor: "var(--cn-table-border)" }}>
         <div className="flex items-center gap-3">
-          <p className="text-xs text-slate-400">
-            <span className="font-semibold text-slate-600">{from}–{to}</span> of <span className="font-semibold text-slate-600">{items.length}</span> applicants
+          <p className="text-xs" style={{ color: "var(--cn-text-3)" }}>
+            <span className="font-semibold" style={{ color: "var(--cn-text-2)" }}>{from}–{to}</span> of <span className="font-semibold" style={{ color: "var(--cn-text-2)" }}>{items.length}</span> applicants
           </p>
           <div className="flex items-center gap-1.5">
-            <span className="text-xs text-slate-400">Rows</span>
+            <span className="text-xs" style={{ color: "var(--cn-text-3)" }}>Rows</span>
             <select value={pageSize} onChange={e => { setPageSize(Number(e.target.value)); setPage(1) }}
-              className="text-xs font-semibold text-slate-600 border border-slate-200 rounded-lg px-2 py-1 outline-none bg-white cursor-pointer">
+              className="text-xs font-semibold border rounded-lg px-2 py-1 outline-none cursor-pointer"
+              style={{ color: "var(--cn-text-2)", borderColor: "var(--cn-border-input)", background: "var(--cn-sort-bg)" }}>
               {PAGE_SIZE_OPTIONS.map(n => <option key={n} value={n}>{n}</option>)}
             </select>
           </div>
@@ -244,8 +246,8 @@ const ApplicantsTable = () => {
             <motion.button key={idx} whileHover={{ scale: dis ? 1 : 1.1 }} whileTap={{ scale: dis ? 1 : 0.9 }}
               onClick={fn} disabled={dis}
               className="w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-150 disabled:opacity-30 disabled:cursor-not-allowed"
-              style={{ color: "#64748b" }}
-              onMouseEnter={e => !dis && (e.currentTarget.style.background = "#ecfdf5")}
+              style={{ color: "var(--cn-text-2)" }}
+              onMouseEnter={e => !dis && (e.currentTarget.style.background = "var(--cn-table-row-hover)")}
               onMouseLeave={e => (e.currentTarget.style.background = "transparent")}>
               <Icon size={14} />
             </motion.button>

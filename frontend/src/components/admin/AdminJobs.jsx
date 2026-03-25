@@ -34,13 +34,13 @@ const AdminJobs = () => {
   const weekTrend = lastWeek === 0 ? null : Math.round(((thisWeek - lastWeek) / lastWeek) * 100)
 
   const stats = [
-    { label: "Total Jobs",      value: total,    icon: Briefcase,    accent: "#f59e0b", bg: "linear-gradient(135deg,#fffbeb,#fef3c7)", sub: "All posted listings"       },
-    { label: "New This Week",   value: thisWeek, icon: TrendingUp,   accent: "#10b981", bg: "linear-gradient(135deg,#ecfdf5,#d1fae5)", sub: "vs last 7 days", trend: weekTrend },
-    { label: "Active Listings", value: total,    icon: CheckCircle2, accent: "#27bbd2", bg: "linear-gradient(135deg,#ecfeff,#cffafe)", sub: "Currently live"             },
+    { label: "Total Jobs",      value: total,    icon: Briefcase,    accent: "#f59e0b", bg: "rgba(245,158,11,0.12)",  sub: "All posted listings"       },
+    { label: "New This Week",   value: thisWeek, icon: TrendingUp,   accent: "#10b981", bg: "rgba(16,185,129,0.12)",  sub: "vs last 7 days", trend: weekTrend },
+    { label: "Active Listings", value: total,    icon: CheckCircle2, accent: "#27bbd2", bg: "rgba(39,187,210,0.12)",  sub: "Currently live"             },
   ]
 
   return (
-    <div className="min-h-screen" style={{ background: "linear-gradient(160deg,#fffbf0 0%,#f8fafc 60%,#f0fdfa 100%)" }}>
+    <div className="min-h-screen" style={{ background: "linear-gradient(160deg,var(--cn-page) 0%,var(--cn-page-alt) 60%,var(--cn-page) 100%)" }}>
       <Navbar />
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10">
 
@@ -56,8 +56,8 @@ const AdminJobs = () => {
               <Briefcase size={20} className="text-white" />
             </div>
             <div>
-              <h1 className="text-2xl font-extrabold text-slate-800 tracking-tight leading-none">Jobs</h1>
-              <p className="text-xs text-slate-400 mt-1">Manage and monitor your posted job listings</p>
+              <h1 className="text-2xl font-extrabold tracking-tight leading-none" style={{ color: "var(--cn-text-1)" }}>Jobs</h1>
+              <p className="text-xs mt-1" style={{ color: "var(--cn-text-3)" }}>Manage and monitor your posted job listings</p>
             </div>
           </div>
           <motion.button
@@ -80,8 +80,8 @@ const AdminJobs = () => {
                 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: 0.08 + i * 0.08 }}
                 whileHover={{ y: -4, boxShadow: `0 16px 40px rgba(15,23,42,0.1), 0 0 0 1px ${accent}22` }}
-                className="relative bg-white rounded-2xl p-5 border border-slate-100 overflow-hidden cursor-default"
-                style={{ boxShadow: "0 2px 12px rgba(15,23,42,0.05)", transition: "box-shadow 0.2s ease, transform 0.2s ease" }}
+                className="relative rounded-2xl p-5 border overflow-hidden cursor-default"
+                style={{ background: "var(--cn-stat-bg)", borderColor: "var(--cn-stat-border)", boxShadow: "var(--cn-card-shadow)", transition: "box-shadow 0.2s ease, transform 0.2s ease" }}
               >
                 <div className="absolute top-0 left-0 right-0 h-[3px] rounded-t-2xl"
                   style={{ background: `linear-gradient(90deg,${accent},${accent}88)` }} />
@@ -97,21 +97,21 @@ const AdminJobs = () => {
                     <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }}
                       transition={{ delay: 0.3 + i * 0.08 }}
                       className="flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold"
-                      style={{ background: trend >= 0 ? "#ecfdf5" : "#fef2f2", color: trend >= 0 ? "#059669" : "#ef4444" }}>
+                      style={{ background: trend >= 0 ? "rgba(5,150,105,0.12)" : "rgba(239,68,68,0.12)", color: trend >= 0 ? "#059669" : "#ef4444" }}>
                       {Math.abs(trend)}%
                     </motion.div>
                   )}
                 </div>
-                <p className="text-[2rem] font-extrabold leading-none tracking-tight text-slate-900">{value}</p>
-                <p className="text-[0.8rem] font-semibold text-slate-600 mt-1">{label}</p>
-                <p className="text-[0.72rem] text-slate-400 mt-0.5">{sub}</p>
-                <div className="mt-4 h-1.5 rounded-full bg-slate-100 overflow-hidden">
+                <p className="text-[2rem] font-extrabold leading-none tracking-tight" style={{ color: "var(--cn-text-1)" }}>{value}</p>
+                <p className="text-[0.8rem] font-semibold mt-1" style={{ color: "var(--cn-text-2)" }}>{label}</p>
+                <p className="text-[0.72rem] mt-0.5" style={{ color: "var(--cn-text-3)" }}>{sub}</p>
+                <div className="mt-4 h-1.5 rounded-full overflow-hidden" style={{ background: "var(--cn-tag-bg)" }}>
                   <motion.div className="h-full rounded-full"
                     style={{ background: `linear-gradient(90deg,${accent},${accent}bb)` }}
                     initial={{ width: 0 }} animate={{ width: `${barPct}%` }}
                     transition={{ duration: 0.8, delay: 0.35 + i * 0.08, ease: "easeOut" }} />
                 </div>
-                <p className="text-[0.68rem] text-slate-400 mt-1.5 text-right">{barPct}% of total</p>
+                <p className="text-[0.68rem] mt-1.5 text-right" style={{ color: "var(--cn-text-3)" }}>{barPct}% of total</p>
               </motion.div>
             )
           })}
@@ -126,17 +126,17 @@ const AdminJobs = () => {
             <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
             <input value={input} onChange={e => setInput(e.target.value)}
               placeholder="Search by title or company…"
-              className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-200 bg-white text-sm text-slate-700 placeholder-slate-400 outline-none transition-all duration-200"
-              style={{ boxShadow: "0 1px 4px rgba(15,23,42,0.04)" }}
+              className="w-full pl-9 pr-4 py-2.5 rounded-xl border text-sm placeholder-slate-400 outline-none transition-all duration-200"
+              style={{ borderColor: "var(--cn-border-input)", background: "var(--cn-sort-bg)", color: "var(--cn-text-1)", boxShadow: "0 1px 4px rgba(15,23,42,0.04)" }}
               onFocus={e => { e.target.style.borderColor = "#f59e0b"; e.target.style.boxShadow = "0 0 0 3px rgba(245,158,11,0.12)" }}
-              onBlur={e  => { e.target.style.borderColor = "#e2e8f0"; e.target.style.boxShadow = "0 1px 4px rgba(15,23,42,0.04)" }}
+              onBlur={e  => { e.target.style.borderColor = "var(--cn-border-input)"; e.target.style.boxShadow = "0 1px 4px rgba(15,23,42,0.04)" }}
             />
           </div>
           <div className="relative">
             <motion.button whileHover={{ borderColor: "#f59e0b" }} whileTap={{ scale: 0.97 }}
               onClick={() => setFilterOpen(v => !v)}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-sm font-medium text-slate-600"
-              style={{ boxShadow: "0 1px 4px rgba(15,23,42,0.04)" }}>
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl border text-sm font-medium"
+              style={{ borderColor: "var(--cn-sort-border)", background: "var(--cn-sort-bg)", color: "var(--cn-sort-text)", boxShadow: "0 1px 4px rgba(15,23,42,0.04)" }}>
               <SlidersHorizontal size={14} />
               {SORT_OPTIONS.find(o => o.value === sort)?.label}
             </motion.button>
@@ -144,12 +144,12 @@ const AdminJobs = () => {
               {filterOpen && (
                 <motion.div initial={{ opacity: 0, y: 6, scale: 0.97 }} animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 6, scale: 0.97 }} transition={{ duration: 0.15 }}
-                  className="absolute right-0 top-full mt-2 w-44 bg-white rounded-xl border border-slate-100 p-1.5 z-20"
-                  style={{ boxShadow: "0 8px 28px rgba(15,23,42,0.1)" }}>
+                  className="absolute right-0 top-full mt-2 w-44 rounded-xl border p-1.5 z-20"
+                  style={{ background: "var(--cn-sort-bg)", borderColor: "var(--cn-sort-border)", boxShadow: "0 8px 28px rgba(15,23,42,0.15)" }}>
                   {SORT_OPTIONS.map(opt => (
                     <button key={opt.value} onClick={() => { setSort(opt.value); setFilterOpen(false) }}
                       className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-[13px] transition-colors duration-150"
-                      style={{ color: sort === opt.value ? "#f59e0b" : "#475569", background: sort === opt.value ? "#fffbeb" : "transparent", fontWeight: sort === opt.value ? 600 : 400 }}>
+                      style={{ color: sort === opt.value ? "#f59e0b" : "var(--cn-sort-text)", background: sort === opt.value ? "var(--cn-sort-item-active-bg)" : "transparent", fontWeight: sort === opt.value ? 600 : 400 }}>
                       {opt.label}
                       {sort === opt.value && <CheckCircle2 size={12} />}
                     </button>
@@ -163,8 +163,8 @@ const AdminJobs = () => {
         {/* Table card */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.28 }}
-          className="bg-white rounded-2xl border border-slate-100 overflow-hidden"
-          style={{ boxShadow: "0 4px 28px rgba(15,23,42,0.07)" }}>
+          className="rounded-2xl border overflow-hidden"
+          style={{ background: "var(--cn-table-bg)", borderColor: "var(--cn-table-border)", boxShadow: "var(--cn-card-shadow)" }}>
           <AdminJobsTable sortOrder={sort} />
         </motion.div>
       </div>

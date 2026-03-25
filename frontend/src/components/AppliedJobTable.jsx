@@ -31,8 +31,8 @@ const AppliedJobTable = () => {
             key={appliedJob._id}
             className="flex items-center justify-between p-4 rounded-xl transition-all"
             style={{
-              background: "rgba(248,250,252,0.8)",
-              border: "1px solid rgba(39,187,210,0.1)",
+              background: "var(--cn-stat-bg)",
+              border: "1px solid var(--cn-border)",
             }}
           >
             <div className="flex items-center gap-3">
@@ -43,12 +43,12 @@ const AppliedJobTable = () => {
                 {appliedJob.job?.company?.name?.charAt(0) || "?"}
               </div>
               <div>
-                <p className="font-semibold text-gray-900 text-sm">{appliedJob.job?.title || "—"}</p>
+                <p className="font-semibold text-sm" style={{ color: "var(--cn-text-1)" }}>{appliedJob.job?.title || "—"}</p>
                 <div className="flex items-center gap-3 mt-0.5">
-                  <span className="text-xs text-[#94a3b8] flex items-center gap-1">
+                  <span className="text-xs flex items-center gap-1" style={{ color: "var(--cn-text-3)" }}>
                     <Building2 size={10} /> {appliedJob.job?.company?.name || "—"}
                   </span>
-                  <span className="text-xs text-[#94a3b8] flex items-center gap-1">
+                  <span className="text-xs flex items-center gap-1" style={{ color: "var(--cn-text-3)" }}>
                     <Calendar size={10} /> {appliedJob?.createdAt?.split("T")[0]}
                   </span>
                 </div>

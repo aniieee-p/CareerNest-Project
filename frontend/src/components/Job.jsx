@@ -70,7 +70,7 @@ const Job = ({ job }) => {
       <div
         ref={cardRef}
         className="relative rounded-[21px] p-5 overflow-hidden"
-        style={{ background: "linear-gradient(160deg,#ffffff 0%,rgba(39,187,210,0.03) 100%)", backdropFilter: "blur(16px)" }}
+        style={{ background: "var(--cn-card)", backdropFilter: "blur(16px)" }}
         onMouseMove={onMove}
         onMouseLeave={onLeave}
       >
@@ -128,20 +128,20 @@ const Job = ({ job }) => {
               <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-white bg-[#10b981]" />
             </div>
             <div className="min-w-0">
-              <p className="font-bold text-[#0f172a] text-[13.5px] leading-tight tracking-[-0.01em] truncate">
+              <p className="font-bold text-[13.5px] leading-tight tracking-[-0.01em] truncate" style={{ color: "var(--cn-text-1)" }}>
                 {job?.company?.name}
               </p>
-              <p className="text-[11px] text-[#94a3b8] flex items-center gap-1 mt-0.5 font-medium">
+              <p className="text-[11px] flex items-center gap-1 mt-0.5 font-medium" style={{ color: "var(--cn-text-3)" }}>
                 <MapPin size={9} strokeWidth={2.5} /> {job?.location || "India"}
               </p>
             </div>
           </div>
 
           {/* title + description */}
-          <h3 className="font-extrabold text-[#0f172a] text-[15px] tracking-[-0.02em] leading-snug mb-1.5 group-hover:text-[#0e7490] transition-colors duration-200">
+          <h3 className="font-extrabold text-[15px] tracking-[-0.02em] leading-snug mb-1.5 transition-colors duration-200" style={{ color: "var(--cn-text-1)" }}>
             {job?.title}
           </h3>
-          <p className="text-[12.5px] text-[#64748b] line-clamp-2 mb-4 leading-[1.65] font-[450]">
+          <p className="text-[12.5px] line-clamp-2 mb-4 leading-[1.65] font-[450]" style={{ color: "var(--cn-text-2)" }}>
             {job?.description}
           </p>
 
@@ -188,7 +188,7 @@ const Job = ({ job }) => {
               onClick={handleSave}
               className="flex-1 py-2.5 rounded-xl text-[12.5px] font-bold"
               style={isSaved
-                ? { background: "#f1f5f9", color: "#94a3b8" }
+                ? { background: "var(--cn-tag-bg)", color: "var(--cn-text-3)" }
                 : { background: "linear-gradient(135deg,#27bbd2,#6366f1)", color: "#fff", boxShadow: "0 2px 12px rgba(39,187,210,0.2)" }
               }
             >

@@ -113,8 +113,9 @@ const ForgotPassword = () => {
 
   const inputStyle = {
     paddingLeft: "2.6rem",
-    borderColor: focused ? "#6366f1" : "#e8edf4",
-    backgroundColor: focused ? "#fafbff" : "#ffffff",
+    borderColor: focused ? "#6366f1" : "var(--cn-input-border)",
+    backgroundColor: focused ? "var(--cn-input-focus)" : "var(--cn-input-bg)",
+    color: "var(--cn-text-1)",
     boxShadow: focused
       ? "0 0 0 3.5px rgba(99,102,241,0.11), 0 1px 6px rgba(99,102,241,0.07)"
       : "0 1px 2px rgba(15,23,42,0.04)",
@@ -238,8 +239,8 @@ const ForgotPassword = () => {
 
       {/* ══ RIGHT PANEL ══ */}
       <motion.div
-        style={{ x: rightX, y: rightY }}
-        className="flex-1 flex items-center justify-center bg-[#f8fafc] px-8 py-14"
+        style={{ x: rightX, y: rightY, background: "var(--cn-auth-right)" }}
+        className="flex-1 flex items-center justify-center px-8 py-14"
         initial={{ opacity: 0, x: 40 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
@@ -254,7 +255,7 @@ const ForgotPassword = () => {
             <div className="p-1.5 rounded-lg" style={{ background: "linear-gradient(135deg,#0ea5c9,#6366f1)" }}>
               <Briefcase size={16} className="text-white" />
             </div>
-            <span className="text-lg font-extrabold text-gray-900">
+            <span className="text-lg font-extrabold" style={{ color: "var(--cn-text-1)" }}>
               Career<span style={{ background: "linear-gradient(90deg,#0ea5c9,#6366f1)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Nest</span>
             </span>
           </Link>
@@ -295,13 +296,13 @@ const ForgotPassword = () => {
           </motion.div>
 
           <div className="mb-8">
-            <h1 className="text-[1.65rem] font-extrabold text-slate-900 tracking-[-0.02em] leading-tight">
+            <h1 className="text-[1.65rem] font-extrabold tracking-[-0.02em] leading-tight" style={{ color: "var(--cn-text-1)" }}>
               Recover your account<br />
               <span style={{ background: "linear-gradient(90deg,#6366f1,#0ea5c9)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
                 securely
               </span>
             </h1>
-            <p className="text-[0.8125rem] text-slate-400 mt-2 leading-relaxed">
+            <p className="text-[0.8125rem] mt-2 leading-relaxed" style={{ color: "var(--cn-text-3)" }}>
               Enter your email and we'll send you a secure reset link — expires in 1 hour.
             </p>
           </div>
@@ -335,7 +336,7 @@ const ForgotPassword = () => {
               </div>
 
               <div className="rounded-2xl p-6 text-center"
-                style={{ background: "#f0fdf4", border: "1px solid #bbf7d0" }}>
+                style={{ background: "rgba(16,185,129,0.08)", border: "1px solid rgba(16,185,129,0.25)" }}>
                 <motion.div
                   initial={{ scale: 0, rotate: -20 }} animate={{ scale: 1, rotate: 0 }}
                   transition={{ delay: 0.1, type: "spring", stiffness: 260, damping: 18 }}
@@ -347,19 +348,19 @@ const ForgotPassword = () => {
                 <motion.p
                   initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2 }}
-                  className="text-[0.9375rem] font-bold text-slate-800 mb-1">
+                  className="text-[0.9375rem] font-bold mb-1" style={{ color: "var(--cn-text-1)" }}>
                   Check your inbox
                 </motion.p>
                 <motion.p
                   initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}
-                  className="text-[0.8rem] text-slate-500 leading-relaxed">
+                  className="text-[0.8rem] leading-relaxed" style={{ color: "var(--cn-text-2)" }}>
                   We sent a reset link to{" "}
-                  <span className="font-semibold text-slate-700">{email}</span>.
-                  <br />It expires in <span className="font-semibold text-slate-700">1 hour</span>.
+                  <span className="font-semibold" style={{ color: "var(--cn-text-1)" }}>{email}</span>.
+                  <br />It expires in <span className="font-semibold" style={{ color: "var(--cn-text-1)" }}>1 hour</span>.
                 </motion.p>
                 <motion.p
                   initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.45 }}
-                  className="text-[0.75rem] text-slate-400 mt-3">
+                  className="text-[0.75rem] mt-3" style={{ color: "var(--cn-text-3)" }}>
                   Didn't receive it?{" "}
                   <button type="button" onClick={() => setSent(false)}
                     className="font-semibold hover:opacity-70 transition-opacity duration-150"
@@ -372,7 +373,7 @@ const ForgotPassword = () => {
           ) : (
             <form onSubmit={onSubmit} className="space-y-4">
               <div className="space-y-2">
-                <label htmlFor="email" className="block text-[0.8125rem] font-semibold text-slate-600 tracking-wide">
+                <label htmlFor="email" className="block text-[0.8125rem] font-semibold tracking-wide" style={{ color: "var(--cn-text-2)" }}>
                   Email address
                 </label>
                 <div className="relative">
@@ -388,7 +389,7 @@ const ForgotPassword = () => {
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="you@example.com" required
                     onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
-                    className="w-full py-[0.72rem] pr-4 rounded-xl border text-[0.8125rem] text-slate-800 placeholder-slate-300 outline-none"
+                    className="w-full py-[0.72rem] pr-4 rounded-xl border text-[0.8125rem] placeholder-slate-300 outline-none"
                     style={inputStyle}
                   />
                 </div>
@@ -431,10 +432,10 @@ const ForgotPassword = () => {
             </Link>
           </div>
 
-          <p className="text-center text-[0.72rem] text-slate-400 mt-6 leading-relaxed">
+          <p className="text-center text-[0.72rem] mt-6 leading-relaxed" style={{ color: "var(--cn-text-3)" }}>
             By continuing you agree to our{" "}
-            <span className="underline cursor-pointer hover:text-slate-500 transition-colors duration-150">Terms</span>{" "}&{" "}
-            <span className="underline cursor-pointer hover:text-slate-500 transition-colors duration-150">Privacy Policy</span>.
+            <span className="underline cursor-pointer transition-colors duration-150" style={{ color: "var(--cn-text-2)" }}>Terms</span>{" "}&{" "}
+            <span className="underline cursor-pointer transition-colors duration-150" style={{ color: "var(--cn-text-2)" }}>Privacy Policy</span>.
           </p>
         </motion.div>
       </motion.div>

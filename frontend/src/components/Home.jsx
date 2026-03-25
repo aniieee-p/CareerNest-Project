@@ -147,10 +147,12 @@ const Home = () => {
   userGetAllJobs();
   const { user } = useSelector((store) => store.auth);
   const navigate = useNavigate();
-  useEffect(() => { if (user?.role === "recruiter") navigate("/admin/companies"); }, []);
+  useEffect(() => {
+    if (user?.role === "recruiter") navigate("/admin/companies");
+  }, [user]);
 
   return (
-    <div className="relative" style={{ backgroundColor: "#ffffff",
+    <div className="relative" style={{ backgroundColor: "var(--cn-page)",
       backgroundImage: "radial-gradient(ellipse 80% 50% at 20% -10%, rgba(39,187,210,0.06) 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 80% 110%, rgba(99,102,241,0.06) 0%, transparent 60%)" }}>
       <Navbar />
       <HeroSection />
@@ -160,13 +162,13 @@ const Home = () => {
       <section className="max-w-7xl mx-auto px-4 sm:px-8 py-28">
         <FadeUp className="text-center mb-16">
           <SectionLabel text="Why CareerNest" />
-          <h2 className="text-[2.15rem] md:text-[2.75rem] font-extrabold text-[#0f172a] leading-[1.15] tracking-[-0.02em] mt-1">
+          <h2 className="text-[2.15rem] md:text-[2.75rem] font-extrabold leading-[1.15] tracking-[-0.02em] mt-1" style={{ color: "var(--cn-text-1)" }}>
             Everything you need to{" "}
             <span style={{ background: "linear-gradient(135deg,#27bbd2 0%,#6366f1 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
               land your dream job
             </span>
           </h2>
-          <p className="text-[#64748b] mt-4 max-w-[480px] mx-auto text-[15px] leading-[1.7]">
+          <p className="mt-4 max-w-[480px] mx-auto text-[15px] leading-[1.7]" style={{ color: "var(--cn-text-2)" }}>
             From AI-powered matching to real-time alerts — every tool you need, in one place.
           </p>
         </FadeUp>
@@ -198,7 +200,7 @@ const Home = () => {
                   glow={glow}
                   className="h-full rounded-[21px] p-7"
                   style={{
-                    background: `linear-gradient(160deg, #ffffff 0%, ${color}04 100%)`,
+                    background: `linear-gradient(160deg, var(--cn-card) 0%, ${color}04 100%)`,
                     backdropFilter: "blur(16px)",
                   }}
                 >
@@ -220,8 +222,8 @@ const Home = () => {
                   </motion.div>
 
                   {/* text */}
-                  <h3 className="font-extrabold text-[#0f172a] mb-2.5 text-[15px] tracking-[-0.02em] leading-snug">{title}</h3>
-                  <p className="text-[13px] text-[#64748b] leading-[1.72] mb-6 font-[450]">{desc}</p>
+                  <h3 className="font-extrabold text-[15px] tracking-[-0.02em] leading-snug mb-2.5" style={{ color: "var(--cn-text-1)" }}>{title}</h3>
+                  <p className="text-[13px] leading-[1.72] mb-6 font-[450]" style={{ color: "var(--cn-text-2)" }}>{desc}</p>
 
                   {/* cta */}
                   <div className="flex items-center gap-1 text-[12px] font-bold group-hover:gap-2 transition-all duration-200"
@@ -237,7 +239,7 @@ const Home = () => {
 
       {/* ── How it works ── */}
       <section className="py-28 relative overflow-hidden"
-        style={{ background: "linear-gradient(180deg, #f8fafc 0%, #ffffff 100%)" }}>
+        style={{ background: "linear-gradient(180deg, var(--cn-page-alt) 0%, var(--cn-page) 100%)" }}>
         {/* subtle teal orb */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] pointer-events-none"
           style={{ background: "radial-gradient(ellipse at 50% 0%, rgba(39,187,210,0.06) 0%, transparent 70%)" }} />
@@ -245,13 +247,13 @@ const Home = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-8 relative">
           <FadeUp className="text-center mb-20">
             <SectionLabel text="Process" />
-            <h2 className="text-[2.15rem] md:text-[2.75rem] font-extrabold text-[#0f172a] leading-[1.15] tracking-[-0.02em] mt-1">
+            <h2 className="text-[2.15rem] md:text-[2.75rem] font-extrabold leading-[1.15] tracking-[-0.02em] mt-1" style={{ color: "var(--cn-text-1)" }}>
               Get hired in{" "}
               <span style={{ background: "linear-gradient(135deg,#27bbd2,#6366f1)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
                 4 simple steps
               </span>
             </h2>
-            <p className="text-[#64748b] mt-4 text-[15px] leading-[1.7]">
+            <p className="mt-4 text-[15px] leading-[1.7]" style={{ color: "var(--cn-text-2)" }}>
               From signup to offer letter — the whole journey, simplified.
             </p>
           </FadeUp>
@@ -283,8 +285,8 @@ const Home = () => {
                     style={{ color, background: `${color}12` }}>
                     STEP {num}
                   </span>
-                  <h3 className="font-bold text-[#0f172a] mb-2 text-[15px] tracking-[-0.01em]">{title}</h3>
-                  <p className="text-[13.5px] text-[#64748b] leading-[1.65] max-w-[175px]">{desc}</p>
+                  <h3 className="font-bold mb-2 text-[15px] tracking-[-0.01em]" style={{ color: "var(--cn-text-1)" }}>{title}</h3>
+                  <p className="text-[13.5px] leading-[1.65] max-w-[175px]" style={{ color: "var(--cn-text-2)" }}>{desc}</p>
                 </motion.div>
               </FadeUp>
             ))}

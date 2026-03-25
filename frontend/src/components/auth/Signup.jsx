@@ -179,8 +179,9 @@ const Signup = () => {
 
   const inputStyle = (field) => ({
     paddingLeft: "2.6rem",
-    borderColor: focusedField === field ? "#6366f1" : "#e8edf4",
-    backgroundColor: focusedField === field ? "#fafbff" : "#ffffff",
+    borderColor: focusedField === field ? "#6366f1" : "var(--cn-input-border)",
+    backgroundColor: focusedField === field ? "var(--cn-input-focus)" : "var(--cn-input-bg)",
+    color: "var(--cn-text-1)",
     boxShadow: focusedField === field
       ? "0 0 0 3.5px rgba(99,102,241,0.11), 0 1px 6px rgba(99,102,241,0.07)"
       : "0 1px 2px rgba(15,23,42,0.04)",
@@ -305,11 +306,12 @@ const Signup = () => {
       {/* ══ RIGHT PANEL ══ */}
       <motion.div
         style={{ x: rightX, y: rightY }}
-        className="flex-1 flex items-center justify-center bg-[#f8fafc] px-8 py-14 overflow-y-auto"
+        className="flex-1 flex items-center justify-center px-8 py-14 overflow-y-auto"
         initial={{ opacity: 0, x: 40 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
       >
+        <div style={{ background: "var(--cn-auth-right)", position: "absolute", inset: 0, zIndex: -1 }} />
         <motion.div
           initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45, delay: 0.1, ease: "easeOut" }}
@@ -320,17 +322,17 @@ const Signup = () => {
             <div className="p-1.5 rounded-lg" style={{ background: "linear-gradient(135deg,#0ea5c9,#6366f1)" }}>
               <Briefcase size={16} className="text-white" />
             </div>
-            <span className="text-lg font-extrabold text-gray-900">
+            <span className="text-lg font-extrabold" style={{ color: "var(--cn-text-1)" }}>
               Career<span style={{ background: "linear-gradient(90deg,#0ea5c9,#6366f1)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Nest</span>
             </span>
           </Link>
 
           {/* Heading */}
           <div className="mb-8">
-            <h1 className="text-[1.65rem] font-extrabold text-slate-900 tracking-[-0.02em] leading-tight">
+            <h1 className="text-[1.65rem] font-extrabold tracking-[-0.02em] leading-tight" style={{ color: "var(--cn-text-1)" }}>
               Create your account
             </h1>
-            <p className="text-[0.8125rem] text-slate-400 mt-2 leading-relaxed">
+            <p className="text-[0.8125rem] mt-2 leading-relaxed" style={{ color: "var(--cn-text-3)" }}>
               Already have an account?{" "}
               <Link to="/login" className="font-semibold transition-colors duration-150 hover:opacity-80"
                 style={{ color: "#6366f1" }}>
@@ -343,7 +345,7 @@ const Signup = () => {
 
             {/* Role toggle */}
             <div className="relative flex gap-1.5 p-1 rounded-xl"
-              style={{ background: "#f0f1ff", border: "1px solid #e0e7ff" }}>
+              style={{ background: "var(--cn-role-bg)", border: "1px solid var(--cn-role-border)" }}>
               {[
                 { value: "student",   label: "Student",   Icon: GraduationCap },
                 { value: "recruiter", label: "Recruiter", Icon: Building2 },
@@ -373,7 +375,7 @@ const Signup = () => {
 
             {/* Full name */}
             <div className="space-y-2">
-              <label htmlFor="fullname" className="block text-[0.8125rem] font-semibold text-slate-600 tracking-wide">Full name</label>
+              <label htmlFor="fullname" className="block text-[0.8125rem] font-semibold tracking-wide" style={{ color: "var(--cn-text-2)" }}>Full name</label>
               <div className="relative">
                 <motion.div className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"
                   animate={{ color: focusedField === "fullname" ? "#6366f1" : "#b0bac9", scale: focusedField === "fullname" ? 1.1 : 1 }}
@@ -383,14 +385,14 @@ const Signup = () => {
                 <input id="fullname" type="text" name="fullname" value={input.fullname}
                   onChange={onChange} placeholder="John Doe" required
                   onFocus={() => setFocused("fullname")} onBlur={() => setFocused(null)}
-                  className="w-full py-[0.72rem] pr-4 rounded-xl border text-[0.8125rem] text-slate-800 placeholder-slate-300 outline-none"
+                  className="w-full py-[0.72rem] pr-4 rounded-xl border text-[0.8125rem] placeholder-slate-300 outline-none"
                   style={inputStyle("fullname")} />
               </div>
             </div>
 
             {/* Email */}
             <div className="space-y-2">
-              <label htmlFor="email" className="block text-[0.8125rem] font-semibold text-slate-600 tracking-wide">Email address</label>
+              <label htmlFor="email" className="block text-[0.8125rem] font-semibold tracking-wide" style={{ color: "var(--cn-text-2)" }}>Email address</label>
               <div className="relative">
                 <motion.div className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"
                   animate={{ color: focusedField === "email" ? "#6366f1" : "#b0bac9", scale: focusedField === "email" ? 1.1 : 1 }}
@@ -400,14 +402,14 @@ const Signup = () => {
                 <input id="email" type="email" name="email" value={input.email}
                   onChange={onChange} placeholder="you@example.com" required
                   onFocus={() => setFocused("email")} onBlur={() => setFocused(null)}
-                  className="w-full py-[0.72rem] pr-4 rounded-xl border text-[0.8125rem] text-slate-800 placeholder-slate-300 outline-none"
+                  className="w-full py-[0.72rem] pr-4 rounded-xl border text-[0.8125rem] placeholder-slate-300 outline-none"
                   style={inputStyle("email")} />
               </div>
             </div>
 
             {/* Phone */}
             <div className="space-y-2">
-              <label htmlFor="phonenumber" className="block text-[0.8125rem] font-semibold text-slate-600 tracking-wide">Phone number</label>
+              <label htmlFor="phonenumber" className="block text-[0.8125rem] font-semibold tracking-wide" style={{ color: "var(--cn-text-2)" }}>Phone number</label>
               <div className="relative">
                 <motion.div className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"
                   animate={{ color: focusedField === "phonenumber" ? "#6366f1" : "#b0bac9", scale: focusedField === "phonenumber" ? 1.1 : 1 }}
@@ -417,14 +419,14 @@ const Signup = () => {
                 <input id="phonenumber" type="text" name="phonenumber" value={input.phonenumber}
                   onChange={onChange} placeholder="+91 9876543210" required
                   onFocus={() => setFocused("phonenumber")} onBlur={() => setFocused(null)}
-                  className="w-full py-[0.72rem] pr-4 rounded-xl border text-[0.8125rem] text-slate-800 placeholder-slate-300 outline-none"
+                  className="w-full py-[0.72rem] pr-4 rounded-xl border text-[0.8125rem] placeholder-slate-300 outline-none"
                   style={inputStyle("phonenumber")} />
               </div>
             </div>
 
             {/* Password */}
             <div className="space-y-2">
-              <label htmlFor="password" className="block text-[0.8125rem] font-semibold text-slate-600 tracking-wide">Password</label>
+              <label htmlFor="password" className="block text-[0.8125rem] font-semibold tracking-wide" style={{ color: "var(--cn-text-2)" }}>Password</label>
               <div className="relative">
                 <motion.div className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"
                   animate={{ color: focusedField === "password" ? "#6366f1" : "#b0bac9", scale: focusedField === "password" ? 1.1 : 1 }}
@@ -434,7 +436,7 @@ const Signup = () => {
                 <input id="password" type={showPass ? "text" : "password"} name="password"
                   value={input.password} onChange={onChange} placeholder="••••••••" required
                   onFocus={() => setFocused("password")} onBlur={() => setFocused(null)}
-                  className="w-full py-[0.72rem] pr-11 rounded-xl border text-[0.8125rem] text-slate-800 placeholder-slate-300 outline-none"
+                  className="w-full py-[0.72rem] pr-11 rounded-xl border text-[0.8125rem] placeholder-slate-300 outline-none"
                   style={inputStyle("password")} />
                 <motion.button type="button" onClick={() => setShowPass(!showPass)}
                   whileHover={{ color: "#475569" }} whileTap={{ scale: 0.82 }}
@@ -455,8 +457,8 @@ const Signup = () => {
 
             {/* Profile photo */}
             <div className="space-y-2">
-              <label className="block text-[0.8125rem] font-semibold text-slate-600 tracking-wide">
-                Profile photo <span className="text-slate-400 font-normal">(optional)</span>
+              <label className="block text-[0.8125rem] font-semibold tracking-wide" style={{ color: "var(--cn-text-2)" }}>
+                Profile photo <span className="font-normal" style={{ color: "var(--cn-text-3)" }}>(optional)</span>
               </label>
               <AnimatePresence mode="wait">
                 {input.file ? (
@@ -464,23 +466,23 @@ const Signup = () => {
                     initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.96 }} transition={{ duration: 0.18 }}
                     className="flex items-center gap-3 px-4 py-3 rounded-xl border"
-                    style={{ borderColor: "#c7d2fe", background: "#fafbff" }}
+                    style={{ borderColor: "var(--cn-border)", background: "var(--cn-input-bg)" }}
                   >
                     <img
                       src={URL.createObjectURL(input.file)}
                       alt="preview"
                       className="w-9 h-9 rounded-lg object-cover shrink-0"
-                      style={{ border: "1px solid #e0e7ff" }}
+                      style={{ border: "1px solid var(--cn-border)" }}
                     />
                     <div className="flex-1 min-w-0">
-                      <p className="text-[0.8rem] font-semibold text-slate-700 truncate">{input.file.name}</p>
-                      <p className="text-[0.7rem] text-slate-400">{(input.file.size / 1024).toFixed(0)} KB</p>
+                      <p className="text-[0.8rem] font-semibold truncate" style={{ color: "var(--cn-text-1)" }}>{input.file.name}</p>
+                      <p className="text-[0.7rem]" style={{ color: "var(--cn-text-3)" }}>{(input.file.size / 1024).toFixed(0)} KB</p>
                     </div>
                     <motion.button type="button"
                       whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
                       onClick={() => setInput({ ...input, file: "" })}
-                      className="shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-slate-400 hover:text-red-500 transition-colors duration-150"
-                      style={{ background: "#f1f5f9" }}>
+                      className="shrink-0 w-6 h-6 rounded-full flex items-center justify-center hover:text-red-500 transition-colors duration-150"
+                      style={{ background: "var(--cn-tag-bg)", color: "var(--cn-text-3)" }}>
                       <span className="text-[0.75rem] font-bold leading-none">✕</span>
                     </motion.button>
                   </motion.div>
@@ -488,20 +490,20 @@ const Signup = () => {
                   <motion.label key="upload"
                     initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.96 }} transition={{ duration: 0.18 }}
-                    whileHover={{ borderColor: "#a5b4fc", backgroundColor: "#fafbff" }}
+                    whileHover={{ borderColor: "#a5b4fc", backgroundColor: "var(--cn-input-focus)" }}
                     className="flex flex-col items-center gap-2 px-4 py-5 rounded-xl border-2 border-dashed cursor-pointer transition-all duration-200"
-                    style={{ borderColor: "#e2e8f0" }}
+                    style={{ borderColor: "var(--cn-border-input)" }}
                   >
                     <motion.div whileHover={{ scale: 1.1, rotate: -6 }}
                       className="w-9 h-9 rounded-xl flex items-center justify-center"
-                      style={{ background: "linear-gradient(135deg,#eef2ff,#e0e7ff)", border: "1px solid #c7d2fe" }}>
+                      style={{ background: "rgba(99,102,241,0.1)", border: "1px solid rgba(99,102,241,0.2)" }}>
                       <Upload size={15} strokeWidth={2} style={{ color: "#6366f1" }} />
                     </motion.div>
                     <div className="text-center">
-                      <p className="text-[0.8125rem] font-semibold text-slate-600">
-                        Click to upload <span className="text-[0.75rem] font-normal text-slate-400">or drag & drop</span>
+                      <p className="text-[0.8125rem] font-semibold" style={{ color: "var(--cn-text-2)" }}>
+                        Click to upload <span className="text-[0.75rem] font-normal" style={{ color: "var(--cn-text-3)" }}>or drag & drop</span>
                       </p>
-                      <p className="text-[0.7rem] text-slate-400 mt-0.5">PNG, JPG up to 5MB</p>
+                      <p className="text-[0.7rem] mt-0.5" style={{ color: "var(--cn-text-3)" }}>PNG, JPG up to 5MB</p>
                     </div>
                     <input type="file" accept="image/*" onChange={onFileChange} className="hidden" />
                   </motion.label>
@@ -539,10 +541,10 @@ const Signup = () => {
             </motion.button>
           </form>
 
-          <p className="text-center text-[0.72rem] text-slate-400 mt-8 leading-relaxed">
+          <p className="text-center text-[0.72rem] mt-8 leading-relaxed" style={{ color: "var(--cn-text-3)" }}>
             By signing up you agree to our{" "}
-            <span className="underline cursor-pointer hover:text-slate-500 transition-colors duration-150">Terms</span>{" "}&{" "}
-            <span className="underline cursor-pointer hover:text-slate-500 transition-colors duration-150">Privacy Policy</span>.
+            <span className="underline cursor-pointer transition-colors duration-150" style={{ color: "var(--cn-text-2)" }}>Terms</span>{" "}&{" "}
+            <span className="underline cursor-pointer transition-colors duration-150" style={{ color: "var(--cn-text-2)" }}>Privacy Policy</span>.
           </p>
         </motion.div>
       </motion.div>

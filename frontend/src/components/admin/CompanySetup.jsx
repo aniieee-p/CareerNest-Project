@@ -72,7 +72,7 @@ const CompanySetup = () => {
   }
 
   return (
-    <div className="min-h-screen" style={{ background: "linear-gradient(160deg,#f0f4ff 0%,#f8fafc 60%,#f0fdfa 100%)" }}>
+    <div className="min-h-screen" style={{ background: "linear-gradient(160deg,var(--cn-page) 0%,var(--cn-page-alt) 60%,var(--cn-page) 100%)" }}>
       <Navbar />
       <div className="max-w-2xl mx-auto px-4 py-10">
 
@@ -83,10 +83,10 @@ const CompanySetup = () => {
           <div className="flex items-center gap-4 mb-8">
             <motion.button whileHover={{ x: -3 }} whileTap={{ scale: 0.96 }}
               onClick={() => navigate("/admin/companies")}
-              className="w-9 h-9 rounded-xl flex items-center justify-center border border-slate-200 bg-white text-slate-500 shrink-0 transition-all duration-150"
-              style={{ boxShadow: "0 1px 4px rgba(15,23,42,0.06)" }}
+              className="w-9 h-9 rounded-xl flex items-center justify-center border shrink-0 transition-all duration-150"
+              style={{ background: "var(--cn-cancel-bg)", borderColor: "var(--cn-cancel-border)", color: "var(--cn-cancel-text)", boxShadow: "0 1px 4px rgba(15,23,42,0.06)" }}
               onMouseEnter={e => { e.currentTarget.style.borderColor = "#6366f1"; e.currentTarget.style.color = "#6366f1" }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = "#e2e8f0"; e.currentTarget.style.color = "#64748b" }}>
+              onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--cn-cancel-border)"; e.currentTarget.style.color = "var(--cn-cancel-text)" }}>
               <ArrowLeft size={16} />
             </motion.button>
             <div className="flex items-center gap-3">
@@ -95,38 +95,38 @@ const CompanySetup = () => {
                 <Building2 size={18} className="text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-extrabold text-slate-800 tracking-tight leading-none">Company Setup</h1>
-                <p className="text-xs text-slate-400 mt-0.5">Update your company profile and branding</p>
+                <h1 className="text-xl font-extrabold tracking-tight leading-none" style={{ color: "var(--cn-text-1)" }}>Company Setup</h1>
+                <p className="text-xs mt-0.5" style={{ color: "var(--cn-text-3)" }}>Update your company profile and branding</p>
               </div>
             </div>
           </div>
 
           {/* Form card */}
           <form onSubmit={onSubmit}
-            className="bg-white rounded-3xl border border-slate-100 overflow-hidden"
-            style={{ boxShadow: "0 8px 40px rgba(15,23,42,0.08)" }}>
+            className="rounded-3xl border overflow-hidden"
+            style={{ background: "var(--cn-setup-bg)", borderColor: "var(--cn-stat-border)", boxShadow: "0 8px 40px rgba(15,23,42,0.08)" }}>
 
             {/* Logo upload section */}
-            <div className="px-8 pt-8 pb-6 border-b border-slate-50">
-              <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Company Logo</p>
+            <div className="px-8 pt-8 pb-6 border-b" style={{ borderColor: "var(--cn-divider)" }}>
+              <p className="text-xs font-bold uppercase tracking-widest mb-4" style={{ color: "var(--cn-text-3)" }}>Company Logo</p>
               <div className="flex items-center gap-5">
-                <div className="relative w-20 h-20 rounded-2xl border-2 border-dashed border-slate-200 flex items-center justify-center overflow-hidden shrink-0 transition-all duration-200"
-                  style={{ background: preview ? "transparent" : "#f8faff" }}>
+                <div className="relative w-20 h-20 rounded-2xl border-2 border-dashed flex items-center justify-center overflow-hidden shrink-0 transition-all duration-200"
+                  style={{ borderColor: "var(--cn-upload-border)", background: preview ? "transparent" : "var(--cn-upload-bg)" }}>
                   {preview
                     ? <img src={preview} alt="logo" className="w-full h-full object-cover" />
-                    : <Building2 size={24} className="text-slate-300" />
+                    : <Building2 size={24} style={{ color: "var(--cn-text-3)" }} />
                   }
                 </div>
                 <div>
                   <label htmlFor="logo-upload"
-                    className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold cursor-pointer border border-slate-200 bg-white text-slate-600 transition-all duration-150"
-                    style={{ boxShadow: "0 1px 4px rgba(15,23,42,0.05)" }}
+                    className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold cursor-pointer border transition-all duration-150"
+                    style={{ background: "var(--cn-cancel-bg)", borderColor: "var(--cn-cancel-border)", color: "var(--cn-cancel-text)", boxShadow: "0 1px 4px rgba(15,23,42,0.05)" }}
                     onMouseEnter={e => { e.currentTarget.style.borderColor = "#6366f1"; e.currentTarget.style.color = "#6366f1" }}
-                    onMouseLeave={e => { e.currentTarget.style.borderColor = "#e2e8f0"; e.currentTarget.style.color = "#475569" }}>
+                    onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--cn-cancel-border)"; e.currentTarget.style.color = "var(--cn-cancel-text)" }}>
                     <Upload size={14} /> Upload Logo
                   </label>
                   <input id="logo-upload" type="file" accept="image/*" onChange={onFile} className="hidden" />
-                  <p className="text-xs text-slate-400 mt-1.5">PNG, JPG up to 2MB. Recommended 200×200px.</p>
+                  <p className="text-xs mt-1.5" style={{ color: "var(--cn-text-3)" }}>PNG, JPG up to 2MB. Recommended 200×200px.</p>
                 </div>
               </div>
             </div>
@@ -135,20 +135,22 @@ const CompanySetup = () => {
             <div className="px-8 py-6 grid grid-cols-1 sm:grid-cols-2 gap-5">
               {FIELDS.map(({ name, label, icon: Icon, placeholder, type, accent }) => (
                 <div key={name} className={name === "description" ? "sm:col-span-2" : ""}>
-                  <label className="flex items-center gap-1.5 text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">
+                  <label className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest mb-2" style={{ color: "var(--cn-text-3)" }}>
                     <Icon size={11} style={{ color: accent }} /> {label}
                   </label>
                   <div className="relative">
                     <Icon size={14}
                       className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none transition-colors duration-150"
-                      style={{ color: focused === name ? accent : "#cbd5e1" }} />
+                      style={{ color: focused === name ? accent : "var(--cn-text-3)" }} />
                     <input
                       type={type} name={name} value={input[name]}
                       onChange={onChange} placeholder={placeholder}
                       onFocus={() => setFocused(name)} onBlur={() => setFocused(null)}
-                      className="w-full pl-10 pr-4 py-3 rounded-xl border text-sm text-slate-800 placeholder-slate-300 outline-none transition-all duration-200"
+                      className="w-full pl-10 pr-4 py-3 rounded-xl border text-sm placeholder-slate-300 outline-none transition-all duration-200"
                       style={{
-                        borderColor: focused === name ? accent : "#e2e8f0",
+                        borderColor: focused === name ? accent : "var(--cn-input-border)",
+                        background: "var(--cn-input-bg)",
+                        color: "var(--cn-text-1)",
                         boxShadow: focused === name ? `0 0 0 3px ${accent}18` : "0 1px 3px rgba(15,23,42,0.04)",
                       }}
                     />
@@ -161,9 +163,10 @@ const CompanySetup = () => {
             <div className="px-8 pb-8 flex gap-3">
               <motion.button type="button" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
                 onClick={() => navigate("/admin/companies")}
-                className="flex-1 py-3 rounded-xl text-sm font-semibold text-slate-500 border border-slate-200 bg-white transition-all duration-150"
+                className="flex-1 py-3 rounded-xl text-sm font-semibold border transition-all duration-150"
+                style={{ background: "var(--cn-cancel-bg)", borderColor: "var(--cn-cancel-border)", color: "var(--cn-cancel-text)" }}
                 onMouseEnter={e => { e.currentTarget.style.borderColor = "#6366f1"; e.currentTarget.style.color = "#6366f1" }}
-                onMouseLeave={e => { e.currentTarget.style.borderColor = "#e2e8f0"; e.currentTarget.style.color = "#64748b" }}>
+                onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--cn-cancel-border)"; e.currentTarget.style.color = "var(--cn-cancel-text)" }}>
                 Cancel
               </motion.button>
 

@@ -39,11 +39,11 @@ function Tip({ label, children }) {
 }
 
 const TYPE_COLORS = {
-  "Full-time":  { bg: "#eff6ff", color: "#3b82f6", border: "#bfdbfe" },
-  "Part-time":  { bg: "#f5f3ff", color: "#8b5cf6", border: "#ddd6fe" },
-  "Remote":     { bg: "#ecfdf5", color: "#10b981", border: "#a7f3d0" },
-  "Internship": { bg: "#fff7ed", color: "#f97316", border: "#fed7aa" },
-  "Contract":   { bg: "#fef9c3", color: "#ca8a04", border: "#fde68a" },
+  "Full-time":  { bg: "rgba(59,130,246,0.1)",  color: "#3b82f6", border: "rgba(59,130,246,0.25)" },
+  "Part-time":  { bg: "rgba(139,92,246,0.1)",  color: "#8b5cf6", border: "rgba(139,92,246,0.25)" },
+  "Remote":     { bg: "rgba(16,185,129,0.1)",  color: "#10b981", border: "rgba(16,185,129,0.25)" },
+  "Internship": { bg: "rgba(249,115,22,0.1)",  color: "#f97316", border: "rgba(249,115,22,0.25)" },
+  "Contract":   { bg: "rgba(202,138,4,0.1)",   color: "#ca8a04", border: "rgba(202,138,4,0.25)"  },
 }
 
 const AdminJobsTable = ({ sortOrder = "newest" }) => {
@@ -82,16 +82,16 @@ const AdminJobsTable = ({ sortOrder = "newest" }) => {
           <motion.div initial={{ opacity: 0, scale: 0.7 }} animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, ease: [0.34, 1.56, 0.64, 1] }}
             className="w-20 h-20 rounded-3xl flex items-center justify-center mb-5"
-            style={{ background: "linear-gradient(145deg,#fffbeb,#fef3c7)", boxShadow: "0 8px 32px rgba(245,158,11,0.15)" }}>
+            style={{ background: "rgba(245,158,11,0.12)", boxShadow: "0 8px 32px rgba(245,158,11,0.15)" }}>
             <Briefcase size={32} strokeWidth={1.4} style={{ color: "#f59e0b" }} />
           </motion.div>
           <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.18 }}>
-            <h3 className="text-lg font-extrabold text-slate-800 mb-2">
+            <h3 className="text-lg font-extrabold mb-2" style={{ color: "var(--cn-text-1)" }}>
               {searchJobByText ? "No jobs found" : "No jobs posted yet"}
             </h3>
-            <p className="text-sm text-slate-400 max-w-[280px] leading-relaxed mx-auto mb-6">
+            <p className="text-sm max-w-[280px] leading-relaxed mx-auto mb-6" style={{ color: "var(--cn-text-3)" }}>
               {searchJobByText
-                ? <>No jobs match <span className="font-semibold text-slate-600">"{searchJobByText}"</span>.</>
+                ? <>No jobs match <span className="font-semibold" style={{ color: "var(--cn-text-2)" }}>"{searchJobByText}"</span>.</>
                 : "Post your first job listing to start receiving applications."}
             </p>
           </motion.div>
@@ -118,15 +118,16 @@ const AdminJobsTable = ({ sortOrder = "newest" }) => {
       <div className="overflow-x-auto">
         <table className="w-full text-sm border-collapse">
           <thead>
-            <tr style={{ background: "linear-gradient(90deg,#fffdf5 0%,#fffbeb 100%)" }}>
-              <th className="px-6 py-3.5 text-left text-[11px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 w-8">#</th>
+            <tr style={{ background: "var(--cn-page-alt)" }}>
+              <th className="px-6 py-3.5 text-left text-[11px] font-bold uppercase tracking-widest border-b w-8" style={{ color: "var(--cn-text-3)", borderColor: "var(--cn-table-border)" }}>#</th>
               {[
                 { label: "Company" }, { label: "Role" },
                 { label: "Posted", icon: <Calendar size={10} className="inline mb-0.5 mr-1" /> },
                 { label: "Type" }, { label: "Actions", right: true },
               ].map(({ label, icon, right }) => (
                 <th key={label}
-                  className={`px-6 py-3.5 text-[11px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 ${right ? "text-right" : "text-left"}`}>
+                  className={`px-6 py-3.5 text-[11px] font-bold uppercase tracking-widest border-b ${right ? "text-right" : "text-left"}`}
+                  style={{ color: "var(--cn-text-3)", borderColor: "var(--cn-table-border)" }}>
                   {icon}{label}
                 </th>
               ))}
@@ -145,38 +146,38 @@ const AdminJobsTable = ({ sortOrder = "newest" }) => {
                   <motion.tr key={job._id}
                     initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, x: -16 }} transition={{ duration: 0.2, delay: i * 0.03 }}
-                    className="group border-b border-slate-100/70 cursor-default"
-                    style={{ background: isEven ? "#ffffff" : "#fffdf8", transition: "background 0.15s ease, box-shadow 0.15s ease" }}
-                    onMouseEnter={e => { e.currentTarget.style.background = "#fffbeb"; e.currentTarget.style.boxShadow = "inset 3px 0 0 #f59e0b" }}
-                    onMouseLeave={e => { e.currentTarget.style.background = isEven ? "#ffffff" : "#fffdf8"; e.currentTarget.style.boxShadow = "none" }}
+                    className="group border-b cursor-default"
+                    style={{ background: isEven ? "var(--cn-table-bg)" : "var(--cn-page-alt)", borderColor: "var(--cn-table-border)", transition: "background 0.15s ease, box-shadow 0.15s ease" }}
+                    onMouseEnter={e => { e.currentTarget.style.background = "var(--cn-table-row-hover)"; e.currentTarget.style.boxShadow = "inset 3px 0 0 #f59e0b" }}
+                    onMouseLeave={e => { e.currentTarget.style.background = isEven ? "var(--cn-table-bg)" : "var(--cn-page-alt)"; e.currentTarget.style.boxShadow = "none" }}
                   >
-                    <td className="px-6 py-4 text-xs text-slate-300 font-mono select-none">{String(globalIdx + 1).padStart(2, "0")}</td>
+                    <td className="px-6 py-4 text-xs font-mono select-none" style={{ color: "var(--cn-text-3)" }}>{String(globalIdx + 1).padStart(2, "0")}</td>
 
                     {/* Company */}
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <Avatar className="w-9 h-9 rounded-xl border-2 border-white shrink-0"
-                          style={{ boxShadow: "0 2px 8px rgba(15,23,42,0.1)" }}>
+                        <Avatar className="w-9 h-9 rounded-xl border-2 shrink-0"
+                          style={{ borderColor: "var(--cn-surface)", boxShadow: "0 2px 8px rgba(15,23,42,0.1)" }}>
                           <AvatarImage src={job?.company?.logo} className="object-cover rounded-xl" />
                           <AvatarFallback className="rounded-xl text-white text-xs font-extrabold"
                             style={{ background: `linear-gradient(135deg,${g1},${g2})` }}>
                             {job?.company?.name?.[0]?.toUpperCase()}
                           </AvatarFallback>
                         </Avatar>
-                        <span className="font-semibold text-slate-700 text-[0.875rem] group-hover:text-amber-600 transition-colors duration-150">
+                        <span className="font-semibold text-[0.875rem]" style={{ color: "var(--cn-text-2)" }}>
                           {job?.company?.name}
                         </span>
                       </div>
                     </td>
 
                     {/* Role */}
-                    <td className="px-6 py-4 font-bold text-slate-800 text-[0.875rem]">{job?.title}</td>
+                    <td className="px-6 py-4 font-bold text-[0.875rem]" style={{ color: "var(--cn-text-1)" }}>{job?.title}</td>
 
                     {/* Date */}
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-1.5">
-                        <Calendar size={12} className="text-slate-300 shrink-0" />
-                        <span className="text-xs text-slate-500 font-medium">{dateStr}</span>
+                        <Calendar size={12} style={{ color: "var(--cn-text-3)" }} className="shrink-0" />
+                        <span className="text-xs font-medium" style={{ color: "var(--cn-text-2)" }}>{dateStr}</span>
                       </div>
                     </td>
 
@@ -198,7 +199,7 @@ const AdminJobsTable = ({ sortOrder = "newest" }) => {
                             onClick={() => navigate(`/admin/companies/${job._id}`)}
                             className="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-150"
                             style={{ color: "#94a3b8" }}
-                            onMouseEnter={e => { e.currentTarget.style.background = "#fffbeb"; e.currentTarget.style.color = "#f59e0b" }}
+                            onMouseEnter={e => { e.currentTarget.style.background = "rgba(245,158,11,0.1)"; e.currentTarget.style.color = "#f59e0b" }}
                             onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#94a3b8" }}>
                             <Edit2 size={14} />
                           </motion.button>
@@ -208,7 +209,7 @@ const AdminJobsTable = ({ sortOrder = "newest" }) => {
                             onClick={() => navigate(`/admin/jobs/${job._id}/applicants`)}
                             className="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-150"
                             style={{ color: "#94a3b8" }}
-                            onMouseEnter={e => { e.currentTarget.style.background = "#ecfeff"; e.currentTarget.style.color = "#27bbd2" }}
+                            onMouseEnter={e => { e.currentTarget.style.background = "rgba(39,187,210,0.1)"; e.currentTarget.style.color = "#27bbd2" }}
                             onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#94a3b8" }}>
                             <Eye size={14} />
                           </motion.button>
@@ -219,20 +220,26 @@ const AdminJobsTable = ({ sortOrder = "newest" }) => {
                               <motion.button whileHover={{ scale: 1.12 }} whileTap={{ scale: 0.88 }}
                                 className="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-150"
                                 style={{ color: "#94a3b8" }}
-                                onMouseEnter={e => { e.currentTarget.style.background = "#f1f5f9"; e.currentTarget.style.color = "#475569" }}
+                                onMouseEnter={e => { e.currentTarget.style.background = "var(--cn-surface-hover)"; e.currentTarget.style.color = "var(--cn-text-2)"; }}
                                 onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#94a3b8" }}>
                                 <MoreHorizontal size={15} />
                               </motion.button>
                             </Tip>
                           </PopoverTrigger>
-                          <PopoverContent align="end" className="w-40 p-1.5 rounded-xl border border-slate-100"
-                            style={{ boxShadow: "0 8px 28px rgba(15,23,42,0.1)" }}>
+                          <PopoverContent align="end" className="w-40 p-1.5 rounded-xl"
+                            style={{ background: "var(--cn-popover)", border: "1px solid var(--cn-border)", boxShadow: "0 8px 28px rgba(15,23,42,0.15)" }}>
                             <button onClick={() => navigate(`/admin/companies/${job._id}`)}
-                              className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] text-slate-600 hover:bg-amber-50 hover:text-amber-600 transition-colors duration-150">
+                              className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] transition-colors duration-150"
+                              style={{ color: "var(--cn-text-2)" }}
+                              onMouseEnter={e => { e.currentTarget.style.background = "rgba(245,158,11,0.1)"; e.currentTarget.style.color = "#f59e0b"; }}
+                              onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "var(--cn-text-2)"; }}>
                               <Edit2 size={13} /> Edit job
                             </button>
                             <button onClick={() => navigate(`/admin/jobs/${job._id}/applicants`)}
-                              className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] text-slate-600 hover:bg-sky-50 hover:text-sky-600 transition-colors duration-150">
+                              className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] transition-colors duration-150"
+                              style={{ color: "var(--cn-text-2)" }}
+                              onMouseEnter={e => { e.currentTarget.style.background = "rgba(39,187,210,0.1)"; e.currentTarget.style.color = "#27bbd2"; }}
+                              onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "var(--cn-text-2)"; }}>
                               <Eye size={13} /> View applicants
                             </button>
                           </PopoverContent>
@@ -248,17 +255,18 @@ const AdminJobsTable = ({ sortOrder = "newest" }) => {
       </div>
 
       {/* Pagination footer */}
-      <div className="px-6 py-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3"
-        style={{ background: "linear-gradient(90deg,#fffdf8,#f8fafc)" }}>
+      <div className="px-6 py-4 border-t flex flex-col sm:flex-row items-center justify-between gap-3"
+        style={{ background: "var(--cn-page-alt)", borderColor: "var(--cn-table-border)" }}>
         <div className="flex items-center gap-3">
-          <p className="text-xs text-slate-400">
+          <p className="text-xs" style={{ color: "var(--cn-text-3)" }}>
             {rows.length === 0 ? "No results" :
-              <><span className="font-semibold text-slate-600">{from}–{to}</span> of <span className="font-semibold text-slate-600">{rows.length}</span> jobs</>}
+              <><span className="font-semibold" style={{ color: "var(--cn-text-2)" }}>{from}–{to}</span> of <span className="font-semibold" style={{ color: "var(--cn-text-2)" }}>{rows.length}</span> jobs</>}
           </p>
           <div className="flex items-center gap-1.5">
-            <span className="text-xs text-slate-400">Rows</span>
+            <span className="text-xs" style={{ color: "var(--cn-text-3)" }}>Rows</span>
             <select value={pageSize} onChange={e => { setPageSize(Number(e.target.value)); setPage(1) }}
-              className="text-xs font-semibold text-slate-600 border border-slate-200 rounded-lg px-2 py-1 outline-none bg-white cursor-pointer">
+              className="text-xs font-semibold border rounded-lg px-2 py-1 outline-none cursor-pointer"
+              style={{ color: "var(--cn-text-2)", borderColor: "var(--cn-border-input)", background: "var(--cn-sort-bg)" }}>
               {PAGE_SIZE_OPTIONS.map(n => <option key={n} value={n}>{n}</option>)}
             </select>
           </div>
@@ -273,8 +281,8 @@ const AdminJobsTable = ({ sortOrder = "newest" }) => {
             <motion.button key={idx} whileHover={{ scale: disabled ? 1 : 1.1 }} whileTap={{ scale: disabled ? 1 : 0.9 }}
               onClick={action} disabled={disabled}
               className="w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-150 disabled:opacity-30 disabled:cursor-not-allowed"
-              style={{ color: "#64748b" }}
-              onMouseEnter={e => !disabled && (e.currentTarget.style.background = "#fffbeb")}
+              style={{ color: "var(--cn-text-2)" }}
+              onMouseEnter={e => !disabled && (e.currentTarget.style.background = "var(--cn-table-row-hover)")}
               onMouseLeave={e => (e.currentTarget.style.background = "transparent")}>
               <Icon size={14} />
             </motion.button>
