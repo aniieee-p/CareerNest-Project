@@ -9,7 +9,7 @@ import jobRoute from './routes/job.route.js';
 import applicationRoute from './routes/application.route.js';
 import contactRoute from './routes/contact.route.js';
 
-dotenv.config({});
+dotenv.config();
 
 
 const app = express();
