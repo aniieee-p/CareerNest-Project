@@ -11,6 +11,7 @@ import contactRoute from './routes/contact.route.js';
 
 dotenv.config();
 
+console.log("MONGO_URI:", process.env.MONGO_URI ? "loaded" : "MISSING");
 
 const app = express();
 
