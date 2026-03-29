@@ -93,6 +93,28 @@ app.get("/home", (req, res) => {
     });
 });
 
+// 👇 YEH ADD KARO TEMPORARILY
+import nodemailer from 'nodemailer';
+
+app.get("/test-email", async (req, res) => {
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: process.env.EMAIL,
+      pass: process.env.EMAIL_PASS
+    }
+  });
+
+  await transporter.sendMail({
+    from: process.env.EMAIL,
+    to: process.env.EMAIL, // apne aap ko hi bhejo test ke liye
+    subject: "CareerNest Test",
+    text: "Nodemailer is working!"
+  });
+
+  res.json({ message: "Email sent! ✅" });
+});
+
 // api routes
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/company", companyRoute);
