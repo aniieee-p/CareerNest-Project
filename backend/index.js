@@ -8,6 +8,7 @@ import companyRoute from './routes/company.route.js';
 import jobRoute from './routes/job.route.js';
 import applicationRoute from './routes/application.route.js';
 import contactRoute from './routes/contact.route.js';
+import aiRoute from './routes/ai.route.js';
 
 dotenv.config();
 
@@ -41,6 +42,7 @@ app.use("/api/v1/company", companyRoute);
 app.use("/api/v1/job", jobRoute);
 app.use("/api/v1/application", applicationRoute);
 app.use("/api/v1/contact", contactRoute);
+app.use("/api/v1/ai", aiRoute);
 
 
 
