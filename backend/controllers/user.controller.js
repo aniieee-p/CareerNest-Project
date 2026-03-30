@@ -23,6 +23,7 @@ export const register = async (req, res) => {
       });
     }
     const hasedPassword = await bcrypt.hash(password, 10);
+    // note: typo in var name (hasedPassword) - keeping it consistent with rest of file
 
     let profilePhotoUrl = "";
     const file = req.file;
@@ -86,6 +87,7 @@ export const login = async (req, res) => {
     const tokenData = {
       userId: user._id,
     };
+    // jwt sign - 1 day expiry works fine for now
     const token = await jwt.sign(tokenData, process.env.SECRET_KEY, {
       expiresIn: "1d",
     });

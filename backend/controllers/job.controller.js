@@ -1,11 +1,12 @@
 import { Job } from "../models/job.model.js";
 
-// admin can host a job
+// admin posts a job
 export const PostJob = async (req, res) => {
     try {
         const { title, description, requirements, salary, location, jobType, experience, position, companyId } = req.body;
-        const userId = req.id; // logged in user id
+        const userId = req.id;
 
+        // TODO: add better validation later
         if(!title || !description || !requirements || !salary || !location || !jobType || !experience || !position || !companyId){
             return res.status(400).json({
                 message: "Something is missing.",
@@ -51,10 +52,10 @@ export const getAllJobs = async (req, res) => {
             success: false
             })  
         }
+        // console.log("jobs fetched:", jobs.length) // debug
         return res.status(200).json({
             jobs,
             success: true,
-
         })
     } catch (error) {
     console.log(error);        

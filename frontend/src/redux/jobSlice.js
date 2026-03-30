@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+// job related state - might split this into separate slices later
 const jobSlice = createSlice({
     name:"job",
     initialState:{
@@ -12,7 +13,6 @@ const jobSlice = createSlice({
         savedJobs:[],
     },
     reducers:{
-        // actions 
         setAllJobs:(state,action) => {
             state.allJobs = action.payload;
         },

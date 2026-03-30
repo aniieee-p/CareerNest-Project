@@ -121,7 +121,7 @@ const Jobs = () => {
       try {
         const res = await axios.get(`${JOB_API_END_POINT}/get`, { withCredentials: true });
         if (res.data.success) dispatch(setAllJobs(res.data.jobs));
-      } catch (e) { console.log(e); }
+      } catch (e) { console.log("fetch jobs error:", e); }
     };
     fetchJobs();
   }, []);
@@ -145,6 +145,7 @@ const Jobs = () => {
 
   const handleSearch = () => dispatch(setSearchedQuery(localQuery));
 
+  // count active filters (arrays count each item separately)
   const activeCount = Object.values(filters).reduce((acc, v) => {
     if (!v) return acc;
     return acc + (Array.isArray(v) ? v.length : 1);
