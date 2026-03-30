@@ -90,13 +90,13 @@ const JobDescription = () => {
                                 </div>
                                 <Button
                                     onClick={isApplied ? null : applyJobHandler}
-                                    disabled={isApplied}
-                                    className={`px-8 py-5 rounded-xl font-semibold ${isApplied ? 'cursor-not-allowed' : 'text-white'}`}
-                                    style={isApplied
+                                    disabled={isApplied || user?.role === 'recruiter'}
+                                    className={`px-8 py-5 rounded-xl font-semibold ${(isApplied || user?.role === 'recruiter') ? 'cursor-not-allowed' : 'text-white'}`}
+                                    style={(isApplied || user?.role === 'recruiter')
                                       ? { background: "var(--cn-tag-bg)", color: "var(--cn-text-3)" }
                                       : { background: "linear-gradient(135deg,#27bbd2,#6366f1)" }}
                                 >
-                                    {isApplied ? 'Already Applied' : 'Apply Now'}
+                                    {user?.role === 'recruiter' ? 'Not Available' : isApplied ? 'Already Applied' : 'Apply Now'}
                                 </Button>
                             </div>
 

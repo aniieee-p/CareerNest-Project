@@ -86,6 +86,7 @@ export const login = async (req, res) => {
 
     const tokenData = {
       userId: user._id,
+      role: user.role,
     };
     // jwt sign - 1 day expiry works fine for now
     const token = await jwt.sign(tokenData, process.env.SECRET_KEY, {

@@ -8,6 +8,9 @@ export const applyJob = async (req, res) => {
         if(!jobId){
             return res.status(400).json({ message: "Job id is required.", success: false });
         }
+        if(req.role === "recruiter"){
+            return res.status(403).json({ message: "Recruiters are not allowed to apply for jobs.", success: false });
+        }
         const existingApplication = await Application.findOne({ job: jobId, applicant: userId });
         if(existingApplication){
             return res.status(400).json({ message: "You have already applied for this job.", success: false });

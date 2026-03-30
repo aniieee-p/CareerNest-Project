@@ -30,6 +30,7 @@ const Profile = () => {
   useGetAppliedJobs();
   const [open, setOpen] = useState(false);
   const { allAppliedJobs = [], savedJobs = [] } = useSelector((store) => store.job);
+  const isRecruiter = user?.role === "recruiter";
 
   // Redirect to login if not authenticated
   React.useEffect(() => {
@@ -37,7 +38,7 @@ const Profile = () => {
   }, [user]);
 
   const stats = [
-    { icon: Send, label: "Applications", value: allAppliedJobs.length, color: "#27bbd2", bg: "rgba(39,187,210,0.1)" },
+    { icon: Send, label: "Applications", value: isRecruiter ? 0 : allAppliedJobs.length, color: "#27bbd2", bg: "rgba(39,187,210,0.1)" },
     { icon: Eye, label: "Profile Views", value: "142", color: "#6366f1", bg: "rgba(99,102,241,0.1)" },
     { icon: Briefcase, label: "Job Matches", value: "38", color: "#f59e0b", bg: "rgba(245,158,11,0.1)" },
     { icon: Bookmark, label: "Saved Jobs", value: savedJobs.length, color: "#10b981", bg: "rgba(16,185,129,0.1)" },
