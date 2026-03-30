@@ -244,3 +244,50 @@ export const resetPassword = async (req, res) => {
         return res.status(500).json({ message: "Server error", success: false });
     }
 };
+
+export const trackProfileView = async (req, res) => {
+    try {
+        const { id } = req.params;
+        // don't count self-views
+        if (req.id === id) {
+            const user = await User.findById(id).select("profileViews");
+            return res.status(200).json({ profileViews: user?.profileViews || 0, success: true });
+        }
+        const user = await User.findByIdAndUpdate(
+            id,
+            { $inc: { profileViews: 1 } },
+            { new: true }
+        ).select("profileViews");
+        if (!user) return res.status(404).json({ message: "User not found", success: false });
+        return res.status(200).json({ profileViews: user.profileViews, success: true });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "Server error", success: false });
+    }
+};
+
+export const getProfileStats = async (req, res) => {
+    try {
+        const userId = req.id;
+        const user = await User.findById(userId).select("profileViews profile.skills");
+        if (!user) return res.status(404).json({ message: "User not found", success: false });
+
+        const { Job } = await import("../models/job.model.js");
+        const skills = user.profile?.skills || [];
+        let jobMatches = 0;
+        if (skills.length > 0) {
+            jobMatches = await Job.countDocuments({
+                requirements: { $in: skills.map(s => new RegExp(s, "i")) }
+            });
+        }
+
+        return res.status(200).json({
+            profileViews: user.profileViews || 0,
+            jobMatches,
+            success: true
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "Server error", success: false });
+    }
+};

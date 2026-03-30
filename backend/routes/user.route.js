@@ -7,9 +7,10 @@ import {
   updateProfile,
   forgotPassword,
   resetPassword,
+  trackProfileView,
+  getProfileStats,
 } from "../controllers/user.controller.js";
 import isAuthenticated from "../middlewares/isAuthenticated.js";
-
 
 const router = express.Router();
 
@@ -17,6 +18,8 @@ router.route("/register").post(singleUpload, register);
 router.route("/login").post(login);
 router.route("/logout").get(logout);
 router.route("/profile/update").post(isAuthenticated, multiUpload, updateProfile);
+router.route("/profile/stats").get(isAuthenticated, getProfileStats);
+router.route("/profile/view/:id").post(isAuthenticated, trackProfileView);
 router.route("/forgot-password").post(forgotPassword);
 router.route("/reset-password/:token").post(resetPassword);
 

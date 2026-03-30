@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "./shared/Navbar";
 import { Avatar, AvatarImage, AvatarFallback } from "./ui/avatar";
 import { Badge } from "./ui/badge";
@@ -13,6 +13,8 @@ import {
   Upload, Sparkles
 } from "lucide-react";
 import Footer from "./shared/Footer";
+import axios from "axios";
+import { PROFILE_STATS_API, PROFILE_VIEW_API } from "@/utils/constant";
 
 const FadeUp = ({ children, delay = 0 }) => (
   <motion.div
@@ -29,6 +31,7 @@ const Profile = () => {
   const navigate = useNavigate();
   useGetAppliedJobs();
   const [open, setOpen] = useState(false);
+  const [profileStats, setProfileStats] = useState({ profileViews: 0, jobMatches: 0 });
   const { allAppliedJobs = [], savedJobs = [] } = useSelector((store) => store.job);
   const isRecruiter = user?.role === "recruiter";
 
@@ -37,11 +40,28 @@ const Profile = () => {
     if (!user) navigate("/login");
   }, [user]);
 
+  // fetch real profile stats
+  useEffect(() => {
+    if (!user) return;
+    const fetchStats = async () => {
+      try {
+        const res = await axios.get(PROFILE_STATS_API, { withCredentials: true });
+        if (res.data.success) setProfileStats({ profileViews: res.data.profileViews, jobMatches: res.data.jobMatches });
+      } catch (e) { console.log(e); }
+    };
+    // track self-view (backend ignores self-views for count but returns current value)
+    const trackView = async () => {
+      try { await axios.post(`${PROFILE_VIEW_API}/${user._id}`, {}, { withCredentials: true }); } catch (e) {}
+    };
+    fetchStats();
+    trackView();
+  }, [user?._id]);
+
   const stats = [
-    { icon: Send, label: "Applications", value: isRecruiter ? 0 : allAppliedJobs.length, color: "#27bbd2", bg: "rgba(39,187,210,0.1)" },
-    { icon: Eye, label: "Profile Views", value: "142", color: "#6366f1", bg: "rgba(99,102,241,0.1)" },
-    { icon: Briefcase, label: "Job Matches", value: "38", color: "#f59e0b", bg: "rgba(245,158,11,0.1)" },
-    { icon: Bookmark, label: "Saved Jobs", value: savedJobs.length, color: "#10b981", bg: "rgba(16,185,129,0.1)" },
+    { icon: Send,     label: "Applications",  value: isRecruiter ? 0 : allAppliedJobs.length,  color: "#27bbd2", bg: "rgba(39,187,210,0.1)" },
+    { icon: Eye,      label: "Profile Views",  value: profileStats.profileViews,                color: "#6366f1", bg: "rgba(99,102,241,0.1)" },
+    { icon: Briefcase,label: "Job Matches",    value: isRecruiter ? 0 : profileStats.jobMatches,color: "#f59e0b", bg: "rgba(245,158,11,0.1)" },
+    { icon: Bookmark, label: "Saved Jobs",     value: savedJobs.length,                         color: "#10b981", bg: "rgba(16,185,129,0.1)" },
   ];
 
   return (

@@ -36,6 +36,7 @@ const userSchema = new mongoose.Schema({
     },
     resetPasswordToken: { type: String },
     resetPasswordExpiry: { type: Date },
+    profileViews: { type: Number, default: 0 },
 }, { timestamps: true });
 
 const User = mongoose.model("User", userSchema);
