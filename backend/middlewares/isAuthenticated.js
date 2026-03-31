@@ -22,7 +22,11 @@ const isAuthenticated = async (req, res, next) => {
     next();
 
   } catch (error) {
-    console.log(error);
+    console.log("Auth Error:", error);
+
+    return res.status(401).json({
+      message: "Authentication failed",
+      success: false,
+    });
   }
-}
-export default isAuthenticated;
+};

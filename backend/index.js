@@ -15,15 +15,19 @@ dotenv.config();
 
 const app = express();
 
+// CORS configuration
 const corsOptions = {
     origin: [
         "https://careernest-anisha.netlify.app",
         "http://localhost:5173"
     ],
-    credentials: true
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"]
 };
 
 app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 
 // middleware
 app.use(express.json());
@@ -38,6 +42,11 @@ app.use("/api/v1/application", applicationRoute);
 app.use("/api/v1/contact", contactRoute);
 app.use("/api/v1/ai", aiRoute);
 
+// health check (optional but useful)
+app.get("/", (req, res) => {
+    res.send("API is running");
+});
+
 // PORT
 const PORT = process.env.PORT || 3000;
 
@@ -45,9 +54,9 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, async () => {
     try {
         await connectDB();
-        console.log("MongoDB connected successfully ✅");
+        console.log("MongoDB connected successfully");
         console.log(`Server running on port ${PORT}`);
     } catch (error) {
-        console.log("DB connection error ❌", error);
+        console.log("DB connection error", error);
     }
 });

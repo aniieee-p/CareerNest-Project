@@ -23,7 +23,7 @@ const AppliedJobTable = () => {
 
   return (
     <div className="space-y-3">
-      {allAppliedJobs.map((appliedJob) => {
+      {allAppliedJobs.filter(a => a?.job).map((appliedJob) => {
         const status = appliedJob?.status?.toLowerCase() || "pending";
         const cfg = statusConfig[status] || statusConfig.pending;
         return (
