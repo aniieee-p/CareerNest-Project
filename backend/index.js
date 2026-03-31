@@ -15,26 +15,37 @@ dotenv.config();
 
 const app = express();
 
+// trust proxy (important for cookies on Render)
+app.set("trust proxy", 1);
+
 // CORS configuration
+const allowedOrigins = [
+    "https://careernest-anisha.netlify.app",
+    "http://localhost:5173"
+];
+
 const corsOptions = {
-    origin: [
-        "https://careernest-anisha.netlify.app",
-        "http://localhost:5173"
-    ],
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"]
 };
 
 app.use(cors(corsOptions));
-// app.options('/*', cors(corsOptions));
+app.options('*', cors(corsOptions));
 
 // middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// api routes
+// routes
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/company", companyRoute);
 app.use("/api/v1/job", jobRoute);
@@ -42,7 +53,7 @@ app.use("/api/v1/application", applicationRoute);
 app.use("/api/v1/contact", contactRoute);
 app.use("/api/v1/ai", aiRoute);
 
-// health check (optional but useful)
+// health check
 app.get("/", (req, res) => {
     res.send("API is running");
 });
@@ -50,7 +61,7 @@ app.get("/", (req, res) => {
 // PORT
 const PORT = process.env.PORT || 3000;
 
-// connect DB + start server
+// start server
 app.listen(PORT, async () => {
     try {
         await connectDB();
