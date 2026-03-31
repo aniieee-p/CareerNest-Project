@@ -10,6 +10,7 @@ import { updateApplicationStatus } from '@/redux/applicationSlice'
 import axios from 'axios'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
+import CandidateSheet from './CandidateSheet'
 
 const PAGE_SIZE_OPTIONS = [5, 10, 20]
 
@@ -45,12 +46,13 @@ function Tip({ label, children }) {
   )
 }
 
-const ApplicantsTable = () => {
+const ApplicantsTable = ({ jobRequirements = [] }) => {
   const { applicants } = useSelector(s => s.application)
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [page,     setPage]     = useState(1)
   const [pageSize, setPageSize] = useState(10)
+  const [selectedId, setSelectedId] = useState(null)
 
   const statusHandler = async (status, id) => {
     try {
@@ -147,10 +149,9 @@ const ApplicantsTable = () => {
                         <div>
                           <p className="font-bold text-[0.875rem] leading-tight cursor-pointer hover:text-[#27bbd2] transition-colors"
                             style={{ color: "var(--cn-text-1)" }}
-                            onClick={() => navigate(`/profile/${item?.applicant?._id}`)}>
+                            onClick={() => setSelectedId(item?.applicant?._id)}>
                             {name}
-                          </p>
-                          <p className="text-xs mt-0.5 flex items-center gap-1" style={{ color: "var(--cn-text-3)" }}>
+                          </p>                          <p className="text-xs mt-0.5 flex items-center gap-1" style={{ color: "var(--cn-text-3)" }}>
                             <Mail size={10} />{item?.applicant?.email}
                           </p>
                         </div>
@@ -261,6 +262,12 @@ const ApplicantsTable = () => {
         </div>
       </div>
     </div>
+
+    <CandidateSheet
+      applicantId={selectedId}
+      jobRequirements={jobRequirements}
+      onClose={() => setSelectedId(null)}
+    />
   )
 }
 

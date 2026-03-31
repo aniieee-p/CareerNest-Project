@@ -123,7 +123,7 @@ const Applicants = () => {
           className="rounded-2xl border overflow-hidden"
           style={{ background: "var(--cn-table-bg)", borderColor: "var(--cn-table-border)", boxShadow: "var(--cn-card-shadow)" }}
         >
-          <ApplicantsTable />
+          <ApplicantsTable jobRequirements={applicants?.requirements || []} />
         </motion.div>
 
       </div>
