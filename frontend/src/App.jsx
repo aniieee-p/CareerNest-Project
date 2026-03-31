@@ -20,6 +20,7 @@ import SavedJobs from "./components/SavedJobs";
 import RecruitmentSolutions from "./components/RecruitmentSolutions";
 import ContactSupport from "./components/ContactSupport";
 import ProtectedRoute from "./components/admin/ProtectedRoute";
+import PublicProfile from "./components/PublicProfile";
 
 const appRouter = createBrowserRouter([
 {
@@ -57,6 +58,10 @@ const appRouter = createBrowserRouter([
 {
   path:'/profile',
   element:<Profile/>
+},
+{
+  path:'/profile/:id',
+  element:<PublicProfile/>
 },
 // for admin
 {

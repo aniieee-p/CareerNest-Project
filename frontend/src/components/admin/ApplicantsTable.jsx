@@ -9,6 +9,7 @@ import { APPLICATION_API_END_POINT } from '@/utils/constant'
 import { updateApplicationStatus } from '@/redux/applicationSlice'
 import axios from 'axios'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useNavigate } from 'react-router-dom'
 
 const PAGE_SIZE_OPTIONS = [5, 10, 20]
 
@@ -47,6 +48,7 @@ function Tip({ label, children }) {
 const ApplicantsTable = () => {
   const { applicants } = useSelector(s => s.application)
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const [page,     setPage]     = useState(1)
   const [pageSize, setPageSize] = useState(10)
 
@@ -143,7 +145,11 @@ const ApplicantsTable = () => {
                           </AvatarFallback>
                         </Avatar>
                         <div>
-                          <p className="font-bold text-[0.875rem] leading-tight" style={{ color: "var(--cn-text-1)" }}>{name}</p>
+                          <p className="font-bold text-[0.875rem] leading-tight cursor-pointer hover:text-[#27bbd2] transition-colors"
+                            style={{ color: "var(--cn-text-1)" }}
+                            onClick={() => navigate(`/profile/${item?.applicant?._id}`)}>
+                            {name}
+                          </p>
                           <p className="text-xs mt-0.5 flex items-center gap-1" style={{ color: "var(--cn-text-3)" }}>
                             <Mail size={10} />{item?.applicant?.email}
                           </p>

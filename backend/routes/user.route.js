@@ -9,6 +9,7 @@ import {
   resetPassword,
   trackProfileView,
   getProfileStats,
+  getPublicProfile,
 } from "../controllers/user.controller.js";
 import isAuthenticated from "../middlewares/isAuthenticated.js";
 
@@ -20,6 +21,7 @@ router.route("/logout").get(logout);
 router.route("/profile/update").post(isAuthenticated, multiUpload, updateProfile);
 router.route("/profile/stats").get(isAuthenticated, getProfileStats);
 router.route("/profile/view/:id").post(isAuthenticated, trackProfileView);
+router.route("/profile/:id").get(isAuthenticated, getPublicProfile);
 router.route("/forgot-password").post(forgotPassword);
 router.route("/reset-password/:token").post(resetPassword);
 

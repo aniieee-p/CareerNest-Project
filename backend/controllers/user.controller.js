@@ -291,3 +291,17 @@ export const getProfileStats = async (req, res) => {
         return res.status(500).json({ message: "Server error", success: false });
     }
 };
+
+export const getPublicProfile = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const user = await User.findById(id).select(
+            "fullname email phonenumber role profile profileViews createdAt"
+        );
+        if (!user) return res.status(404).json({ message: "User not found", success: false });
+        return res.status(200).json({ user, success: true });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "Server error", success: false });
+    }
+};
