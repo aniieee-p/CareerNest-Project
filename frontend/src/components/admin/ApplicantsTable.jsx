@@ -196,13 +196,15 @@ const ApplicantsTable = ({ jobRequirements = [] }) => {
                     <td className="px-6 py-4 text-right">
                       <Popover>
                         <PopoverTrigger asChild>
-                            <motion.button whileHover={{ scale: 1.12 }} whileTap={{ scale: 0.88 }}
+                            <button
                               className="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-150"
                               style={{ color: "#94a3b8" }}
                               onMouseEnter={e => { e.currentTarget.style.background = "#f1f5f9"; e.currentTarget.style.color = "#475569" }}
                               onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#94a3b8" }}>
-                              <MoreHorizontal size={15} />
-                            </motion.button>
+                              <motion.span whileHover={{ scale: 1.12 }} whileTap={{ scale: 0.88 }} className="flex items-center justify-center">
+                                <MoreHorizontal size={15} />
+                              </motion.span>
+                            </button>
                         </PopoverTrigger>
                         <PopoverContent align="end" className="w-40 p-1.5 rounded-xl border border-slate-100"
                           style={{ boxShadow: "0 8px 28px rgba(15,23,42,0.1)", background: "#ffffff", zIndex: 9999 }}>
