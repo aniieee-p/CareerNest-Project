@@ -98,6 +98,7 @@ const ApplicantsTable = ({ jobRequirements = [] }) => {
   const to    = Math.min(page * pageSize, items.length)
 
   return (
+    <>
     <div>
       <div className="overflow-x-auto">
         <table className="w-full text-sm border-collapse">
@@ -151,7 +152,8 @@ const ApplicantsTable = ({ jobRequirements = [] }) => {
                             style={{ color: "var(--cn-text-1)" }}
                             onClick={() => setSelectedId(item?.applicant?._id)}>
                             {name}
-                          </p>                          <p className="text-xs mt-0.5 flex items-center gap-1" style={{ color: "var(--cn-text-3)" }}>
+                          </p>
+                          <p className="text-xs mt-0.5 flex items-center gap-1" style={{ color: "var(--cn-text-3)" }}>
                             <Mail size={10} />{item?.applicant?.email}
                           </p>
                         </div>
@@ -268,6 +270,7 @@ const ApplicantsTable = ({ jobRequirements = [] }) => {
       jobRequirements={jobRequirements}
       onClose={() => setSelectedId(null)}
     />
+    </>
   )
 }
 
