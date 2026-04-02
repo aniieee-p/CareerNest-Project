@@ -35,7 +35,7 @@ const useClickOutside = (ref, cb) => {
 };
 
 export default function Navbar() {
-  const { user } = useSelector((s) => s.auth);
+  const user = useSelector((s) => s.auth?.user);
   const dispatch  = useDispatch();
   const navigate  = useNavigate();
   const location  = useLocation();

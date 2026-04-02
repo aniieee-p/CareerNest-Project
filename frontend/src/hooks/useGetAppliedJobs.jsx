@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux"
 
 const useGetAppliedJobs = () => {
     const dispatch = useDispatch();
-    const { user } = useSelector((store) => store.auth);
+    const { user } = useSelector((store) => store.auth ?? {});
 
     useEffect(()=>{
         if(user?.role === "recruiter") {

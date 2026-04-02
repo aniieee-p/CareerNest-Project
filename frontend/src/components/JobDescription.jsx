@@ -12,8 +12,8 @@ import { MapPin, Briefcase, IndianRupee, Users, Calendar, Clock, ArrowLeft, Load
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 
 const JobDescription = () => {
-    const { singleJob } = useSelector(store => store.job);
-    const { user } = useSelector(store => store.auth);
+    const { singleJob } = useSelector(store => store.job ?? {});
+    const { user } = useSelector(store => store.auth ?? {});
     const [isApplied, setIsApplied] = useState(false);
     const [loading, setLoading] = useState(true);
 

@@ -12,7 +12,7 @@ import { motion } from "framer-motion";
 const PublicProfile = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-    const { user: currentUser } = useSelector((s) => s.auth);
+    const { user: currentUser } = useSelector((s) => s.auth ?? {});
     const [profile, setProfile] = useState(null);
     const [loading, setLoading] = useState(true);
 

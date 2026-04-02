@@ -27,12 +27,12 @@ const FadeUp = ({ children, delay = 0 }) => (
 );
 
 const Profile = () => {
-  const { user } = useSelector((store) => store.auth);
+  const { user } = useSelector((store) => store.auth ?? {});
   const navigate = useNavigate();
   useGetAppliedJobs();
   const [open, setOpen] = useState(false);
   const [profileStats, setProfileStats] = useState({ profileViews: 0, jobMatches: 0 });
-  const { allAppliedJobs = [], savedJobs = [] } = useSelector((store) => store.job);
+  const { allAppliedJobs = [], savedJobs = [] } = useSelector((store) => store.job ?? {});
   const isRecruiter = user?.role === "recruiter";
 
   // Redirect to login if not authenticated

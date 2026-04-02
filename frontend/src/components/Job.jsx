@@ -25,8 +25,8 @@ const useSpotlight = (glowColor = "rgba(39,187,210,0.13)") => {
 const Job = ({ job }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { savedJobs } = useSelector((store) => store.job);
-  const { user } = useSelector((store) => store.auth);
+  const { savedJobs } = useSelector((store) => store.job ?? {});
+  const { user } = useSelector((store) => store.auth ?? {});
   const isSaved = savedJobs?.some((j) => j._id === job?._id);
   const { cardRef, spotRef, onMove, onLeave } = useSpotlight();
 

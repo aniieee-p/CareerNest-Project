@@ -41,7 +41,7 @@ const getSuggestionsFromProfile = (bio = "", existingSkills = []) => {
 
 const UpdateProfileDialog = ({ open, setOpen }) => {
     const [loading, setLoading] = useState(false);
-    const { user } = useSelector(store => store.auth);
+    const { user } = useSelector(store => store.auth ?? {});
     const [skillInput, setSkillInput] = useState("");
     const [skillTags, setSkillTags] = useState(user?.profile?.skills || []);
     const [showSuggestions, setShowSuggestions] = useState(false);
