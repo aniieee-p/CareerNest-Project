@@ -1,5 +1,4 @@
-import React, { useState } from 'react'
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
+import React, { useState, useRef, useEffect } from 'react'
 import { MoreHorizontal, Users, CheckCircle2, XCircle, Clock,
   ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, FileText, Mail, Phone } from 'lucide-react'
 import { Avatar, AvatarImage, AvatarFallback } from '../ui/avatar'
@@ -43,6 +42,45 @@ function Tip({ label, children }) {
         )}
       </AnimatePresence>
     </span>
+  )
+}
+
+function ActionMenu({ onAccept, onReject }) {
+  const [open, setOpen] = useState(false)
+  const ref = useRef(null)
+  useEffect(() => {
+    const handler = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false) }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [])
+  return (
+    <div ref={ref} style={{ position: 'relative', display: 'inline-block' }}>
+      <button
+        onClick={() => setOpen(v => !v)}
+        className="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-150"
+        style={{ color: "#94a3b8" }}
+        onMouseEnter={e => { e.currentTarget.style.background = "#f1f5f9"; e.currentTarget.style.color = "#475569" }}
+        onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#94a3b8" }}>
+        <MoreHorizontal size={15} />
+      </button>
+      {open && (
+        <div style={{
+          position: 'fixed', zIndex: 99999, background: '#ffffff',
+          border: '1px solid #e2e8f0', borderRadius: '12px',
+          boxShadow: '0 8px 28px rgba(15,23,42,0.15)', padding: '6px',
+          minWidth: '140px', transform: 'translateX(-100%)'
+        }}>
+          <button onClick={() => { onAccept(); setOpen(false) }}
+            className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-[13px] text-emerald-600 hover:bg-emerald-50 transition-colors">
+            <CheckCircle2 size={13} /> Accept
+          </button>
+          <button onClick={() => { onReject(); setOpen(false) }}
+            className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-[13px] text-red-500 hover:bg-red-50 transition-colors mt-0.5">
+            <XCircle size={13} /> Reject
+          </button>
+        </div>
+      )}
+    </div>
   )
 }
 
@@ -196,30 +234,10 @@ const ApplicantsTable = ({ jobRequirements = [] }) => {
 
                     {/* Actions */}
                     <td className="px-6 py-4 text-right">
-                      <Popover>
-                        <PopoverTrigger asChild>
-                            <button
-                              className="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-150"
-                              style={{ color: "#94a3b8" }}
-                              onMouseEnter={e => { e.currentTarget.style.background = "#f1f5f9"; e.currentTarget.style.color = "#475569" }}
-                              onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#94a3b8" }}>
-                              <motion.span whileHover={{ scale: 1.12 }} whileTap={{ scale: 0.88 }} className="flex items-center justify-center">
-                                <MoreHorizontal size={15} />
-                              </motion.span>
-                            </button>
-                        </PopoverTrigger>
-                        <PopoverContent align="end" className="w-40 p-1.5 rounded-xl border border-slate-100"
-                          style={{ boxShadow: "0 8px 28px rgba(15,23,42,0.1)", background: "#ffffff", zIndex: 9999 }}>
-                          <button onClick={() => statusHandler("Accepted", item?._id)}
-                            className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] text-emerald-600 hover:bg-emerald-50 transition-colors duration-150">
-                            <CheckCircle2 size={13} /> Accept
-                          </button>
-                          <button onClick={() => statusHandler("Rejected", item?._id)}
-                            className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] text-red-500 hover:bg-red-50 transition-colors duration-150 mt-0.5">
-                            <XCircle size={13} /> Reject
-                          </button>
-                        </PopoverContent>
-                      </Popover>
+                      <ActionMenu
+                        onAccept={() => statusHandler("Accepted", item?._id)}
+                        onReject={() => statusHandler("Rejected", item?._id)}
+                      />
                     </td>
                   </motion.tr>
                 )
