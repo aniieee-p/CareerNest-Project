@@ -205,7 +205,7 @@ const ApplicantsTable = ({ jobRequirements = [] }) => {
                             </motion.button>
                         </PopoverTrigger>
                         <PopoverContent align="end" className="w-40 p-1.5 rounded-xl border border-slate-100"
-                          style={{ boxShadow: "0 8px 28px rgba(15,23,42,0.1)" }}>
+                          style={{ boxShadow: "0 8px 28px rgba(15,23,42,0.1)", background: "#ffffff", zIndex: 9999 }}>
                           <button onClick={() => statusHandler("Accepted", item?._id)}
                             className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] text-emerald-600 hover:bg-emerald-50 transition-colors duration-150">
                             <CheckCircle2 size={13} /> Accept
