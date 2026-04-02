@@ -64,7 +64,7 @@ function ActionMenu({ onAccept, onReject }) {
 }
 
 const ApplicantsTable = ({ jobRequirements = [] }) => {
-  const { applicants } = useSelector(s => s.application)
+  const applicants = useSelector(s => s.application?.applicants)
   const dispatch = useDispatch()
   const [page,     setPage]     = useState(1)
   const [pageSize, setPageSize] = useState(10)
@@ -81,7 +81,7 @@ const ApplicantsTable = ({ jobRequirements = [] }) => {
     } catch (e) { toast.error(e.response?.data?.message || "Update failed") }
   }
 
-  const items = applicants?.applications ?? []
+  const items = applicants?.applications || []
 
   if (!items.length) {
     return (
