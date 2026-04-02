@@ -8,7 +8,6 @@ import { APPLICATION_API_END_POINT } from '@/utils/constant'
 import { updateApplicationStatus } from '@/redux/applicationSlice'
 import axios from 'axios'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useNavigate } from 'react-router-dom'
 import CandidateSheet from './CandidateSheet'
 
 const PAGE_SIZE_OPTIONS = [5, 10, 20]
@@ -24,26 +23,6 @@ const GRADIENTS = [
   ["#10b981","#059669"], ["#ec4899","#f43f5e"],
 ]
 const getGradient = (name = "") => GRADIENTS[(name.charCodeAt(0) || 0) % GRADIENTS.length]
-
-function Tip({ label, children }) {
-  const [show, setShow] = useState(false)
-  return (
-    <span className="relative inline-flex" onMouseEnter={() => setShow(true)} onMouseLeave={() => setShow(false)}>
-      {children}
-      <AnimatePresence>
-        {show && (
-          <motion.span initial={{ opacity: 0, y: 4, scale: 0.92 }} animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 4, scale: 0.92 }} transition={{ duration: 0.12 }}
-            className="absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap px-2 py-1 rounded-lg text-[11px] font-medium text-white pointer-events-none z-50"
-            style={{ background: "#1e293b", boxShadow: "0 4px 12px rgba(0,0,0,0.2)" }}>
-            {label}
-            <span className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent" style={{ borderTopColor: "#1e293b" }} />
-          </motion.span>
-        )}
-      </AnimatePresence>
-    </span>
-  )
-}
 
 function ActionMenu({ onAccept, onReject }) {
   const [open, setOpen] = useState(false)
@@ -87,7 +66,6 @@ function ActionMenu({ onAccept, onReject }) {
 const ApplicantsTable = ({ jobRequirements = [] }) => {
   const { applicants } = useSelector(s => s.application)
   const dispatch = useDispatch()
-  const navigate = useNavigate()
   const [page,     setPage]     = useState(1)
   const [pageSize, setPageSize] = useState(10)
   const [selectedId, setSelectedId] = useState(null)
