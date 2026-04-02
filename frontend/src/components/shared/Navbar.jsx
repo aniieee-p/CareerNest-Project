@@ -291,7 +291,7 @@ export default function Navbar() {
 
                 <AnimatePresence>
                   {popoverOpen && (
-                    <PopoverContent forceMount asChild align="end" sideOffset={8}
+                    <PopoverContent align="end" sideOffset={8}
                       style={{ border: "1px solid var(--cn-border)", borderRadius: 18, padding: 8, boxShadow: dark ? "0 12px 40px rgba(0,0,0,0.5)" : "0 12px 40px rgba(0,0,0,0.12)", width: 232, background: "var(--cn-popover)" }}
                     >
                       <motion.div
