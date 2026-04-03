@@ -30,6 +30,7 @@ const CompanySetup = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
+    if (!singleCompany) return;
     setInput({
       name:        singleCompany.name        || "",
       description: singleCompany.description || "",

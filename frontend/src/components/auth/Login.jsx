@@ -119,7 +119,7 @@ const Login = () => {
   const [btnState, setBtnState]   = useState("idle");
   const [rememberMe, setRememberMe] = useState(() => localStorage.getItem("rememberMe") === "true");
 
-  const { loading } = useSelector((s) => s.auth);
+  const { loading } = useSelector((s) => s.auth ?? {});
   const navigate    = useNavigate();
   const dispatch    = useDispatch();
 

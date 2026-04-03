@@ -122,7 +122,7 @@ const Signup = () => {
   const [focusedField, setFocused] = useState(null);
   const [btnState, setBtnState]   = useState("idle");
 
-  const { loading } = useSelector((s) => s.auth);
+  const { loading } = useSelector((s) => s.auth ?? {});
   const dispatch    = useDispatch();
   const navigate    = useNavigate();
 

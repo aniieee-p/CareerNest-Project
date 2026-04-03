@@ -10,7 +10,7 @@ const GRADIENTS = [
   ["#6366f1","#8b5cf6"], ["#0ea5c9","#27bbd2"], ["#f59e0b","#f97316"],
   ["#10b981","#059669"], ["#ec4899","#f43f5e"],
 ];
-const getGradient = (name = "") => GRADIENTS[name.charCodeAt(0) % GRADIENTS.length];
+const getGradient = (name = "") => GRADIENTS[(name.charCodeAt(0) || 0) % GRADIENTS.length];
 
 const CandidateSheet = ({ applicantId, jobRequirements = [], onClose }) => {
   const [profile, setProfile] = useState(null);
