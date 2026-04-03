@@ -59,7 +59,7 @@ export const register = async (req, res) => {
 // ================= LOGIN =================
 export const login = async (req, res) => {
   try {
-    const { email, password, role } = req.body;
+    const { email, password, role, rememberMe } = req.body;
 
     if (!email || !password || !role) {
       return res.status(400).json({
@@ -113,7 +113,7 @@ export const login = async (req, res) => {
     return res
       .status(200)
       .cookie("token", token, {
-        maxAge: 1 * 24 * 60 * 60 * 1000,
+        maxAge: rememberMe ? 30 * 24 * 60 * 60 * 1000 : 1 * 24 * 60 * 60 * 1000,
         httpOnly: true,
         secure: true,
         sameSite: "None",

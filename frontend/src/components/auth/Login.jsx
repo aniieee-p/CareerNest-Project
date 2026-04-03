@@ -123,17 +123,9 @@ const Login = () => {
   const navigate    = useNavigate();
   const dispatch    = useDispatch();
 
-  // Rehydrate remembered user on mount
-  useEffect(() => {
-    const saved = localStorage.getItem("rememberedUser");
-    if (saved) {
-      try {
-        const savedUser = JSON.parse(saved);
-        dispatch(setUser(savedUser));
-        navigate(savedUser?.role === "recruiter" ? "/admin/companies" : "/");
-      } catch (_) {}
-    }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  // Rehydrate remembered user on mount — removed: localStorage cannot restore the auth cookie,
+  // so restoring user state without a valid cookie causes 401s on all API calls.
+  // redux-persist handles keeping user state; the cookie handles actual auth.
 
   /* Parallax */
   const mouseX = useMotionValue(0);
@@ -162,20 +154,15 @@ const Login = () => {
     setBtnState("loading");
     dispatch(setLoading(true));
     try {
-      const res = await axios.post(`${USER_API_END_POINT}/login`, input, {
+      const res = await axios.post(`${USER_API_END_POINT}/login`, { ...input, rememberMe }, {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
       });
       if (res.data.success) {
         setBtnState("success");
         dispatch(setUser(res.data.user));
-        if (rememberMe) {
-          localStorage.setItem("rememberMe", "true");
-          localStorage.setItem("rememberedUser", JSON.stringify(res.data.user));
-        } else {
-          localStorage.removeItem("rememberMe");
-          localStorage.removeItem("rememberedUser");
-        }
+        localStorage.removeItem("rememberMe");
+        localStorage.removeItem("rememberedUser");
         toast.success(res.data.message);
         setTimeout(() => navigate(res.data.user?.role === "recruiter" ? "/admin/companies" : "/"), 650);
       }

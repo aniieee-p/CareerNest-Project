@@ -1,4 +1,7 @@
 import { createBrowserRouter , RouterProvider } from "react-router-dom";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { setUser } from "./redux/authSlice";
 import Login from './components/auth/Login';
 import Signup from './components/auth/Signup'
 import ForgotPassword from './components/auth/ForgotPassword';
@@ -114,6 +117,17 @@ const appRouter = createBrowserRouter([
 
 ])
 function App() {
+  const dispatch = useDispatch();
+
+  // Clear any stale localStorage-based auth (old "remember me" flow that didn't restore cookies)
+  useEffect(() => {
+    if (localStorage.getItem("rememberedUser")) {
+      localStorage.removeItem("rememberedUser");
+      localStorage.removeItem("rememberMe");
+      dispatch(setUser(null));
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   return (
     <div style={{ background: "var(--cn-page)", minHeight: "100vh" }}>
       <RouterProvider router ={appRouter} />
