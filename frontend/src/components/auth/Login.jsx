@@ -161,6 +161,7 @@ const Login = () => {
       if (res.data.success) {
         setBtnState("success");
         dispatch(setUser(res.data.user));
+        localStorage.setItem("token", res.data.token);
         localStorage.removeItem("rememberMe");
         localStorage.removeItem("rememberedUser");
         toast.success(res.data.message);

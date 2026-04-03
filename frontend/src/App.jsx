@@ -124,6 +124,7 @@ function App() {
     if (localStorage.getItem("rememberedUser")) {
       localStorage.removeItem("rememberedUser");
       localStorage.removeItem("rememberMe");
+      localStorage.removeItem("token");
       dispatch(setUser(null));
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps

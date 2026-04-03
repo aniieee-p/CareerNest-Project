@@ -1,6 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
+import './utils/axiosInstance.js' // registers Authorization header interceptor globally
 import App from './App.jsx'
 import { Toaster } from 'sonner'
 import { Provider } from 'react-redux'

@@ -112,16 +112,10 @@ export const login = async (req, res) => {
 
     return res
       .status(200)
-      .cookie("token", token, {
-        maxAge: rememberMe ? 30 * 24 * 60 * 60 * 1000 : 1 * 24 * 60 * 60 * 1000,
-        httpOnly: true,
-        secure: true,
-        sameSite: "None",
-        path: "/", // 🔥 IMPORTANT
-      })
       .json({
         message: `Welcome back ${user.fullname}`,
         user: safeUser,
+        token,
         success: true,
       });
   } catch (error) {
