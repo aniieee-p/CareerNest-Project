@@ -296,3 +296,36 @@ export const getPublicProfile = async (req, res) => {
         return res.status(500).json({ message: "Server error", success: false });
     }
 };
+
+// ================= SAVED JOBS =================
+export const toggleSavedJob = async (req, res) => {
+    try {
+        const { jobId } = req.params;
+        const user = await User.findById(req.id);
+        if (!user) return res.status(404).json({ message: "User not found", success: false });
+
+        const index = user.savedJobs.indexOf(jobId);
+        if (index === -1) {
+            user.savedJobs.push(jobId);
+        } else {
+            user.savedJobs.splice(index, 1);
+        }
+        await user.save();
+        return res.status(200).json({ savedJobs: user.savedJobs, success: true });
+    } catch (error) {
+        return res.status(500).json({ message: "Server error", success: false });
+    }
+};
+
+export const getSavedJobs = async (req, res) => {
+    try {
+        const user = await User.findById(req.id).populate({
+            path: "savedJobs",
+            populate: { path: "company" },
+        });
+        if (!user) return res.status(404).json({ message: "User not found", success: false });
+        return res.status(200).json({ savedJobs: user.savedJobs, success: true });
+    } catch (error) {
+        return res.status(500).json({ message: "Server error", success: false });
+    }
+};

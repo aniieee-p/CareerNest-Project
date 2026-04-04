@@ -3,9 +3,11 @@ import { Bookmark, MapPin, Clock, IndianRupee, ArrowRight } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "./ui/avatar";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { toggleSaveJob } from "@/redux/jobSlice";
+import { setSavedJobs } from "@/redux/jobSlice";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
+import axios from "axios";
+import { SAVED_JOBS_API } from "@/utils/constant";
 
 const useSpotlight = (glowColor = "rgba(39,187,210,0.13)") => {
   const cardRef = useRef(null);
@@ -35,15 +37,24 @@ const Job = ({ job }) => {
     return d === 0 ? "Today" : `${d}d ago`;
   };
 
-  const handleSave = (e) => {
+  const handleSave = async (e) => {
     e.stopPropagation();
     if (!user) {
       toast.error("Please login to save jobs");
       navigate("/login");
       return;
     }
-    dispatch(toggleSaveJob(job));
-    toast.success(isSaved ? "Removed from saved" : "Job saved");
+    try {
+      const res = await axios.post(`${SAVED_JOBS_API}/${job._id}`, {}, { withCredentials: true });
+      if (res.data.success) {
+        // re-fetch full populated saved jobs
+        const saved = await axios.get(SAVED_JOBS_API, { withCredentials: true });
+        if (saved.data.success) dispatch(setSavedJobs(saved.data.savedJobs));
+        toast.success(isSaved ? "Removed from saved" : "Job saved");
+      }
+    } catch {
+      toast.error("Failed to save job");
+    }
   };
 
   return (

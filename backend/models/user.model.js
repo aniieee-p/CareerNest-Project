@@ -37,6 +37,7 @@ const userSchema = new mongoose.Schema({
     resetPasswordToken: { type: String },
     resetPasswordExpiry: { type: Date },
     profileViews: { type: Number, default: 0 },
+    savedJobs: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Job' }],
 }, { timestamps: true });
 
 const User = mongoose.model("User", userSchema);

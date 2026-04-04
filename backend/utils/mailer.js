@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer';
 
-const transporter = nodemailer.createTransport({
+const getTransporter = () => nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 587,
     secure: false,
@@ -11,16 +11,8 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-transporter.verify((error, success) => {
-    if (error) {
-        console.log('Mailer config error:', error.message);
-    } else {
-        console.log('Mailer ready to send emails');
-    }
-});
-
 export const sendResetEmail = async ({ email, resetUrl }) => {
-    await transporter.sendMail({
+    await getTransporter().sendMail({
         from: `"CareerNest" <${process.env.EMAIL_USER}>`,
         to: email,
         subject: 'Password Reset Request',
@@ -34,7 +26,7 @@ export const sendResetEmail = async ({ email, resetUrl }) => {
 };
 
 export const sendContactEmail = async ({ name, email, message }) => {
-    await transporter.sendMail({
+    await getTransporter().sendMail({
         from: `"CareerNest Contact" <${process.env.EMAIL_USER}>`,
         to: process.env.EMAIL_USER,
         replyTo: email,

@@ -8,3 +8,4 @@ export const CONTACT_API_END_POINT     = `${BASE}/contact`;
 export const AI_API_END_POINT          = `${BASE}/ai`;
 export const PROFILE_STATS_API         = `${BASE}/user/profile/stats`;
 export const PROFILE_VIEW_API          = `${BASE}/user/profile/view`;
+export const SAVED_JOBS_API            = `${BASE}/user/saved-jobs`;

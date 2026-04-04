@@ -40,6 +40,9 @@ const jobSlice = createSlice({
             } else {
                 state.savedJobs.push(job);
             }
+        },
+        setSavedJobs:(state, action) => {
+            state.savedJobs = action.payload;
         }
     }
 });
@@ -50,6 +53,7 @@ export const {
     setSearchJobByText, 
     setAllAppliedJobs,
     setSearchedQuery,
-    toggleSaveJob
+    toggleSaveJob,
+    setSavedJobs,
 } = jobSlice.actions;
 export default jobSlice.reducer;

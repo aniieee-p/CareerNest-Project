@@ -10,6 +10,8 @@ import {
   trackProfileView,
   getProfileStats,
   getPublicProfile,
+  toggleSavedJob,
+  getSavedJobs,
 } from "../controllers/user.controller.js";
 import isAuthenticated from "../middlewares/isAuthenticated.js";
 
@@ -24,5 +26,7 @@ router.route("/profile/view/:id").post(isAuthenticated, trackProfileView);
 router.route("/profile/:id").get(isAuthenticated, getPublicProfile);
 router.route("/forgot-password").post(forgotPassword);
 router.route("/reset-password/:token").post(resetPassword);
+router.route("/saved-jobs").get(isAuthenticated, getSavedJobs);
+router.route("/saved-jobs/:jobId").post(isAuthenticated, toggleSavedJob);
 
 export default router;
