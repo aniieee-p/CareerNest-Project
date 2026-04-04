@@ -1,6 +1,5 @@
 import pdfParse from "pdf-parse/lib/pdf-parse.js";
 import { Job } from "../models/job.model.js";
-import axios from "axios";
 
 // Common tech skills keyword list
 const SKILL_KEYWORDS = [
