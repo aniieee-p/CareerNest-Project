@@ -88,16 +88,18 @@ const JobDescription = () => {
                                         </div>
                                     </div>
                                 </div>
+                                {user?.role !== 'recruiter' && (
                                 <Button
                                     onClick={isApplied ? null : applyJobHandler}
-                                    disabled={isApplied || user?.role === 'recruiter'}
-                                    className={`px-8 py-5 rounded-xl font-semibold ${(isApplied || user?.role === 'recruiter') ? 'cursor-not-allowed' : 'text-white'}`}
-                                    style={(isApplied || user?.role === 'recruiter')
+                                    disabled={isApplied}
+                                    className={`px-8 py-5 rounded-xl font-semibold ${isApplied ? 'cursor-not-allowed' : 'text-white'}`}
+                                    style={isApplied
                                       ? { background: "var(--cn-tag-bg)", color: "var(--cn-text-3)" }
                                       : { background: "linear-gradient(135deg,#27bbd2,#6366f1)" }}
                                 >
-                                    {user?.role === 'recruiter' ? 'Not Available' : isApplied ? 'Already Applied' : 'Apply Now'}
+                                    {isApplied ? 'Already Applied' : 'Apply Now'}
                                 </Button>
+                                )}
                             </div>
 
                             <div className='flex items-center gap-2 flex-wrap mt-5'>

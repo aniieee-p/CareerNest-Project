@@ -24,6 +24,7 @@ import SavedJobs from "./components/SavedJobs";
 import RecruitmentSolutions from "./components/RecruitmentSolutions";
 import ContactSupport from "./components/ContactSupport";
 import ProtectedRoute from "./components/admin/ProtectedRoute";
+import StudentRoute from "./components/auth/StudentRoute";
 import PublicProfile from "./components/PublicProfile";
 
 const appRouter = createBrowserRouter([
@@ -49,7 +50,7 @@ const appRouter = createBrowserRouter([
 },
 {
   path:'/jobs',
-  element:<Jobs />
+  element:<StudentRoute><Jobs /></StudentRoute>
 },
 {
   path:'/description/:id',
@@ -61,7 +62,7 @@ const appRouter = createBrowserRouter([
 },
 {
   path:'/profile',
-  element:<Profile/>
+  element:<StudentRoute><Profile/></StudentRoute>
 },
 {
   path:'/profile/:id',
@@ -104,7 +105,7 @@ const appRouter = createBrowserRouter([
 },
 {
   path:'/saved-jobs',
-  element:<SavedJobs/>
+  element:<StudentRoute><SavedJobs/></StudentRoute>
 },
 {
   path:'/recruitment',
