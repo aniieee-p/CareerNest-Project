@@ -61,13 +61,11 @@ app.get("/", (req, res) => {
 // PORT
 const PORT = process.env.PORT || 3000;
 
-// start server
-app.listen(PORT, async () => {
-    try {
-        await connectDB();
-        console.log("MongoDB connected successfully");
+// connect DB then start server
+connectDB().then(() => {
+    app.listen(PORT, () => {
         console.log(`Server running on port ${PORT}`);
-    } catch (error) {
-        console.log("DB connection error", error);
-    }
+    });
+}).catch((error) => {
+    console.log("DB connection failed, server not started:", error);
 });
