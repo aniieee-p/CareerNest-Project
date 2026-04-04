@@ -153,7 +153,7 @@ const ResetPassword = () => {
     if (password.length < 6)  { toast.error("Password must be at least 6 characters"); return; }
     try {
       setLoading(true);
-      const res = await axios.post(`${USER_API_END_POINT}/reset-password/${token}`, { password });
+      const res = await axios.post(`${USER_API_END_POINT}/reset-password/${token}`, { password }, { timeout: 60000 });
       if (res.data.success) {
         setDone(true);
         toast.success("Password reset successfully");

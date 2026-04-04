@@ -99,13 +99,15 @@ const ForgotPassword = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    setBtnState("loading");
     try {
-      setBtnState("loading");
-      const res = await axios.post(`${USER_API_END_POINT}/forgot-password`, { email });
-      if (res.data.success) { setSent(true); toast.success(res.data.message); }
+      const res = await axios.post(`${USER_API_END_POINT}/forgot-password`, { email }, { timeout: 60000 });
+      if (res.data.success) {
+        setSent(true);
+        toast.success(res.data.message);
+      }
     } catch (err) {
-      toast.error(err.response?.data?.message || "Something went wrong");
-      setBtnState("idle");
+      toast.error(err.response?.data?.message || "Something went wrong. The server may be waking up — try again.");
     } finally {
       setBtnState("idle");
     }
