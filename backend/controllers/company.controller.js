@@ -4,6 +4,9 @@ import cloudinary from "../utils/cloudinary.js";
 
 export const registerCompany = async (req, res) => {
     try {
+        if (req.role !== "recruiter") {
+            return res.status(403).json({ message: "Only recruiters can register companies.", success: false });
+        }
         const { companyName } = req.body;
         if (!companyName) {
             return res.status(400).json({
@@ -72,6 +75,9 @@ export const getCompanyById = async (req, res) => {
 }
 export const updateCompany = async (req, res) => {
     try {
+        if (req.role !== "recruiter") {
+            return res.status(403).json({ message: "Only recruiters can update companies.", success: false });
+        }
         const { name, description, website, location } = req.body;
         const file = req.file;
 

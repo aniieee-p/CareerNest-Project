@@ -3,6 +3,9 @@ import { Job } from "../models/job.model.js";
 // admin posts a job
 export const PostJob = async (req, res) => {
     try {
+        if (req.role !== "recruiter") {
+            return res.status(403).json({ message: "Only recruiters can post jobs.", success: false });
+        }
         const { title, description, requirements, salary, location, jobType, experience, position, companyId } = req.body;
         const userId = req.id;
 
@@ -85,6 +88,9 @@ export const getJobById = async (req, res) => {
 // how many jobs has been created by a admin
 export const getAdminJobs = async (req, res) => {
     try {
+        if (req.role !== "recruiter") {
+            return res.status(403).json({ message: "Only recruiters can access admin jobs.", success: false });
+        }
         const adminId = req.id;
         const jobs = await Job.find({ created_by: adminId }).populate({ path: "company" }).sort({ createdAt: -1 });
         if(!jobs){
