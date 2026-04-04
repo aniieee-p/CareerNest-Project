@@ -9,7 +9,8 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import { USER_API_END_POINT } from "@/utils/constant";
-import { setUser } from "@/redux/authSlice";
+import { setUser, resetAuth } from "@/redux/authSlice";
+import { persistor } from "@/redux/store";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "next-themes";
@@ -55,7 +56,8 @@ export default function Navbar() {
     try {
       const res = await axios.get(`${USER_API_END_POINT}/logout`, { withCredentials: true });
       if (res.data.success) {
-        dispatch(setUser(null));
+        dispatch(resetAuth());
+        await persistor.purge();
         localStorage.removeItem("token");
         localStorage.removeItem("rememberMe");
         localStorage.removeItem("rememberedUser");

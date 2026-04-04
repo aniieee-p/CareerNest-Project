@@ -27,6 +27,7 @@ const persistConfig = {
     key: 'root',
     version: 3,
     storage,
+    whitelist: ['auth'], // only persist auth slice
     transforms: [jobTransform],
 }
 
@@ -49,4 +50,6 @@ const store = configureStore({
             },
         }),
 });
+
+export const persistor = persistStore(store);
 export default store;
