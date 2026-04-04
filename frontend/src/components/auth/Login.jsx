@@ -188,12 +188,12 @@ const Login = () => {
   });
 
   return (
-    <div className="min-h-screen flex font-sans select-none">
+    <div className="h-screen flex font-sans select-none overflow-hidden">
 
       {/* ══ LEFT PANEL ══ */}
       <motion.div
         style={{ x: leftX, y: leftY }}
-        className="hidden lg:flex flex-col justify-between w-[52%] relative overflow-hidden p-12"
+        className="hidden lg:flex flex-col justify-between w-[52%] relative overflow-hidden p-12 sticky top-0 h-screen"
         initial={{ opacity: 0, x: -40 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
@@ -305,9 +305,13 @@ const Login = () => {
         style={{ background: "linear-gradient(to bottom,transparent,#e2e8f0 20%,#e2e8f0 80%,transparent)" }} />
 
       {/* ══ RIGHT PANEL ══ */}
+      <div
+        className="flex-1 overflow-y-auto"
+        style={{ background: "var(--cn-auth-right)" }}
+      >
       <motion.div
-        style={{ x: rightX, y: rightY, background: "var(--cn-auth-right)" }}
-        className="flex-1 flex items-center justify-center px-8 py-14"
+        style={{ x: rightX, y: rightY }}
+        className="min-h-full flex items-center justify-center px-8 py-10"
         initial={{ opacity: 0, x: 40 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
@@ -598,6 +602,7 @@ const Login = () => {
           </p>
         </motion.div>
       </motion.div>
+      </div>
     </div>
   );
 };
