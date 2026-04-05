@@ -1,4 +1,6 @@
 import { Job } from "../models/job.model.js";
+import { Notification } from "../models/notification.model.js";
+import User from "../models/user.model.js";
 
 // admin posts a job
 export const PostJob = async (req, res) => {
@@ -28,6 +30,15 @@ export const PostJob = async (req, res) => {
             company: companyId,
             created_by: userId
          });
+        // fire-and-forget: notify all students about new job
+        User.find({ role: "student" }).select("_id").lean().then(students => {
+            const notes = students.map(s => ({
+                userId: s._id,
+                message: `New job posted: "${title}" in ${location}.`,
+                type: "job",
+            }));
+            if (notes.length) Notification.insertMany(notes).catch(() => {});
+        }).catch(() => {});
         return res.status(201).json({
             message: "Job posted successfully.",
             success: true,

@@ -10,6 +10,7 @@ import jobRoute from './routes/job.route.js';
 import applicationRoute from './routes/application.route.js';
 import contactRoute from './routes/contact.route.js';
 import aiRoute from './routes/ai.route.js';
+import notificationRoute from './routes/notification.route.js';
 
 const app = express();
 
@@ -50,6 +51,7 @@ app.use("/api/v1/job", jobRoute);
 app.use("/api/v1/application", applicationRoute);
 app.use("/api/v1/contact", contactRoute);
 app.use("/api/v1/ai", aiRoute);
+app.use("/api/v1/notification", notificationRoute);
 
 // health check
 app.get("/", (req, res) => {

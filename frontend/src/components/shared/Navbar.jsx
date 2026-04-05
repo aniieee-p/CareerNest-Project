@@ -14,6 +14,8 @@ import { persistor } from "@/redux/store";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "next-themes";
+import NotificationDropdown from "../NotificationDropdown";
+import useGetNotifications from "@/hooks/useGetNotifications";
 
 /* ── tiny hook: scroll position ── */
 const useScrolled = (threshold = 14) => {
@@ -46,8 +48,13 @@ export default function Navbar() {
   const [popoverOpen, setPopoverOpen] = useState(false);
   const [searchOpen,  setSearchOpen]  = useState(false);
   const [searchVal,   setSearchVal]   = useState("");
+  const [notifOpen,   setNotifOpen]   = useState(false);
   const { theme, setTheme } = useTheme();
   const dark = theme === "dark";
+
+  useGetNotifications();
+  const { notifications } = useSelector(s => s.notification ?? { notifications: [] });
+  const unreadCount = notifications.filter(n => !n.isRead).length;
 
   const searchRef = useRef(null);
   useClickOutside(searchRef, () => setSearchOpen(false));
@@ -256,16 +263,23 @@ export default function Navbar() {
           ) : (
             <div className="flex items-center gap-1.5">
               {/* bell */}
-              <motion.button whileHover={{ scale: 1.08 }} whileTap={{ scale: 0.93 }}
-                className="relative p-2 rounded-xl text-[#94a3b8] hover:text-[#f59e0b] hover:bg-[#f59e0b]/6 transition-colors duration-150"
-              >
-                <Bell size={16} />
-                <motion.span
-                  animate={{ scale: [1, 1.3, 1] }}
-                  transition={{ repeat: Infinity, duration: 2, repeatDelay: 3 }}
-                  className="absolute top-1.5 right-1.5 h-1.5 w-1.5 rounded-full bg-[#f59e0b]"
-                />
-              </motion.button>
+              <div className="relative">
+                <motion.button
+                  whileHover={{ scale: 1.08 }} whileTap={{ scale: 0.93 }}
+                  onClick={() => setNotifOpen(o => !o)}
+                  className="relative p-2 rounded-xl transition-colors duration-150"
+                  style={{ color: notifOpen ? "#f59e0b" : "#94a3b8", background: notifOpen ? "rgba(245,158,11,0.08)" : "transparent" }}
+                >
+                  <Bell size={16} />
+                  {unreadCount > 0 && (
+                    <span className="absolute top-1 right-1 min-w-[16px] h-4 px-0.5 rounded-full text-[9px] font-bold text-white flex items-center justify-center"
+                      style={{ background: "#f59e0b", lineHeight: 1 }}>
+                      {unreadCount > 9 ? "9+" : unreadCount}
+                    </span>
+                  )}
+                </motion.button>
+                <NotificationDropdown open={notifOpen} onClose={() => setNotifOpen(false)} />
+              </div>
 
               {/* avatar dropdown */}
               <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>

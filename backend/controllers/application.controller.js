@@ -1,5 +1,6 @@
 import { Application } from "../models/application.model.js";
 import { Job } from "../models/job.model.js";
+import { Notification } from "../models/notification.model.js";
 
 export const applyJob = async (req, res) => {
     try {
@@ -22,6 +23,12 @@ export const applyJob = async (req, res) => {
         const application = await Application.create({ job: jobId, applicant: userId });
         job.applications.push(application._id);
         await job.save();
+        // notify applicant
+        await Notification.create({
+            userId: userId,
+            message: `Your application for "${job.title}" was submitted successfully.`,
+            type: "application",
+        });
         return res.status(201).json({ message: "Application submitted successfully.", success: true, application });
     } catch (error) {
         console.error(error.message);
@@ -74,6 +81,15 @@ export const updateStatus = async (req, res) => {
         }
         application.status = status.toLowerCase();
         await application.save();
+        // notify applicant about status change
+        const populated = await application.populate({ path: "job", select: "title" });
+        const statusMsg = {
+            accepted: `Congratulations! Your application for "${populated.job?.title}" was accepted.`,
+            rejected: `Your application for "${populated.job?.title}" was not selected this time.`,
+            shortlisted: `You've been shortlisted for "${populated.job?.title}". Stay tuned!`,
+        };
+        const msg = statusMsg[status.toLowerCase()] || `Your application status was updated to "${status}".`;
+        await Notification.create({ userId: application.applicant, message: msg, type: "application" });
         return res.status(200).json({ message: "Application status updated successfully.", success: true });
     } catch (error) {
         console.error(error.message);
