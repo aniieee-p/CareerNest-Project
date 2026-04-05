@@ -1,4 +1,6 @@
-import pdfParse from "pdf-parse/lib/pdf-parse.js";
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+const pdfParse = require("pdf-parse");
 import { Job } from "../models/job.model.js";
 
 // Common tech skills keyword list
