@@ -21,7 +21,12 @@ const timeAgo = (date) => {
     return `${Math.floor(diff / 86400)}d ago`;
 };
 
-const NotificationDropdown = ({ open, onClose }) => {
+const getNavTarget = (n) => {
+    if (n.jobId) {
+        if (n.type === "application" || n.type === "job") return `/description/${n.jobId}`;
+    }
+    return null;
+};
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { notifications } = useSelector(store => store.notification);
@@ -36,10 +41,8 @@ const NotificationDropdown = ({ open, onClose }) => {
     const handleClick = async (n) => {
         dispatch(markOneRead(n._id));
         try { await api.patch(`${NOTIFICATION_API}/${n._id}/read`); } catch {}
-        if (n.jobId) {
-            onClose();
-            navigate(`/description/${n.jobId}`);
-        }
+        const target = getNavTarget(n);
+        if (target) { onClose(); navigate(target); }
     };
 
     const handleReadAll = async () => {
@@ -95,9 +98,9 @@ const NotificationDropdown = ({ open, onClose }) => {
                                     style={{
                                         background: n.isRead ? "transparent" : "rgba(39,187,210,0.05)",
                                         borderBottom: "1px solid var(--cn-border-subtle)",
-                                        cursor: n.jobId ? "pointer" : "default",
+                                        cursor: getNavTarget(n) ? "pointer" : "default",
                                     }}
-                                    onMouseEnter={e => { if (n.jobId) e.currentTarget.style.background = "rgba(39,187,210,0.08)"; }}
+                                    onMouseEnter={e => { if (getNavTarget(n)) e.currentTarget.style.background = "rgba(39,187,210,0.08)"; }}
                                     onMouseLeave={e => e.currentTarget.style.background = n.isRead ? "transparent" : "rgba(39,187,210,0.05)"}
                                 >
                                     <div className="mt-0.5 p-1.5 rounded-full shrink-0" style={{ background: "var(--cn-tag-bg)" }}>
