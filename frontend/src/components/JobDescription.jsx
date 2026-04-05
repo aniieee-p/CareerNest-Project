@@ -2,7 +2,7 @@
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "@/utils/axiosInstance";
 import { APPLICATION_API_END_POINT, JOB_API_END_POINT } from "@/utils/constant";
 import { setSingleJob } from "@/redux/jobSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -27,7 +27,7 @@ const JobDescription = () => {
         if (applyLoading) return;
         setApplyLoading(true);
         try {
-            const res = await axios.get(`${APPLICATION_API_END_POINT}/apply/${jobId}`, { withCredentials: true });
+            const res = await api.get(`${APPLICATION_API_END_POINT}/apply/${jobId}`);
             if (res.data.success) {
                 setIsApplied(true);
                 dispatch(setSingleJob({ ...singleJob, applications: [...singleJob.applications, { applicant: user?._id }] }));
@@ -45,7 +45,7 @@ const JobDescription = () => {
         setLoading(true);
         const fetchSingleJob = async () => {
             try {
-                const res = await axios.get(`${JOB_API_END_POINT}/get/${jobId}`, { withCredentials: true });
+                const res = await api.get(`${JOB_API_END_POINT}/get/${jobId}`);
                 if (res.data.success) {
                     dispatch(setSingleJob(res.data.job));
                     setIsApplied(res.data.job.applications.some(a => a.applicant === user?._id));

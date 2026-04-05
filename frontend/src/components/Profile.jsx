@@ -13,7 +13,7 @@ import {
   Upload, Sparkles
 } from "lucide-react";
 import Footer from "./shared/Footer";
-import axios from "axios";
+import api from "@/utils/axiosInstance";
 import { PROFILE_STATS_API, PROFILE_VIEW_API } from "@/utils/constant";
 
 const FadeUp = ({ children, delay = 0 }) => (
@@ -45,7 +45,7 @@ const Profile = () => {
     if (!user) return;
     const fetchStats = async () => {
       try {
-        const res = await axios.get(PROFILE_STATS_API, { withCredentials: true });
+        const res = await api.get(PROFILE_STATS_API);
         if (res.data.success) setProfileStats({
             profileViews: res.data.profileViews ?? 0,
             jobMatches: res.data.jobMatches ?? 0,
@@ -54,7 +54,7 @@ const Profile = () => {
     };
     // track self-view (backend ignores self-views for count but returns current value)
     const trackView = async () => {
-      try { await axios.post(`${PROFILE_VIEW_API}/${user._id}`, {}, { withCredentials: true }); } catch (e) {}
+      try { await api.post(`${PROFILE_VIEW_API}/${user._id}`, {}); } catch (e) {}
     };
     fetchStats();
     trackView();

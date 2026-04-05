@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import axios from 'axios';
+import api from '@/utils/axiosInstance';
 import { setSavedJobs } from '@/redux/jobSlice';
 import { SAVED_JOBS_API } from '@/utils/constant';
 
@@ -12,7 +12,7 @@ const useGetSavedJobs = () => {
         if (!user) return;
         const fetch = async () => {
             try {
-                const res = await axios.get(SAVED_JOBS_API, { withCredentials: true });
+                const res = await api.get(SAVED_JOBS_API);
                 if (res.data.success) dispatch(setSavedJobs(res.data.savedJobs));
             } catch (err) {
 

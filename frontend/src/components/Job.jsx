@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setSavedJobs } from "@/redux/jobSlice";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
-import axios from "axios";
+import api from "@/utils/axiosInstance";
 import { SAVED_JOBS_API } from "@/utils/constant";
 
 const useSpotlight = (glowColor = "rgba(39,187,210,0.13)") => {
@@ -45,10 +45,10 @@ const Job = ({ job }) => {
       return;
     }
     try {
-      const res = await axios.post(`${SAVED_JOBS_API}/${job._id}`, {}, { withCredentials: true });
+      const res = await api.post(`${SAVED_JOBS_API}/${job._id}`, {});
       if (res.data.success) {
         // re-fetch full populated saved jobs
-        const saved = await axios.get(SAVED_JOBS_API, { withCredentials: true });
+        const saved = await api.get(SAVED_JOBS_API);
         if (saved.data.success) dispatch(setSavedJobs(saved.data.savedJobs));
         toast.success(isSaved ? "Removed from saved" : "Job saved");
       }
