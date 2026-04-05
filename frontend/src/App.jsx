@@ -1,4 +1,4 @@
-import { createBrowserRouter , RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Navigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setUser } from "./redux/authSlice";
@@ -117,6 +117,10 @@ const appRouter = createBrowserRouter([
   element:<ContactSupport/>
 },
 
+{
+  path: '/admin/*',
+  element: <ProtectedRoute><Navigate to="/admin/jobs" replace /></ProtectedRoute>
+},
 {
   path: "*",
   element: <NotFound />

@@ -1,10 +1,14 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { motion } from "framer-motion";
-import { Home, ArrowLeft } from "lucide-react";
+import { Home, ArrowLeft, LayoutDashboard } from "lucide-react";
 
 const NotFound = () => {
   const navigate = useNavigate();
+  const user = useSelector((s) => s.auth?.user);
+  const isRecruiter = user?.role === "recruiter";
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 text-center"
       style={{ background: "var(--cn-page)", color: "var(--cn-text-1)" }}>
@@ -19,9 +23,11 @@ const NotFound = () => {
         </p>
         <h1 className="text-2xl font-bold">Page not found</h1>
         <p className="text-sm max-w-xs mx-auto" style={{ color: "var(--cn-text-3)" }}>
-          The page you're looking for doesn't exist or has been moved.
+          {isRecruiter
+            ? "This page doesn't exist. Head back to your recruiter dashboard."
+            : "The page you're looking for doesn't exist or has been moved."}
         </p>
-        <div className="flex items-center justify-center gap-3 pt-2">
+        <div className="flex items-center justify-center gap-3 pt-2 flex-wrap">
           <button
             onClick={() => navigate(-1)}
             className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium border transition-colors"
@@ -29,13 +35,23 @@ const NotFound = () => {
           >
             <ArrowLeft size={15} /> Go Back
           </button>
-          <button
-            onClick={() => navigate("/")}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium text-white"
-            style={{ background: "linear-gradient(135deg,#27bbd2,#6366f1)" }}
-          >
-            <Home size={15} /> Home
-          </button>
+          {isRecruiter ? (
+            <button
+              onClick={() => navigate("/admin/jobs")}
+              className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium text-white"
+              style={{ background: "linear-gradient(135deg,#27bbd2,#6366f1)" }}
+            >
+              <LayoutDashboard size={15} /> Go to Dashboard
+            </button>
+          ) : (
+            <button
+              onClick={() => navigate("/")}
+              className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium text-white"
+              style={{ background: "linear-gradient(135deg,#27bbd2,#6366f1)" }}
+            >
+              <Home size={15} /> Home
+            </button>
+          )}
         </div>
       </motion.div>
     </div>
