@@ -36,6 +36,7 @@ export const PostJob = async (req, res) => {
                 userId: s._id,
                 message: `New job posted: "${title}" in ${location}.`,
                 type: "job",
+                jobId: job._id,
             }));
             if (notes.length) Notification.insertMany(notes).catch(() => {});
         }).catch(() => {});

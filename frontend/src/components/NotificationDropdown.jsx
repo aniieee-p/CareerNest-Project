@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Bell, Briefcase, Send, Info, CheckCheck } from "lucide-react";
 import { markOneRead, markAllRead } from "@/redux/notificationSlice";
@@ -22,19 +23,23 @@ const timeAgo = (date) => {
 
 const NotificationDropdown = ({ open, onClose }) => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const { notifications } = useSelector(store => store.notification);
     const ref = useRef(null);
 
-    // close on outside click
     useEffect(() => {
         const handler = (e) => { if (ref.current && !ref.current.contains(e.target)) onClose(); };
         if (open) document.addEventListener("mousedown", handler);
         return () => document.removeEventListener("mousedown", handler);
     }, [open, onClose]);
 
-    const handleRead = async (id) => {
-        dispatch(markOneRead(id));
-        try { await api.patch(`${NOTIFICATION_API}/${id}/read`); } catch {}
+    const handleClick = async (n) => {
+        dispatch(markOneRead(n._id));
+        try { await api.patch(`${NOTIFICATION_API}/${n._id}/read`); } catch {}
+        if (n.jobId) {
+            onClose();
+            navigate(`/description/${n.jobId}`);
+        }
     };
 
     const handleReadAll = async () => {
@@ -85,13 +90,14 @@ const NotificationDropdown = ({ open, onClose }) => {
                             notifications.map(n => (
                                 <button
                                     key={n._id}
-                                    onClick={() => handleRead(n._id)}
+                                    onClick={() => handleClick(n)}
                                     className="w-full text-left flex items-start gap-3 px-4 py-3 transition-colors duration-150"
                                     style={{
                                         background: n.isRead ? "transparent" : "rgba(39,187,210,0.05)",
                                         borderBottom: "1px solid var(--cn-border-subtle)",
+                                        cursor: n.jobId ? "pointer" : "default",
                                     }}
-                                    onMouseEnter={e => e.currentTarget.style.background = "rgba(39,187,210,0.08)"}
+                                    onMouseEnter={e => { if (n.jobId) e.currentTarget.style.background = "rgba(39,187,210,0.08)"; }}
                                     onMouseLeave={e => e.currentTarget.style.background = n.isRead ? "transparent" : "rgba(39,187,210,0.05)"}
                                 >
                                     <div className="mt-0.5 p-1.5 rounded-full shrink-0" style={{ background: "var(--cn-tag-bg)" }}>

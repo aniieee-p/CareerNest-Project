@@ -28,6 +28,7 @@ export const applyJob = async (req, res) => {
             userId: userId,
             message: `Your application for "${job.title}" was submitted successfully.`,
             type: "application",
+            jobId: job._id,
         });
         return res.status(201).json({ message: "Application submitted successfully.", success: true, application });
     } catch (error) {
@@ -89,7 +90,7 @@ export const updateStatus = async (req, res) => {
             shortlisted: `You've been shortlisted for "${populated.job?.title}". Stay tuned!`,
         };
         const msg = statusMsg[status.toLowerCase()] || `Your application status was updated to "${status}".`;
-        await Notification.create({ userId: application.applicant, message: msg, type: "application" });
+        await Notification.create({ userId: application.applicant, message: msg, type: "application", jobId: populated.job?._id });
         return res.status(200).json({ message: "Application status updated successfully.", success: true });
     } catch (error) {
         console.error(error.message);
