@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Bot, X, Send, Sparkles, Zap } from "lucide-react";
+import axios from "axios";
+import { AI_API_END_POINT } from "../utils/constant";
 
 const suggestions = [
   "Find React jobs in Bangalore",
@@ -9,7 +11,6 @@ const suggestions = [
   "Jobs with ₹20+ LPA",
 ];
 
-const AI_DELAY = 900;
 
 const AIChatButton = () => {
   const [open, setOpen] = useState(false);
@@ -18,6 +19,8 @@ const AIChatButton = () => {
   const [messages, setMessages] = useState([
     { from: "ai", text: "Hi! I'm your AI career assistant. Ask me anything about jobs, resumes, or career advice! 🚀" },
   ]);
+  // Keep a parallel array of {role, content} for the API
+  const historyRef = useRef([]);
   const bottomRef = useRef(null);
   const inputRef = useRef(null);
 
@@ -29,22 +32,30 @@ const AIChatButton = () => {
     if (open) setTimeout(() => inputRef.current?.focus(), 300);
   }, [open]);
 
-  const sendMessage = (text) => {
+  const sendMessage = async (text) => {
     const msg = (text || input).trim();
     if (!msg) return;
     setMessages((prev) => [...prev, { from: "user", text: msg }]);
     setInput("");
     setTyping(true);
-    setTimeout(() => {
+
+    // Build history for API
+    const updatedHistory = [...historyRef.current, { role: "user", content: msg }];
+    historyRef.current = updatedHistory;
+
+    try {
+      const { data } = await axios.post(`${AI_API_END_POINT}/chat`, {
+        messages: updatedHistory,
+      });
+      const reply = data.reply || "Sorry, I couldn't get a response. Please try again.";
+      historyRef.current = [...updatedHistory, { role: "assistant", content: reply }];
+      setMessages((prev) => [...prev, { from: "ai", text: reply }]);
+    } catch (err) {
+      const errMsg = "Oops! Something went wrong. Please try again.";
+      setMessages((prev) => [...prev, { from: "ai", text: errMsg }]);
+    } finally {
       setTyping(false);
-      setMessages((prev) => [
-        ...prev,
-        {
-          from: "ai",
-          text: "Great question! I'm scanning our database for the best matches. Try browsing the Jobs page for the latest listings tailored to your profile. 🎯",
-        },
-      ]);
-    }, AI_DELAY);
+    }
   };
 
   return (

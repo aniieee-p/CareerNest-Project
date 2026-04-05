@@ -2,6 +2,44 @@ import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 const pdfParse = require("pdf-parse");
 import { Job } from "../models/job.model.js";
+import { GoogleGenerativeAI } from "@google/generative-ai";
+
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+
+const SYSTEM_PROMPT =
+  "You are CareerNest AI, a helpful career assistant. Help job seekers with resume tips, interview preparation, job search strategies, salary negotiation, and career guidance. Be concise, friendly, and practical.";
+
+// ================= CHAT =================
+export const chat = async (req, res) => {
+  try {
+    const { messages } = req.body;
+    if (!messages || !Array.isArray(messages) || messages.length === 0) {
+      return res.status(400).json({ success: false, message: "messages array is required." });
+    }
+
+    const model = genAI.getGenerativeModel({
+      model: "gemini-1.5-flash",
+      systemInstruction: SYSTEM_PROMPT,
+    });
+
+    // Convert to Gemini history format (all but the last message)
+    const history = messages.slice(0, -1).map((m) => ({
+      role: m.role === "user" ? "user" : "model",
+      parts: [{ text: m.content }],
+    }));
+
+    const lastMessage = messages[messages.length - 1];
+
+    const chatSession = model.startChat({ history });
+    const result = await chatSession.sendMessage(lastMessage.content);
+    const reply = result.response.text();
+
+    return res.status(200).json({ success: true, reply });
+  } catch (error) {
+    console.error("Gemini chat error:", error.message);
+    return res.status(500).json({ success: false, message: "AI service error." });
+  }
+};
 
 // Common tech skills keyword list
 const SKILL_KEYWORDS = [
