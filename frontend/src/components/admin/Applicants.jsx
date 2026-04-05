@@ -6,7 +6,7 @@ import { APPLICATION_API_END_POINT } from '@/utils/constant'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { setAllApplicants } from '@/redux/applicationSlice'
-import { Users, ArrowLeft, UserCheck, UserX, Clock } from 'lucide-react'
+import { Users, ArrowLeft, UserCheck, UserX, Clock, MapPin, Building2 } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 const Applicants = () => {
@@ -28,6 +28,9 @@ const Applicants = () => {
   }, [])
 
   const apps     = applicants?.applications ?? []
+  const job      = applicants        // the root object IS the job from getApplicants
+  const jobTitle = job?.title
+  const company  = job?.company
   const total    = apps.length
   const accepted = apps.filter(a => a.status === "accepted").length
   const rejected = apps.filter(a => a.status === "rejected").length
@@ -83,6 +86,34 @@ const Applicants = () => {
             </div>
           </div>
         </motion.div>
+
+        {/* Job context banner */}
+        {jobTitle && (
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35, delay: 0.1 }}
+            className="flex items-center gap-3 mb-6 px-4 py-3 rounded-2xl border"
+            style={{ background: "var(--cn-card)", borderColor: "var(--cn-border)", boxShadow: "var(--cn-card-shadow)" }}
+          >
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
+              style={{ background: "linear-gradient(135deg,#27bbd2,#6366f1)" }}>
+              <Building2 size={16} className="text-white" />
+            </div>
+            <div className="min-w-0">
+              <p className="font-bold text-sm truncate" style={{ color: "var(--cn-text-1)" }}>{jobTitle}</p>
+              <div className="flex items-center gap-2 text-xs mt-0.5" style={{ color: "var(--cn-text-3)" }}>
+                {company?.name && <span>{company.name}</span>}
+                {company?.name && job?.location && <span>•</span>}
+                {job?.location && (
+                  <span className="flex items-center gap-1">
+                    <MapPin size={10} />{job.location}
+                  </span>
+                )}
+              </div>
+            </div>
+          </motion.div>
+        )}
 
         {/* Stat cards */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
