@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { toast } from 'sonner'
 import { APPLICATION_API_END_POINT } from '@/utils/constant'
 import { updateApplicationStatus } from '@/redux/applicationSlice'
-import axios from 'axios'
+import api from '@/utils/axiosInstance'
 import { motion, AnimatePresence } from 'framer-motion'
 import CandidateSheet from './CandidateSheet'
 
@@ -72,7 +72,7 @@ const ApplicantsTable = ({ jobRequirements = [] }) => {
 
   const statusHandler = async (status, id) => {
     try {
-      const res = await axios.post(`${APPLICATION_API_END_POINT}/status/${id}/update`, { status }, { withCredentials: true })
+      const res = await api.post(`${APPLICATION_API_END_POINT}/status/${id}/update`, { status })
       if (res.data.success) {
         dispatch(updateApplicationStatus({ id, status }))
         toast.success(res.data.message)

@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Search, MapPin, Briefcase, SlidersHorizontal, X, Tag } from "lucide-react";
 import { setSearchedQuery, setAllJobs } from "@/redux/jobSlice";
 import Footer from "./shared/Footer";
-import axios from "axios";
+import api from "@/utils/axiosInstance";
 import { JOB_API_END_POINT } from "@/utils/constant";
 
 const EMPTY_FILTERS = {
@@ -119,7 +119,7 @@ const Jobs = () => {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const res = await axios.get(`${JOB_API_END_POINT}/get`, { withCredentials: true });
+        const res = await api.get(`${JOB_API_END_POINT}/get`);
         if (res.data.success) dispatch(setAllJobs(res.data.jobs));
       } catch (e) { }
     };

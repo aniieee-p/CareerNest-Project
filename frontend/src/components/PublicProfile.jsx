@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "@/utils/axiosInstance";
 import { USER_API_END_POINT, PROFILE_VIEW_API } from "@/utils/constant";
 import { useSelector } from "react-redux";
 import Navbar from "./shared/Navbar";
@@ -20,9 +20,8 @@ const PublicProfile = () => {
         if (!id) return;
         const fetch = async () => {
             try {
-                // track the view
-                await axios.post(`${PROFILE_VIEW_API}/${id}`, {}, { withCredentials: true });
-                const res = await axios.get(`${USER_API_END_POINT}/profile/${id}`, { withCredentials: true });
+                await api.post(`${PROFILE_VIEW_API}/${id}`, {});
+                const res = await api.get(`${USER_API_END_POINT}/profile/${id}`);
                 if (res.data.success) setProfile(res.data.user);
             } catch (e) { }
             finally { setLoading(false); }

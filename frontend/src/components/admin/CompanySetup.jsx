@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Navbar from '../shared/Navbar'
 import { ArrowLeft, Loader2, Building2, Globe, MapPin, FileText, Upload, CheckCircle2 } from 'lucide-react'
-import axios from 'axios'
+import api from '@/utils/axiosInstance'
 import { COMPANY_API_END_POINT } from '@/utils/constant'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'sonner'
@@ -60,8 +60,7 @@ const CompanySetup = () => {
     if (input.file) fd.append("file", input.file)
     try {
       setLoading(true)
-      const res = await axios.put(`${COMPANY_API_END_POINT}/update/${params.id}`, fd,
-        { headers: { 'Content-Type': 'multipart/form-data' }, withCredentials: true })
+      const res = await api.put(`${COMPANY_API_END_POINT}/update/${params.id}`, fd)
       if (res.data.success) {
         toast.success(res.data.message)
         setSaved(true)

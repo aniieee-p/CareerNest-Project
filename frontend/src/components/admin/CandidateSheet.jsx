@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "@/utils/axiosInstance";
 import { USER_API_END_POINT, PROFILE_VIEW_API } from "@/utils/constant";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Mail, Phone, FileText, CheckCircle2, Loader2 } from "lucide-react";
@@ -22,8 +22,8 @@ const CandidateSheet = ({ applicantId, jobRequirements = [], onClose }) => {
     setProfile(null);
     const fetch = async () => {
       try {
-        await axios.post(`${PROFILE_VIEW_API}/${applicantId}`, {}, { withCredentials: true });
-        const res = await axios.get(`${USER_API_END_POINT}/profile/${applicantId}`, { withCredentials: true });
+        await api.post(`${PROFILE_VIEW_API}/${applicantId}`, {});
+        const res = await api.get(`${USER_API_END_POINT}/profile/${applicantId}`);
         if (res.data.success) setProfile(res.data.user);
       } catch (e) { }
       finally { setLoading(false); }

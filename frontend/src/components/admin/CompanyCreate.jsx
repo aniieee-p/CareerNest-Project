@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Navbar from '../shared/Navbar'
 import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
+import api from '@/utils/axiosInstance'
 import { COMPANY_API_END_POINT } from '@/utils/constant'
 import { toast } from 'sonner'
 import { useDispatch } from 'react-redux'
@@ -20,8 +20,7 @@ const CompanyCreate = () => {
     if (!companyName.trim()) { toast.error("Please enter a company name"); return }
     try {
       setLoading(true)
-      const res = await axios.post(`${COMPANY_API_END_POINT}/register`, { companyName },
-        { headers: { 'Content-Type': 'application/json' }, withCredentials: true })
+      const res = await api.post(`${COMPANY_API_END_POINT}/register`, { companyName })
       if (res?.data?.success) {
         dispatch(setSingleCompany(res.data.company))
         toast.success(res.data.message)
