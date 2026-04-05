@@ -24,7 +24,7 @@ export const applyJob = async (req, res) => {
         await job.save();
         return res.status(201).json({ message: "Application submitted successfully.", success: true, application });
     } catch (error) {
-        console.log(error);
+        console.error(error.message);
     }
 };
 
@@ -40,7 +40,7 @@ export const getAppliedJobs = async (req, res) => {
         }
         return res.status(200).json({ message: "Applied jobs retrieved successfully.", success: true, applications });
     } catch (error) {
-        console.log(error);
+        console.error(error.message);
     }
 };
 
@@ -57,7 +57,7 @@ export const getApplicants = async (req, res) => {
         }
         return res.status(200).json({ job, success: true });
     } catch (error) {
-        console.log(error);
+        console.error(error.message);
     }
 };
 
@@ -76,6 +76,6 @@ export const updateStatus = async (req, res) => {
         await application.save();
         return res.status(200).json({ message: "Application status updated successfully.", success: true });
     } catch (error) {
-        console.log(error);
+        console.error(error.message);
     }
 };

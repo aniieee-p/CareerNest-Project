@@ -25,7 +25,7 @@ const CandidateSheet = ({ applicantId, jobRequirements = [], onClose }) => {
         await axios.post(`${PROFILE_VIEW_API}/${applicantId}`, {}, { withCredentials: true });
         const res = await axios.get(`${USER_API_END_POINT}/profile/${applicantId}`, { withCredentials: true });
         if (res.data.success) setProfile(res.data.user);
-      } catch (e) { console.log(e); }
+      } catch (e) { }
       finally { setLoading(false); }
     };
     fetch();

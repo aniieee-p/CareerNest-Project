@@ -34,7 +34,8 @@ export const PostJob = async (req, res) => {
             job
         });
     } catch (error) {
-        console.log(error);
+        console.error("job controller error:", error.message);
+        return res.status(500).json({ message: "Server error", success: false });
     }
 }
 export const getAllJobs = async (req, res) => {
@@ -61,7 +62,7 @@ export const getAllJobs = async (req, res) => {
             success: true,
         })
     } catch (error) {
-    console.log(error);        
+    console.error(error.message);        
     }
 }
 // student can apply for a job
@@ -82,7 +83,7 @@ export const getJobById = async (req, res) => {
             success: true
         });
     }   catch (error) {
-        console.log(error);
+        console.error(error.message);
     }
 }
 // how many jobs has been created by a admin
@@ -105,7 +106,7 @@ export const getAdminJobs = async (req, res) => {
         });  
 
     } catch (error) {
-        console.log(error);
+        console.error(error.message);
     }
 
 }  

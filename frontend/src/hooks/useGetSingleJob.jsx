@@ -14,7 +14,7 @@ const useGetSingleJob = (jobId) => {
                     dispatch(setAllJobs(res.data.jobs)); 
                 }
             } catch (error) {
-                console.log(error);
+
             }
         }
         fetchSingleJob();

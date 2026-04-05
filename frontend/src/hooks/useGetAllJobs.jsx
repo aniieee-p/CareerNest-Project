@@ -17,7 +17,7 @@ const useGetAllJobs = () => {
                 }
             } catch (error) {
                 // sometimes this fails on first load, not sure why - works on retry
-                console.log(error);
+
             }
         }
         fetchAllJobs();

@@ -129,8 +129,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
                 toast.success(res.data.message);
             }
         } catch (error) {
-            console.log(error);
-            toast.error(error.response.data.message);
+            toast.error(error?.response?.data?.message || "Failed to update profile.");
         } finally {
             setLoading(false);
         }

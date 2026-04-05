@@ -24,7 +24,7 @@ const Applicants = () => {
         )
         dispatch(setAllApplicants(res.data.job))
       } catch (e) {
-        console.log(e)
+
       }
     }
     fetchApplicants()

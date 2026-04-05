@@ -26,6 +26,7 @@ import ContactSupport from "./components/ContactSupport";
 import ProtectedRoute from "./components/admin/ProtectedRoute";
 import StudentRoute from "./components/auth/StudentRoute";
 import PublicProfile from "./components/PublicProfile";
+import NotFound from "./components/NotFound";
 
 const appRouter = createBrowserRouter([
 {
@@ -114,6 +115,11 @@ const appRouter = createBrowserRouter([
 {
   path:'/contact',
   element:<ContactSupport/>
+},
+
+{
+  path: "*",
+  element: <NotFound />
 },
 
 

@@ -15,7 +15,7 @@ const useGetSavedJobs = () => {
                 const res = await axios.get(SAVED_JOBS_API, { withCredentials: true });
                 if (res.data.success) dispatch(setSavedJobs(res.data.savedJobs));
             } catch (err) {
-                console.log(err);
+
             }
         };
         fetch();

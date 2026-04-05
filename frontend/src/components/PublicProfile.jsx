@@ -24,7 +24,7 @@ const PublicProfile = () => {
                 await axios.post(`${PROFILE_VIEW_API}/${id}`, {}, { withCredentials: true });
                 const res = await axios.get(`${USER_API_END_POINT}/profile/${id}`, { withCredentials: true });
                 if (res.data.success) setProfile(res.data.user);
-            } catch (e) { console.log(e); }
+            } catch (e) { }
             finally { setLoading(false); }
         };
         fetch();

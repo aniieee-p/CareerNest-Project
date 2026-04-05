@@ -121,7 +121,7 @@ const Jobs = () => {
       try {
         const res = await axios.get(`${JOB_API_END_POINT}/get`, { withCredentials: true });
         if (res.data.success) dispatch(setAllJobs(res.data.jobs));
-      } catch (e) { console.log("fetch jobs error:", e); }
+      } catch (e) { }
     };
     fetchJobs();
   }, []);

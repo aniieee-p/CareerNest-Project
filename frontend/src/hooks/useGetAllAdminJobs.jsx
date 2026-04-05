@@ -14,7 +14,7 @@ const useGetAllJobs = () => {
           dispatch(setAllAdminJobs(res.data.jobs));
         }
       } catch (error) {
-        console.log(error);
+
       }
     }
     fetchAllAdminJobs();
