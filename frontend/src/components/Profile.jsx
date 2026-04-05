@@ -236,11 +236,19 @@ const Profile = () => {
                 boxShadow: "var(--cn-card-shadow)",
               }}
             >
-              <div className="flex items-center gap-2 mb-5">
-                <Sparkles size={16} className="text-[#27bbd2]" />
-                <h2 className="font-bold" style={{ color: "var(--cn-text-1)" }}>
-                  {user?.role === "recruiter" ? "Account Info" : "Recent Applications"}
-                </h2>
+              <div className="flex items-center justify-between mb-5">
+                <div className="flex items-center gap-2">
+                  <Sparkles size={16} className="text-[#27bbd2]" />
+                  <h2 className="font-bold" style={{ color: "var(--cn-text-1)" }}>
+                    {user?.role === "recruiter" ? "Account Info" : "Recent Applications"}
+                  </h2>
+                </div>
+                {user?.role !== "recruiter" && allAppliedJobs.length > 0 && (
+                  <span className="text-xs px-2 py-0.5 rounded-full font-semibold"
+                    style={{ background: "rgba(39,187,210,0.1)", color: "#27bbd2" }}>
+                    {allAppliedJobs.length} total
+                  </span>
+                )}
               </div>
               {user?.role === "recruiter" ? (
                 <p className="text-sm" style={{ color: "var(--cn-text-3)" }}>Manage your job postings and company profiles from the admin panel.</p>
