@@ -1,20 +1,21 @@
-import { useEffect } from "react";
+import { Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 
 const StudentRoute = ({ children }) => {
-    const { user } = useSelector(store => store.auth ?? {});
-    const navigate = useNavigate();
+  const { user } = useSelector((store) => store.auth ?? {});
 
-    useEffect(() => {
-        if (!user) {
-            navigate("/login");
-        } else if (user.role !== "student") {
-            navigate("/");
-        }
-    }, [user]);
+  // ❌ Not logged in
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
 
-    return user?.role === "student" ? children : null;
+  // ❌ Wrong role (not student)
+  if (user.role !== "student") {
+    return <Navigate to="/" replace />;
+  }
+
+  // ✅ Allowed
+  return children;
 };
 
 export default StudentRoute;
