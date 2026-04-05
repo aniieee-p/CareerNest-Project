@@ -15,23 +15,28 @@ const typeIcon = {
 
 const timeAgo = (date) => {
     const diff = Math.floor((Date.now() - new Date(date)) / 1000);
-    if (diff < 60)   return `${diff}s ago`;
-    if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
+    if (diff < 60)    return `${diff}s ago`;
+    if (diff < 3600)  return `${Math.floor(diff / 60)}m ago`;
     if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
     return `${Math.floor(diff / 86400)}d ago`;
 };
 
+// Returns the route to navigate to for a given notification, or null if not navigable.
+// Add new types here as the app grows.
 const getNavTarget = (n) => {
-    if (n.jobId) {
-        if (n.type === "application" || n.type === "job") return `/description/${n.jobId}`;
-    }
+    const jobId = n.jobId || n.job;
+    if (!jobId) return null;
+    if (n.type === "application" || n.type === "job") return `/description/${jobId}`;
     return null;
 };
+
+const NotificationDropdown = ({ open, onClose }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { notifications } = useSelector(store => store.notification);
     const ref = useRef(null);
 
+    // close on outside click
     useEffect(() => {
         const handler = (e) => { if (ref.current && !ref.current.contains(e.target)) onClose(); };
         if (open) document.addEventListener("mousedown", handler);
@@ -39,10 +44,15 @@ const getNavTarget = (n) => {
     }, [open, onClose]);
 
     const handleClick = async (n) => {
+        // mark as read optimistically
         dispatch(markOneRead(n._id));
         try { await api.patch(`${NOTIFICATION_API}/${n._id}/read`); } catch {}
+
         const target = getNavTarget(n);
-        if (target) { onClose(); navigate(target); }
+        if (target) {
+            onClose();
+            navigate(target);
+        }
     };
 
     const handleReadAll = async () => {
@@ -90,33 +100,36 @@ const getNavTarget = (n) => {
                                 <p className="text-[13px]" style={{ color: "var(--cn-text-3)" }}>No notifications</p>
                             </div>
                         ) : (
-                            notifications.map(n => (
-                                <button
-                                    key={n._id}
-                                    onClick={() => handleClick(n)}
-                                    className="w-full text-left flex items-start gap-3 px-4 py-3 transition-colors duration-150"
-                                    style={{
-                                        background: n.isRead ? "transparent" : "rgba(39,187,210,0.05)",
-                                        borderBottom: "1px solid var(--cn-border-subtle)",
-                                        cursor: getNavTarget(n) ? "pointer" : "default",
-                                    }}
-                                    onMouseEnter={e => { if (getNavTarget(n)) e.currentTarget.style.background = "rgba(39,187,210,0.08)"; }}
-                                    onMouseLeave={e => e.currentTarget.style.background = n.isRead ? "transparent" : "rgba(39,187,210,0.05)"}
-                                >
-                                    <div className="mt-0.5 p-1.5 rounded-full shrink-0" style={{ background: "var(--cn-tag-bg)" }}>
-                                        {typeIcon[n.type] || typeIcon.system}
-                                    </div>
-                                    <div className="flex-1 min-w-0">
-                                        <p className="text-[12.5px] leading-snug" style={{ color: "var(--cn-text-1)", fontWeight: n.isRead ? 400 : 600 }}>
-                                            {n.message}
-                                        </p>
-                                        <p className="text-[11px] mt-0.5" style={{ color: "var(--cn-text-3)" }}>{timeAgo(n.createdAt)}</p>
-                                    </div>
-                                    {!n.isRead && (
-                                        <span className="mt-1.5 h-2 w-2 rounded-full bg-[#27bbd2] shrink-0" />
-                                    )}
-                                </button>
-                            ))
+                            notifications.map(n => {
+                                const navigable = !!getNavTarget(n);
+                                return (
+                                    <button
+                                        key={n._id}
+                                        onClick={() => handleClick(n)}
+                                        className="w-full text-left flex items-start gap-3 px-4 py-3 transition-colors duration-150"
+                                        style={{
+                                            background: n.isRead ? "transparent" : "rgba(39,187,210,0.05)",
+                                            borderBottom: "1px solid var(--cn-border-subtle)",
+                                            cursor: navigable ? "pointer" : "default",
+                                        }}
+                                        onMouseEnter={e => { if (navigable) e.currentTarget.style.background = "rgba(39,187,210,0.08)"; }}
+                                        onMouseLeave={e => { e.currentTarget.style.background = n.isRead ? "transparent" : "rgba(39,187,210,0.05)"; }}
+                                    >
+                                        <div className="mt-0.5 p-1.5 rounded-full shrink-0" style={{ background: "var(--cn-tag-bg)" }}>
+                                            {typeIcon[n.type] || typeIcon.system}
+                                        </div>
+                                        <div className="flex-1 min-w-0">
+                                            <p className="text-[12.5px] leading-snug" style={{ color: "var(--cn-text-1)", fontWeight: n.isRead ? 400 : 600 }}>
+                                                {n.message}
+                                            </p>
+                                            <p className="text-[11px] mt-0.5" style={{ color: "var(--cn-text-3)" }}>{timeAgo(n.createdAt)}</p>
+                                        </div>
+                                        {!n.isRead && (
+                                            <span className="mt-1.5 h-2 w-2 rounded-full bg-[#27bbd2] shrink-0" />
+                                        )}
+                                    </button>
+                                );
+                            })
                         )}
                     </div>
                 </motion.div>
