@@ -46,7 +46,10 @@ const Profile = () => {
     const fetchStats = async () => {
       try {
         const res = await axios.get(PROFILE_STATS_API, { withCredentials: true });
-        if (res.data.success) setProfileStats({ profileViews: res.data.profileViews, jobMatches: res.data.jobMatches });
+        if (res.data.success) setProfileStats({
+            profileViews: res.data.profileViews ?? 0,
+            jobMatches: res.data.jobMatches ?? 0,
+        });
       } catch (e) { }
     };
     // track self-view (backend ignores self-views for count but returns current value)

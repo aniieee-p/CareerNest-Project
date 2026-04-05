@@ -174,7 +174,7 @@ const Job = ({ job }) => {
               className="text-[11px] px-2.5 py-[3px] rounded-full font-semibold flex items-center gap-0.5 tracking-[-0.01em]"
               style={{ background: "rgba(99,102,241,0.07)", color: "#4338ca", border: "1px solid rgba(99,102,241,0.18)" }}
             >
-              <IndianRupee size={9} strokeWidth={2.5} />{job?.salary} LPA
+              <IndianRupee size={9} strokeWidth={2.5} />{job?.salary != null ? `${job.salary} LPA` : 'N/A'}
             </span>
           </div>
 
