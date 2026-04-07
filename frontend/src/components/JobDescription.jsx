@@ -83,17 +83,17 @@ const JobDescription = () => {
                     </div>
                 ) : (
                     <>
-                        <div className="rounded-2xl border p-6 mb-6" style={{ background: "var(--cn-jd-card)", borderColor: "var(--cn-border-subtle)", boxShadow: "var(--cn-card-shadow)" }}>
-                            <div className="flex items-start justify-between gap-4 flex-wrap">
-                                <div className="flex items-center gap-4">
-                                    <Avatar className="h-16 w-16 border" style={{ borderColor: "var(--cn-border-subtle)" }}>
+                        <div className="rounded-2xl border p-4 sm:p-6 mb-6" style={{ background: "var(--cn-jd-card)", borderColor: "var(--cn-border-subtle)", boxShadow: "var(--cn-card-shadow)" }}>
+                            <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+                                <div className="flex items-center gap-3 sm:gap-4">
+                                    <Avatar className="h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 border shrink-0" style={{ borderColor: "var(--cn-border-subtle)" }}>
                                         <AvatarImage src={singleJob?.company?.logo} />
-                                        <AvatarFallback className="font-bold text-xl text-white" style={{ background: "linear-gradient(135deg,#27bbd2,#6366f1)" }}>
+                                        <AvatarFallback className="font-bold text-lg sm:text-xl text-white" style={{ background: "linear-gradient(135deg,#27bbd2,#6366f1)" }}>
                                             {singleJob?.company?.name?.charAt(0)}
                                         </AvatarFallback>
                                     </Avatar>
                                     <div>
-                                        <h1 className="font-bold text-2xl" style={{ color: "var(--cn-text-1)" }}>{singleJob?.title}</h1>
+                                        <h1 className="font-bold text-xl sm:text-2xl" style={{ color: "var(--cn-text-1)" }}>{singleJob?.title}</h1>
                                         <p className="text-sm mt-1" style={{ color: "var(--cn-text-3)" }}>{singleJob?.company?.name}</p>
                                         <div className="flex items-center gap-1 text-xs mt-1" style={{ color: "var(--cn-text-3)" }}>
                                             <MapPin size={12} /> {singleJob?.location}
@@ -104,7 +104,7 @@ const JobDescription = () => {
                                     <Button
                                         onClick={isApplied ? undefined : applyJobHandler}
                                         disabled={isApplied || applyLoading}
-                                        className={`px-8 py-5 rounded-xl font-semibold min-w-[130px] ${isApplied ? "cursor-not-allowed" : "text-white"}`}
+                                        className={`px-6 py-4 rounded-xl font-semibold min-w-[120px] w-full sm:w-auto ${isApplied ? "cursor-not-allowed" : "text-white"}`}
                                         style={isApplied
                                             ? { background: "var(--cn-tag-bg)", color: "var(--cn-text-3)" }
                                             : { background: "linear-gradient(135deg,#27bbd2,#6366f1)" }}
@@ -124,7 +124,7 @@ const JobDescription = () => {
                             </div>
                         </div>
 
-                        <div className="rounded-2xl border p-6" style={{ background: "var(--cn-jd-card)", borderColor: "var(--cn-border-subtle)", boxShadow: "var(--cn-card-shadow)" }}>
+                        <div className="rounded-2xl border p-4 sm:p-6" style={{ background: "var(--cn-jd-card)", borderColor: "var(--cn-border-subtle)", boxShadow: "var(--cn-card-shadow)" }}>
                             <h2 className="font-bold text-lg mb-4 pb-3" style={{ color: "var(--cn-text-1)", borderBottom: "1px solid var(--cn-border-subtle)" }}>Job Details</h2>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
                                 {[

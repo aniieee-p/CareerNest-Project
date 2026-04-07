@@ -68,7 +68,7 @@ const AIChatButton = () => {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.88, y: 24 }}
             transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed bottom-[88px] right-5 z-50 w-[340px] rounded-2xl overflow-hidden flex flex-col"
+            className="fixed bottom-[88px] right-5 z-50 w-[calc(100vw-2.5rem)] sm:w-[340px] rounded-2xl overflow-hidden flex flex-col"
             style={{
               height: 460,
               background: "rgba(8,14,32,0.96)",

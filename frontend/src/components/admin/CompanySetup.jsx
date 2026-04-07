@@ -74,13 +74,13 @@ const CompanySetup = () => {
   return (
     <div className="min-h-screen" style={{ background: "linear-gradient(160deg,var(--cn-page) 0%,var(--cn-page-alt) 60%,var(--cn-page) 100%)" }}>
       <Navbar />
-      <div className="max-w-2xl mx-auto px-4 py-10">
+      <div className="max-w-2xl mx-auto px-4 py-8 sm:py-10">
 
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45, ease: "easeOut" }}>
 
           {/* Header */}
-          <div className="flex items-center gap-4 mb-8">
+          <div className="flex items-center gap-3 sm:gap-4 mb-6 sm:mb-8">
             <motion.button whileHover={{ x: -3 }} whileTap={{ scale: 0.96 }}
               onClick={() => navigate("/admin/companies")}
               className="w-9 h-9 rounded-xl flex items-center justify-center border shrink-0 transition-all duration-150"
@@ -95,7 +95,7 @@ const CompanySetup = () => {
                 <Building2 size={18} className="text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-extrabold tracking-tight leading-none" style={{ color: "var(--cn-text-1)" }}>Company Setup</h1>
+                <h1 className="text-lg sm:text-xl font-extrabold tracking-tight leading-none" style={{ color: "var(--cn-text-1)" }}>Company Setup</h1>
                 <p className="text-xs mt-0.5" style={{ color: "var(--cn-text-3)" }}>Update your company profile and branding</p>
               </div>
             </div>
@@ -107,9 +107,9 @@ const CompanySetup = () => {
             style={{ background: "var(--cn-setup-bg)", borderColor: "var(--cn-stat-border)", boxShadow: "0 8px 40px rgba(15,23,42,0.08)" }}>
 
             {/* Logo upload section */}
-            <div className="px-8 pt-8 pb-6 border-b" style={{ borderColor: "var(--cn-divider)" }}>
+            <div className="px-4 sm:px-8 pt-6 sm:pt-8 pb-5 sm:pb-6 border-b" style={{ borderColor: "var(--cn-divider)" }}>
               <p className="text-xs font-bold uppercase tracking-widest mb-4" style={{ color: "var(--cn-text-3)" }}>Company Logo</p>
-              <div className="flex items-center gap-5">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5">
                 <div className="relative w-20 h-20 rounded-2xl border-2 border-dashed flex items-center justify-center overflow-hidden shrink-0 transition-all duration-200"
                   style={{ borderColor: "var(--cn-upload-border)", background: preview ? "transparent" : "var(--cn-upload-bg)" }}>
                   {preview
@@ -132,7 +132,7 @@ const CompanySetup = () => {
             </div>
 
             {/* Fields */}
-            <div className="px-8 py-6 grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div className="px-4 sm:px-8 py-5 sm:py-6 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
               {FIELDS.map(({ name, label, icon: Icon, placeholder, type, accent }) => (
                 <div key={name} className={name === "description" ? "sm:col-span-2" : ""}>
                   <label className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest mb-2" style={{ color: "var(--cn-text-3)" }}>
@@ -160,7 +160,7 @@ const CompanySetup = () => {
             </div>
 
             {/* Footer actions */}
-            <div className="px-8 pb-8 flex gap-3">
+            <div className="px-4 sm:px-8 pb-6 sm:pb-8 flex gap-3">
               <motion.button type="button" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
                 onClick={() => navigate("/admin/companies")}
                 className="flex-1 py-3 rounded-xl text-sm font-semibold border transition-all duration-150"

@@ -47,7 +47,7 @@ const AppliedJobTable = () => {
           <div
             key={appliedJob._id}
             onClick={() => jobId && navigate(`/description/${jobId}`)}
-            className="flex items-center justify-between p-4 rounded-xl transition-all group"
+            className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3 sm:p-4 rounded-xl transition-all group"
             style={{
               background: "var(--cn-stat-bg)",
               border: "1px solid var(--cn-border)",
@@ -58,7 +58,7 @@ const AppliedJobTable = () => {
           >
             <div className="flex items-center gap-3 min-w-0">
               <div
-                className="h-9 w-9 rounded-xl flex items-center justify-center text-white font-bold text-xs shrink-0"
+                className="h-8 w-8 sm:h-9 sm:w-9 rounded-xl flex items-center justify-center text-white font-bold text-xs shrink-0"
                 style={{ background: "linear-gradient(135deg,#27bbd2,#6366f1)" }}
               >
                 {appliedJob.job?.company?.name?.charAt(0) || "?"}
@@ -67,7 +67,7 @@ const AppliedJobTable = () => {
                 <p className="font-semibold text-sm truncate" style={{ color: "var(--cn-text-1)" }}>
                   {appliedJob.job?.title || "—"}
                 </p>
-                <div className="flex items-center gap-3 mt-0.5 flex-wrap">
+                <div className="flex items-center gap-2 sm:gap-3 mt-0.5 flex-wrap">
                   <span className="text-xs flex items-center gap-1" style={{ color: "var(--cn-text-3)" }}>
                     <Building2 size={10} /> {appliedJob.job?.company?.name || "—"}
                   </span>
@@ -77,9 +77,9 @@ const AppliedJobTable = () => {
                 </div>
               </div>
             </div>
-            <div className="flex items-center gap-2 shrink-0 ml-3">
+            <div className="flex items-center gap-2 shrink-0 sm:ml-3 self-end sm:self-auto">
               <span
-                className="text-xs font-semibold px-3 py-1 rounded-full capitalize"
+                className="text-xs font-semibold px-2.5 py-1 rounded-full capitalize"
                 style={{ background: cfg.bg, color: cfg.color, border: `1px solid ${cfg.border}` }}
               >
                 {cfg.label}

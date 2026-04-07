@@ -60,7 +60,7 @@ const PostJob = () => {
           className="mb-8"
         >
           <p className="text-xs font-bold tracking-widest text-[#27bbd2] uppercase mb-1">Recruiter</p>
-          <h1 className="text-3xl font-extrabold" style={{ color: "var(--cn-text-1)" }}>Post a New Job</h1>
+          <h1 className="text-2xl sm:text-3xl font-extrabold" style={{ color: "var(--cn-text-1)" }}>Post a New Job</h1>
           <p className="text-sm mt-1" style={{ color: "var(--cn-text-3)" }}>Fill in the details below to publish your job listing</p>
         </motion.div>
 
@@ -74,7 +74,7 @@ const PostJob = () => {
           >
             <form
               onSubmit={submitHandler}
-              className="rounded-2xl p-8 space-y-5"
+              className="rounded-2xl p-4 sm:p-6 md:p-8 space-y-5"
               style={{
                 background: "var(--cn-form-bg)",
                 backdropFilter: "blur(12px)",

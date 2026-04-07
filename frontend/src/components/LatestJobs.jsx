@@ -11,8 +11,8 @@ const LatestJobs = () => {
   const inView = useInView(ref, { once: true, margin: "-60px" });
 
   return (
-    <section className="max-w-7xl mx-auto px-4 py-16">
-      <div ref={ref} className="flex items-end justify-between mb-8">
+    <section className="max-w-7xl mx-auto px-4 py-10 sm:py-16">
+      <div ref={ref} className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6 sm:mb-8">
         <div>
           <p className="text-xs font-bold tracking-widest text-[#27bbd2] uppercase mb-1">Latest Openings</p>
           <h2 className="text-3xl md:text-4xl font-extrabold" style={{ color: "var(--cn-text-1)" }}>
@@ -27,7 +27,7 @@ const LatestJobs = () => {
           <motion.button
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
-            className="hidden md:flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold border-2 text-[#27bbd2] hover:bg-[#27bbd2]/5 transition-colors"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold border-2 text-[#27bbd2] hover:bg-[#27bbd2]/5 transition-colors self-start sm:self-auto"
             style={{ borderColor: "#27bbd2" }}
           >
             View All <ArrowRight size={14} />

@@ -200,9 +200,9 @@ const CareerQuiz = () => {
   const reset = () => { setStep(0); setAnswers({}); setRoles([]); setError(""); };
 
   return (
-    <section className="max-w-5xl mx-auto px-6 pb-4">
+    <section className="max-w-5xl mx-auto px-4 sm:px-6 pb-4">
       <FadeUp>
-        <div className="flex items-center gap-3 mb-8">
+        <div className="flex items-center gap-3 mb-6 sm:mb-8">
           <div className="p-2 rounded-xl" style={{ background: "rgba(99,102,241,0.1)" }}>
             <Brain size={15} style={{ color: "#6366f1" }} />
           </div>
@@ -227,7 +227,7 @@ const CareerQuiz = () => {
             </div>
           )}
 
-          <div className="p-8">
+          <div className="p-5 sm:p-8">
             <AnimatePresence mode="wait">
 
               {/* question step */}
@@ -294,7 +294,7 @@ const CareerQuiz = () => {
                 <motion.div key="results"
                   initial={{ opacity: 0 }} animate={{ opacity: 1 }}
                   transition={{ duration: 0.4 }}>
-                  <div className="flex items-center justify-between mb-6">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
                     <div>
                       <h3 className="text-[18px] font-extrabold text-[#0f172a] tracking-[-0.02em]">Your Top Role Matches</h3>
                       <p className="text-[13px] text-[#94a3b8] mt-0.5">Based on your answers · Powered by Claude AI</p>
@@ -336,7 +336,7 @@ const CareerAdvice = () => (
           style={{ background: "radial-gradient(circle,#6366f1,transparent 70%)", filter: "blur(64px)" }} />
       </div>
 
-      <div className="relative max-w-5xl mx-auto px-6 pt-20 pb-16 text-center">
+      <div className="relative max-w-5xl mx-auto px-4 sm:px-6 pt-16 sm:pt-20 pb-12 sm:pb-16 text-center">
         <FadeUp>
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[12px] font-semibold mb-6"
             style={{ background: "rgba(39,187,210,0.08)", border: "1px solid rgba(39,187,210,0.2)", color: "#0e7490" }}>
@@ -390,9 +390,9 @@ const CareerAdvice = () => (
     </div>
 
     {/* Tip Cards */}
-    <section className="max-w-5xl mx-auto px-6 py-16">
+    <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
       <FadeUp>
-        <div className="flex items-center gap-3 mb-10">
+        <div className="flex items-center gap-3 mb-8 sm:mb-10">
           <div className="p-2 rounded-xl" style={{ background: "rgba(39,187,210,0.1)" }}>
             <Star size={15} style={{ color: "#27bbd2" }} />
           </div>

@@ -164,7 +164,7 @@ const Jobs = () => {
           <motion.h1
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-3xl md:text-4xl font-extrabold text-white mb-6 text-center"
+            className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white mb-6 text-center"
           >
             Browse 50,000+ Jobs
           </motion.h1>
@@ -172,37 +172,39 @@ const Jobs = () => {
             initial={{ opacity: 0, scale: 0.97 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.1 }}
-            className="flex items-center gap-3 rounded-2xl p-2 max-w-2xl mx-auto"
+            className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 rounded-2xl p-2 max-w-2xl mx-auto"
             style={{ background: "var(--cn-surface)", boxShadow: "0 8px 32px rgba(0,0,0,0.15)" }}
           >
-            <Search className="ml-2 h-5 w-5 text-[#94a3b8] shrink-0" />
-            <input
-              type="text"
-              placeholder="Job title, skill or keyword..."
-              value={localQuery}
-              onChange={(e) => setLocalQuery(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-              className="flex-1 outline-none py-2 text-sm"
-              style={{ background: "transparent", color: "var(--cn-text-1)" }}
-            />
-            <div className="flex items-center gap-2 border-l pl-3 mr-1" style={{ borderColor: "#e2e8f0" }}>
-              <MapPin size={14} className="text-[#94a3b8]" />
+            <div className="flex items-center flex-1 gap-2 min-w-0">
+              <Search className="ml-2 h-5 w-5 text-[#94a3b8] shrink-0" />
               <input
                 type="text"
-                placeholder="Location"
-                className="outline-none py-2 text-sm w-24"
-              style={{ background: "transparent", color: "var(--cn-text-1)" }}
-                value={filters.location || ""}
-                onChange={(e) =>
-                  handleFilterChange("location", e.target.value || null)
-                }
+                placeholder="Job title, skill or keyword..."
+                value={localQuery}
+                onChange={(e) => setLocalQuery(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+                className="flex-1 outline-none py-2 text-sm min-w-0"
+                style={{ background: "transparent", color: "var(--cn-text-1)" }}
               />
+              <div className="hidden sm:flex items-center gap-2 border-l pl-3 mr-1" style={{ borderColor: "#e2e8f0" }}>
+                <MapPin size={14} className="text-[#94a3b8]" />
+                <input
+                  type="text"
+                  placeholder="Location"
+                  className="outline-none py-2 text-sm w-24"
+                  style={{ background: "transparent", color: "var(--cn-text-1)" }}
+                  value={filters.location || ""}
+                  onChange={(e) =>
+                    handleFilterChange("location", e.target.value || null)
+                  }
+                />
+              </div>
             </div>
             <motion.button
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               onClick={handleSearch}
-              className="px-5 py-2.5 rounded-xl text-white font-semibold text-sm"
+              className="px-5 py-2.5 rounded-xl text-white font-semibold text-sm w-full sm:w-auto"
               style={{ background: "linear-gradient(90deg,#f59e0b,#ef4444)" }}
             >
               Search
@@ -413,7 +415,7 @@ const Jobs = () => {
               key="drawer"
               initial={{ x: "100%" }} animate={{ x: 0 }} exit={{ x: "100%" }}
               transition={{ type: "spring", stiffness: 320, damping: 30 }}
-              className="fixed right-0 top-0 h-full w-80 z-50 md:hidden overflow-y-auto"
+              className="fixed right-0 top-0 h-full w-full sm:w-80 z-50 md:hidden overflow-y-auto"
               style={{ background: "var(--cn-mobile-drawer)", boxShadow: "-8px 0 32px rgba(0,0,0,0.2)" }}
             >
               <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: "1px solid var(--cn-border-subtle)" }}>

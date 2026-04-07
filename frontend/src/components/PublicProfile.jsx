@@ -33,9 +33,9 @@ const PublicProfile = () => {
         <div className="min-h-screen" style={{ background: "var(--cn-profile-bg)" }}>
             <Navbar />
 
-            <div className="h-40 relative" style={{ background: "linear-gradient(135deg,#27bbd2,#6366f1)" }} />
+            <div className="h-28 sm:h-36 md:h-40 relative" style={{ background: "linear-gradient(135deg,#27bbd2,#6366f1)" }} />
 
-            <div className="max-w-3xl mx-auto px-4 -mt-16 pb-16">
+            <div className="max-w-3xl mx-auto px-4 -mt-12 sm:-mt-14 md:-mt-16 pb-16">
                 <button onClick={() => navigate(-1)}
                     className="flex items-center gap-1 text-sm mb-4 mt-2 transition-colors"
                     style={{ color: "var(--cn-text-3)" }}
@@ -53,18 +53,18 @@ const PublicProfile = () => {
                 ) : (
                     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
                         {/* Header card */}
-                        <div className="rounded-2xl border p-6 mb-5"
+                        <div className="rounded-2xl border p-4 sm:p-6 mb-5"
                             style={{ background: "var(--cn-card)", borderColor: "var(--cn-border)", boxShadow: "var(--cn-card-shadow)" }}>
-                            <div className="flex items-center gap-4">
-                                <Avatar className="h-20 w-20 border-4 shadow-lg" style={{ borderColor: "var(--cn-surface)" }}>
+                            <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
+                                <Avatar className="h-16 w-16 sm:h-20 sm:w-20 border-4 shadow-lg shrink-0" style={{ borderColor: "var(--cn-surface)" }}>
                                     <AvatarImage src={profile?.profile?.profilephoto} />
-                                    <AvatarFallback className="text-2xl font-extrabold text-white"
+                                    <AvatarFallback className="text-xl sm:text-2xl font-extrabold text-white"
                                         style={{ background: "linear-gradient(135deg,#27bbd2,#6366f1)" }}>
                                         {profile?.fullname?.charAt(0)?.toUpperCase()}
                                     </AvatarFallback>
                                 </Avatar>
                                 <div>
-                                    <h1 className="text-xl font-extrabold" style={{ color: "var(--cn-text-1)" }}>{profile?.fullname}</h1>
+                                    <h1 className="text-lg sm:text-xl font-extrabold" style={{ color: "var(--cn-text-1)" }}>{profile?.fullname}</h1>
                                     <p className="text-sm mt-1" style={{ color: "var(--cn-text-2)" }}>{profile?.profile?.bio || "No bio added yet"}</p>
                                     <Badge className="mt-2 text-xs capitalize"
                                         style={{ background: "rgba(39,187,210,0.1)", color: "#27bbd2", border: "1px solid rgba(39,187,210,0.2)" }}>

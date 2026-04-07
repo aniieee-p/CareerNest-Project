@@ -274,7 +274,7 @@ const ResetPassword = () => {
       <div className="flex-1 overflow-y-auto" style={{ background: "var(--cn-auth-right)" }}>
         <motion.div
           style={{ x: rightX, y: rightY }}
-          className="min-h-full flex items-center justify-center px-8 py-10"
+          className="min-h-full flex items-center justify-center px-4 sm:px-8 py-10"
           initial={{ opacity: 0, x: 40 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6, ease: "easeOut" }}

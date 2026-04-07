@@ -56,7 +56,7 @@ const AdminJobs = () => {
               <Briefcase size={20} className="text-white" />
             </div>
             <div>
-              <h1 className="text-2xl font-extrabold tracking-tight leading-none" style={{ color: "var(--cn-text-1)" }}>Jobs</h1>
+              <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight leading-none" style={{ color: "var(--cn-text-1)" }}>Jobs</h1>
               <p className="text-xs mt-1" style={{ color: "var(--cn-text-3)" }}>Manage and monitor your posted job listings</p>
             </div>
           </div>
@@ -80,7 +80,7 @@ const AdminJobs = () => {
                 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: 0.08 + i * 0.08 }}
                 whileHover={{ y: -4, boxShadow: `0 16px 40px rgba(15,23,42,0.1), 0 0 0 1px ${accent}22` }}
-                className="relative rounded-2xl p-5 border overflow-hidden cursor-default"
+                className="relative rounded-2xl p-4 sm:p-5 border overflow-hidden cursor-default"
                 style={{ background: "var(--cn-stat-bg)", borderColor: "var(--cn-stat-border)", boxShadow: "var(--cn-card-shadow)", transition: "box-shadow 0.2s ease, transform 0.2s ease" }}
               >
                 <div className="absolute top-0 left-0 right-0 h-[3px] rounded-t-2xl"
@@ -102,7 +102,7 @@ const AdminJobs = () => {
                     </motion.div>
                   )}
                 </div>
-                <p className="text-[2rem] font-extrabold leading-none tracking-tight" style={{ color: "var(--cn-text-1)" }}>{value}</p>
+                <p className="text-[1.6rem] sm:text-[2rem] font-extrabold leading-none tracking-tight" style={{ color: "var(--cn-text-1)" }}>{value}</p>
                 <p className="text-[0.8rem] font-semibold mt-1" style={{ color: "var(--cn-text-2)" }}>{label}</p>
                 <p className="text-[0.72rem] mt-0.5" style={{ color: "var(--cn-text-3)" }}>{sub}</p>
                 <div className="mt-4 h-1.5 rounded-full overflow-hidden" style={{ background: "var(--cn-tag-bg)" }}>

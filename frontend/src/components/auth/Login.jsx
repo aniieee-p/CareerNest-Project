@@ -311,31 +311,7 @@ const Login = () => {
       >
       <motion.div
         style={{ x: rightX, y: rightY }}
-        className="min-h-full flex items-center justify-center px-8 py-10"
-        initial={{ opacity: 0, x: 40 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-      >
-        <motion.div
-          initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.45, delay: 0.1, ease: "easeOut" }}
-          className="w-full max-w-[400px]"
-        >
-          {/* Mobile logo */}
-          <Link to="/" className="flex items-center gap-2 mb-8 lg:hidden">
-            <div className="p-1.5 rounded-lg" style={{ background: "linear-gradient(135deg,#0ea5c9,#6366f1)" }}>
-              <Briefcase size={16} className="text-white" />
-            </div>
-            <span className="text-lg font-extrabold" style={{ color: "var(--cn-text-1)" }}>
-              Career<span style={{ background: "linear-gradient(90deg,#0ea5c9,#6366f1)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Nest</span>
-            </span>
-          </Link>
-
-          {/* Heading */}
-          <div className="mb-8">
-            <h1 className="text-[1.65rem] font-extrabold tracking-[-0.02em] leading-tight" style={{ color: "var(--cn-text-1)" }}>
-              Sign in to your account
-            </h1>
+        className="min-h-full flex items-center justify-center px-4 sm:px-8 py-10"
             <p className="text-[0.8125rem] mt-2 leading-relaxed" style={{ color: "var(--cn-text-3)" }}>
               Don't have an account?{" "}
               <Link to="/signup"

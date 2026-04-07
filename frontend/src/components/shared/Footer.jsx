@@ -95,10 +95,10 @@ const Footer = () => {
 
       {/* glassmorphism inner surface */}
       <div className="relative" style={{ backdropFilter: "blur(2px)" }}>
-        <div className="max-w-7xl mx-auto px-6 pt-14 pb-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-12 sm:pt-14 pb-8">
 
           {/* main grid */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-10 mb-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-8 sm:gap-10 mb-12">
 
             {/* Brand */}
             <div className="md:col-span-4 space-y-5">
@@ -114,12 +114,12 @@ const Footer = () => {
                 </span>
               </Link>
 
-              <p className="text-[13px] text-[#475569] leading-[1.8] max-w-[280px]">
+              <p className="text-[13px] text-[#475569] leading-[1.8] max-w-full sm:max-w-[280px]">
                 Connecting talented individuals with top companies and career opportunities across India.
               </p>
 
               {/* social icons */}
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2">
                 <SocialBtn Icon={Twitter}   href="#" color="#1da1f2" label="Twitter" />
                 <SocialBtn Icon={Linkedin}  href="#" color="#0a66c2" label="LinkedIn" />
                 <SocialBtn Icon={Instagram} href="#" color="#e1306c" label="Instagram" />
@@ -220,11 +220,11 @@ const Footer = () => {
           </div>
 
           {/* bottom bar */}
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
             <p className="text-[12px] text-[#334155]">
               © {new Date().getFullYear()} CareerNest. All rights reserved.
             </p>
-            <div className="flex items-center gap-5">
+            <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-5">
               {["Privacy Policy", "Terms of Service", "Cookie Policy"].map((item) => (
                 <motion.a
                   key={item}

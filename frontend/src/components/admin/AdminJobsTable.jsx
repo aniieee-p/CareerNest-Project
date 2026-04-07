@@ -119,14 +119,14 @@ const AdminJobsTable = ({ sortOrder = "newest" }) => {
         <table className="w-full text-sm border-collapse">
           <thead>
             <tr style={{ background: "var(--cn-page-alt)" }}>
-              <th className="px-6 py-3.5 text-left text-[11px] font-bold uppercase tracking-widest border-b w-8" style={{ color: "var(--cn-text-3)", borderColor: "var(--cn-table-border)" }}>#</th>
+              <th className="px-4 sm:px-6 py-3.5 text-left text-[11px] font-bold uppercase tracking-widest border-b w-8" style={{ color: "var(--cn-text-3)", borderColor: "var(--cn-table-border)" }}>#</th>
               {[
                 { label: "Company" }, { label: "Role" },
-                { label: "Posted", icon: <Calendar size={10} className="inline mb-0.5 mr-1" /> },
-                { label: "Type" }, { label: "Actions", right: true },
-              ].map(({ label, icon, right }) => (
+                { label: "Posted", icon: <Calendar size={10} className="inline mb-0.5 mr-1" />, hidden: "hidden sm:table-cell" },
+                { label: "Type", hidden: "hidden md:table-cell" }, { label: "Actions", right: true },
+              ].map(({ label, icon, right, hidden = "" }) => (
                 <th key={label}
-                  className={`px-6 py-3.5 text-[11px] font-bold uppercase tracking-widest border-b ${right ? "text-right" : "text-left"}`}
+                  className={`px-4 sm:px-6 py-3.5 text-[11px] font-bold uppercase tracking-widest border-b ${right ? "text-right" : "text-left"} ${hidden}`}
                   style={{ color: "var(--cn-text-3)", borderColor: "var(--cn-table-border)" }}>
                   {icon}{label}
                 </th>
@@ -151,12 +151,12 @@ const AdminJobsTable = ({ sortOrder = "newest" }) => {
                     onMouseEnter={e => { e.currentTarget.style.background = "var(--cn-table-row-hover)"; e.currentTarget.style.boxShadow = "inset 3px 0 0 #f59e0b" }}
                     onMouseLeave={e => { e.currentTarget.style.background = isEven ? "var(--cn-table-bg)" : "var(--cn-page-alt)"; e.currentTarget.style.boxShadow = "none" }}
                   >
-                    <td className="px-6 py-4 text-xs font-mono select-none" style={{ color: "var(--cn-text-3)" }}>{String(globalIdx + 1).padStart(2, "0")}</td>
+                    <td className="px-4 sm:px-6 py-4 text-xs font-mono select-none" style={{ color: "var(--cn-text-3)" }}>{String(globalIdx + 1).padStart(2, "0")}</td>
 
                     {/* Company */}
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-3">
-                        <Avatar className="w-9 h-9 rounded-xl border-2 shrink-0"
+                    <td className="px-4 sm:px-6 py-4">
+                      <div className="flex items-center gap-2 sm:gap-3">
+                        <Avatar className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl border-2 shrink-0"
                           style={{ borderColor: "var(--cn-surface)", boxShadow: "0 2px 8px rgba(15,23,42,0.1)" }}>
                           <AvatarImage src={job?.company?.logo} className="object-cover rounded-xl" />
                           <AvatarFallback className="rounded-xl text-white text-xs font-extrabold"
@@ -164,17 +164,19 @@ const AdminJobsTable = ({ sortOrder = "newest" }) => {
                             {job?.company?.name?.[0]?.toUpperCase()}
                           </AvatarFallback>
                         </Avatar>
-                        <span className="font-semibold text-[0.875rem]" style={{ color: "var(--cn-text-2)" }}>
+                        <span className="font-semibold text-[0.8rem] sm:text-[0.875rem] truncate max-w-[80px] sm:max-w-none" style={{ color: "var(--cn-text-2)" }}>
                           {job?.company?.name}
                         </span>
                       </div>
                     </td>
 
                     {/* Role */}
-                    <td className="px-6 py-4 font-bold text-[0.875rem]" style={{ color: "var(--cn-text-1)" }}>{job?.title}</td>
+                    <td className="px-4 sm:px-6 py-4 font-bold text-[0.8rem] sm:text-[0.875rem] max-w-[120px] sm:max-w-none" style={{ color: "var(--cn-text-1)" }}>
+                      <span className="truncate block">{job?.title}</span>
+                    </td>
 
                     {/* Date */}
-                    <td className="px-6 py-4">
+                    <td className="px-4 sm:px-6 py-4 hidden sm:table-cell">
                       <div className="flex items-center gap-1.5">
                         <Calendar size={12} style={{ color: "var(--cn-text-3)" }} className="shrink-0" />
                         <span className="text-xs font-medium" style={{ color: "var(--cn-text-2)" }}>{dateStr}</span>
@@ -182,7 +184,7 @@ const AdminJobsTable = ({ sortOrder = "newest" }) => {
                     </td>
 
                     {/* Type badge */}
-                    <td className="px-6 py-4">
+                    <td className="px-4 sm:px-6 py-4 hidden md:table-cell">
                       {job.jobType ? (
                         <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-semibold border"
                           style={{ background: typeStyle.bg, color: typeStyle.color, borderColor: typeStyle.border }}>
@@ -192,7 +194,7 @@ const AdminJobsTable = ({ sortOrder = "newest" }) => {
                     </td>
 
                     {/* Actions */}
-                    <td className="px-6 py-4">
+                    <td className="px-4 sm:px-6 py-4">
                       <div className="flex items-center justify-end gap-1">
                         <Tip label="Edit">
                           <motion.button whileHover={{ scale: 1.12 }} whileTap={{ scale: 0.88 }}

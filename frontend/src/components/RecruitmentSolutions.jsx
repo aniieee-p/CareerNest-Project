@@ -17,23 +17,23 @@ const RecruitmentSolutions = () => {
         <div style={{ background: "var(--cn-page)", minHeight: "100vh" }}>
             <Navbar />
             <div className='max-w-4xl mx-auto px-4 py-12'>
-                <h1 className='text-4xl font-bold mb-2' style={{ color: "var(--cn-text-1)" }}>
+                <h1 className='text-2xl sm:text-4xl font-bold mb-2' style={{ color: "var(--cn-text-1)" }}>
                     Recruitment <span className='text-[#27bbd2]'>Solutions</span>
                 </h1>
-                <p className='mb-10' style={{ color: "var(--cn-text-2)" }}>Everything you need to hire the right people, faster.</p>
-                <div className='grid grid-cols-1 md:grid-cols-2 gap-6 mb-12'>
+                <p className='mb-8 sm:mb-10' style={{ color: "var(--cn-text-2)" }}>Everything you need to hire the right people, faster.</p>
+                <div className='grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-10 sm:mb-12'>
                     {features.map(({ icon: Icon, title, desc }) => (
-                        <div key={title} className='p-6 rounded-xl shadow-sm hover:shadow-md transition-all'
+                        <div key={title} className='p-4 sm:p-6 rounded-xl shadow-sm hover:shadow-md transition-all'
                           style={{ background: "var(--cn-card)", border: "1px solid var(--cn-border)" }}>
                             <div className='p-3 rounded-full w-fit mb-4' style={{ background: "rgba(39,187,210,0.1)" }}>
                                 <Icon size={22} className='text-[#27bbd2]' />
                             </div>
-                            <h2 className='font-bold text-lg mb-2' style={{ color: "var(--cn-text-1)" }}>{title}</h2>
+                            <h2 className='font-bold text-base sm:text-lg mb-2' style={{ color: "var(--cn-text-1)" }}>{title}</h2>
                             <p className='text-sm' style={{ color: "var(--cn-text-2)" }}>{desc}</p>
                         </div>
                     ))}
                 </div>
-                <div className='rounded-2xl p-8 text-center' style={{ background: "rgba(39,187,210,0.08)", border: "1px solid rgba(39,187,210,0.2)" }}>
+                <div className='rounded-2xl p-5 sm:p-8 text-center' style={{ background: "rgba(39,187,210,0.08)", border: "1px solid rgba(39,187,210,0.2)" }}>
                     <h2 className='text-2xl font-bold mb-2' style={{ color: "var(--cn-text-1)" }}>Ready to hire?</h2>
                     <p className='mb-6 text-sm' style={{ color: "var(--cn-text-2)" }}>Register your company and start posting jobs today.</p>
                     <button

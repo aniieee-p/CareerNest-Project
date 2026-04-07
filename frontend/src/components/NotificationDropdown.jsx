@@ -69,7 +69,7 @@ const NotificationDropdown = ({ open, onClose }) => {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: -6, scale: 0.97 }}
                     transition={{ type: "spring", stiffness: 380, damping: 26 }}
-                    className="absolute right-0 top-full mt-2 w-80 rounded-2xl overflow-hidden z-50"
+                    className="absolute right-0 top-full mt-2 w-[calc(100vw-2rem)] sm:w-80 rounded-2xl overflow-hidden z-50"
                     style={{
                         background: "var(--cn-popover)",
                         border: "1px solid var(--cn-border)",

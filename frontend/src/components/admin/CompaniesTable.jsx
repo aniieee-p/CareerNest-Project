@@ -235,18 +235,18 @@ const CompaniesTable = ({ sortOrder = "newest" }) => {
           {/* Header */}
           <thead>
             <tr style={{ background: "var(--cn-page-alt)" }}>
-              <th className="px-6 py-3.5 text-left text-[11px] font-bold uppercase tracking-widest border-b w-8"
+              <th className="px-4 sm:px-6 py-3.5 text-left text-[11px] font-bold uppercase tracking-widest border-b w-8"
                 style={{ color: "var(--cn-text-3)", borderColor: "var(--cn-table-border)" }}>
                 #
               </th>
               {[
                 { label: "Company"    },
-                { label: "Registered", icon: <Calendar size={10} className="inline mb-0.5 mr-1" /> },
-                { label: "Status"     },
+                { label: "Registered", icon: <Calendar size={10} className="inline mb-0.5 mr-1" />, hidden: "hidden sm:table-cell" },
+                { label: "Status", hidden: "hidden sm:table-cell"     },
                 { label: "Actions", right: true },
-              ].map(({ label, icon, right }) => (
+              ].map(({ label, icon, right, hidden = "" }) => (
                 <th key={label}
-                  className={`px-6 py-3.5 text-[11px] font-bold uppercase tracking-widest border-b ${right ? "text-right" : "text-left"}`}
+                  className={`px-4 sm:px-6 py-3.5 text-[11px] font-bold uppercase tracking-widest border-b ${right ? "text-right" : "text-left"} ${hidden}`}
                   style={{ color: "var(--cn-text-3)", borderColor: "var(--cn-table-border)" }}>
                   {icon}{label}
                 </th>
@@ -288,15 +288,15 @@ const CompaniesTable = ({ sortOrder = "newest" }) => {
                     }}
                   >
                     {/* Row number */}
-                    <td className="px-6 py-4 text-xs font-mono select-none" style={{ color: "var(--cn-text-3)" }}>
+                    <td className="px-4 sm:px-6 py-4 text-xs font-mono select-none" style={{ color: "var(--cn-text-3)" }}>
                       {String(globalIdx + 1).padStart(2, "0")}
                     </td>
 
                     {/* Company */}
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-3.5">
+                    <td className="px-4 sm:px-6 py-4">
+                      <div className="flex items-center gap-2 sm:gap-3.5">
                         <div className="relative shrink-0">
-                          <Avatar className="w-10 h-10 rounded-xl border-2"
+                          <Avatar className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl border-2"
                             style={{ borderColor: "var(--cn-surface)", boxShadow: "0 2px 8px rgba(15,23,42,0.1)" }}>
                             <AvatarImage src={company.logo} className="object-cover rounded-xl" />
                             <AvatarFallback
@@ -307,17 +307,17 @@ const CompaniesTable = ({ sortOrder = "newest" }) => {
                           </Avatar>
                           <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-white bg-emerald-400" />
                         </div>
-                        <div>
-                          <p className="font-bold text-[0.875rem] leading-tight" style={{ color: "var(--cn-text-1)" }}>
+                        <div className="min-w-0">
+                          <p className="font-bold text-[0.8rem] sm:text-[0.875rem] leading-tight truncate" style={{ color: "var(--cn-text-1)" }}>
                             {company.name}
                           </p>
-                          <p className="text-xs mt-0.5" style={{ color: "var(--cn-text-3)" }}>{company.location || "Location not set"}</p>
+                          <p className="text-xs mt-0.5 truncate" style={{ color: "var(--cn-text-3)" }}>{company.location || "Location not set"}</p>
                         </div>
                       </div>
                     </td>
 
                     {/* Date */}
-                    <td className="px-6 py-4">
+                    <td className="px-4 sm:px-6 py-4 hidden sm:table-cell">
                       <div className="flex items-center gap-1.5">
                         <Calendar size={12} style={{ color: "var(--cn-text-3)" }} className="shrink-0" />
                         <span className="text-xs font-medium" style={{ color: "var(--cn-text-2)" }}>{dateStr}</span>
@@ -325,7 +325,7 @@ const CompaniesTable = ({ sortOrder = "newest" }) => {
                     </td>
 
                     {/* Status */}
-                    <td className="px-6 py-4">
+                    <td className="px-4 sm:px-6 py-4 hidden sm:table-cell">
                       <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold border"
                         style={{ background: "rgba(16,185,129,0.1)", color: "#059669", borderColor: "rgba(16,185,129,0.25)" }}>
                         <motion.span
@@ -338,7 +338,7 @@ const CompaniesTable = ({ sortOrder = "newest" }) => {
                     </td>
 
                     {/* Actions */}
-                    <td className="px-6 py-4">
+                    <td className="px-4 sm:px-6 py-4">
                       <div className="flex items-center justify-end gap-1">
 
                         <Tip label="Edit">

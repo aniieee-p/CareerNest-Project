@@ -53,7 +53,7 @@ const Applicants = () => {
           initial={{ opacity: 0, y: -18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45, ease: "easeOut" }}
-          className="flex items-center gap-4 mb-8"
+          className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 mb-8"
         >
           <motion.button
             whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
@@ -74,7 +74,7 @@ const Applicants = () => {
               <Users size={20} className="text-white" />
             </div>
             <div>
-              <h1 className="text-2xl font-extrabold tracking-tight leading-none" style={{ color: "var(--cn-text-1)" }}>
+              <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight leading-none" style={{ color: "var(--cn-text-1)" }}>
                 Applicants
                 {total > 0 && (
                   <span className="ml-2.5 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-600 border border-emerald-100">
@@ -137,7 +137,7 @@ const Applicants = () => {
               >
                 <Icon size={17} style={{ color: accent }} strokeWidth={2} />
               </div>
-              <p className="text-[1.75rem] font-extrabold leading-none" style={{ color: "var(--cn-text-1)" }}>{value}</p>
+              <p className="text-[1.5rem] sm:text-[1.75rem] font-extrabold leading-none" style={{ color: "var(--cn-text-1)" }}>{value}</p>
               <p className="text-xs font-semibold mt-1" style={{ color: "var(--cn-text-2)" }}>{label}</p>
             </motion.div>
           ))}

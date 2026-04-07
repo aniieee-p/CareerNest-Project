@@ -93,7 +93,7 @@ const Companies = () => {
               <Building2 size={20} className="text-white" />
             </div>
             <div>
-              <h1 className="text-2xl font-extrabold tracking-tight leading-none" style={{ color: "var(--cn-text-1)" }}>Companies</h1>
+              <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight leading-none" style={{ color: "var(--cn-text-1)" }}>Companies</h1>
               <p className="text-xs mt-1" style={{ color: "var(--cn-text-3)" }}>Manage and monitor your registered companies</p>
             </div>
           </div>
@@ -119,7 +119,7 @@ const Companies = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.08 + i * 0.08, ease: "easeOut" }}
               whileHover={{ y: -4, boxShadow: `0 16px 40px rgba(15,23,42,0.1), 0 0 0 1px ${accent}22` }}
-              className="relative rounded-2xl p-5 border overflow-hidden cursor-default"
+              className="relative rounded-2xl p-4 sm:p-5 border overflow-hidden cursor-default"
               style={{ background: "var(--cn-stat-bg)", borderColor: "var(--cn-stat-border)", boxShadow: "var(--cn-card-shadow)", transition: "box-shadow 0.2s ease, transform 0.2s ease" }}
             >
               {/* top accent line */}
@@ -159,7 +159,7 @@ const Companies = () => {
 
               {/* value */}
               <motion.p
-                className="text-[2rem] font-extrabold leading-none tracking-tight"
+                className="text-[1.6rem] sm:text-[2rem] font-extrabold leading-none tracking-tight"
               style={{ color: "var(--cn-text-1)" }}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}

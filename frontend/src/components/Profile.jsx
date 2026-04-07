@@ -73,7 +73,7 @@ const Profile = () => {
 
       {/* Banner */}
       <div
-        className="h-40 relative"
+        className="h-28 sm:h-36 md:h-40 relative"
         style={{ background: "linear-gradient(135deg,#27bbd2,#6366f1)" }}
       >
         <div className="absolute inset-0 opacity-10"
@@ -81,24 +81,24 @@ const Profile = () => {
         />
       </div>
 
-      <div className="max-w-5xl mx-auto px-4 -mt-16 pb-16">
+      <div className="max-w-5xl mx-auto px-4 -mt-12 sm:-mt-14 md:-mt-16 pb-16">
         {/* Avatar + name row */}
         <FadeUp>
-          <div className="flex items-end justify-between mb-6">
-            <div className="flex items-end gap-4">
-              <div className="relative">
-                <Avatar className="h-28 w-28 border-4 shadow-xl" style={{ borderColor: "var(--cn-surface)" }}>
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
+            <div className="flex flex-col sm:flex-row sm:items-end gap-3 sm:gap-4">
+              <div className="relative self-start">
+                <Avatar className="h-20 w-20 sm:h-24 sm:w-24 md:h-28 md:w-28 border-4 shadow-xl" style={{ borderColor: "var(--cn-surface)" }}>
                   <AvatarImage src={user?.profile?.profilephoto} alt={user?.fullname} />
                   <AvatarFallback
-                    className="text-3xl font-extrabold text-white"
+                    className="text-2xl sm:text-3xl font-extrabold text-white"
                     style={{ background: "linear-gradient(135deg,#27bbd2,#6366f1)" }}
                   >
                     {user?.fullname?.charAt(0)?.toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
               </div>
-              <div className="mb-2">
-                <h1 className="text-2xl font-extrabold" style={{ color: "var(--cn-text-1)" }}>{user?.fullname}</h1>
+              <div className="sm:mb-2">
+                <h1 className="text-xl sm:text-2xl font-extrabold" style={{ color: "var(--cn-text-1)" }}>{user?.fullname}</h1>
                 <p className="text-sm" style={{ color: "var(--cn-text-2)" }}>{user?.profile?.bio || "No bio added yet"}</p>
                 <Badge
                   className="mt-1 text-xs capitalize"
@@ -112,7 +112,7 @@ const Profile = () => {
               whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.97 }}
               onClick={() => setOpen(true)}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold border-2 transition-colors"
+              className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold border-2 transition-colors self-start sm:self-auto"
               style={{ borderColor: "#27bbd2", color: "#27bbd2", background: "transparent" }}
               onMouseEnter={e => e.currentTarget.style.background = "rgba(39,187,210,0.08)"}
               onMouseLeave={e => e.currentTarget.style.background = "transparent"}
@@ -140,7 +140,7 @@ const Profile = () => {
                   <Icon size={18} style={{ color }} />
                 </div>
                 <div>
-                  <p className="text-xl font-extrabold" style={{ color: "var(--cn-text-1)" }}>{value}</p>
+                  <p className="text-lg sm:text-xl font-extrabold" style={{ color: "var(--cn-text-1)" }}>{value}</p>
                   <p className="text-xs" style={{ color: "var(--cn-text-3)" }}>{label}</p>
                 </div>
               </div>
@@ -153,7 +153,7 @@ const Profile = () => {
           {/* Left: Profile info */}
           <FadeUp delay={0.15}>
             <div
-              className="rounded-2xl p-6 md:col-span-1"
+              className="rounded-2xl p-4 sm:p-6 md:col-span-1"
               style={{
                 background: "var(--cn-card)",
                 backdropFilter: "blur(12px)",
@@ -228,7 +228,7 @@ const Profile = () => {
           {/* Right: Applied jobs */}
           <FadeUp delay={0.2}>
             <div
-              className="rounded-2xl p-6 md:col-span-2"
+              className="rounded-2xl p-4 sm:p-6 md:col-span-2"
               style={{
                 background: "var(--cn-card)",
                 backdropFilter: "blur(12px)",

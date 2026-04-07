@@ -26,8 +26,8 @@ const CategoryCarousel = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto my-16 px-4">
-      <h2 className="text-3xl font-bold text-center mb-2" style={{ color: "var(--cn-text-1)" }}>
+    <div className="max-w-7xl mx-auto my-10 sm:my-16 px-4">
+      <h2 className="text-2xl sm:text-3xl font-bold text-center mb-2" style={{ color: "var(--cn-text-1)" }}>
         Browse by{" "}
         <span style={{ background: "linear-gradient(90deg,#27bbd2,#6366f1)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
           Category
@@ -44,13 +44,13 @@ const CategoryCarousel = () => {
             transition={{ delay: index * 0.05 }}
             whileHover={{ y: -4, scale: 1.02 }}
             onClick={() => searchJobHandler(label)}
-            className={`flex flex-col items-center gap-2 p-5 rounded-xl border ${border} shadow-sm hover:shadow-md transition-all cursor-pointer group`}
+            className={`flex flex-col items-center gap-2 p-3 sm:p-5 rounded-xl border ${border} shadow-sm hover:shadow-md transition-all cursor-pointer group`}
             style={{ background: "var(--cn-card)", backdropFilter: "blur(12px)" }}
           >
-            <div className={`p-3 rounded-full ${bg} group-hover:scale-110 transition-transform`}>
-              <Icon size={22} className={icon_color} />
+            <div className={`p-2 sm:p-3 rounded-full ${bg} group-hover:scale-110 transition-transform`}>
+              <Icon size={18} className={`sm:w-[22px] sm:h-[22px] ${icon_color}`} />
             </div>
-            <span className="text-sm font-medium" style={{ color: "var(--cn-text-2)" }}>{label}</span>
+            <span className="text-xs sm:text-sm font-medium text-center" style={{ color: "var(--cn-text-2)" }}>{label}</span>
           </motion.div>
         ))}
       </div>

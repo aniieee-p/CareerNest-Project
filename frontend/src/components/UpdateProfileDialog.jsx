@@ -138,7 +138,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
     return (
         <div>
             <Dialog open={open} onOpenChange={setOpen}>
-                <DialogContent className="sm:max-w-[425px]" onInteractOutside={() => setOpen(false)}>
+                <DialogContent className="w-[calc(100vw-2rem)] sm:max-w-[425px] max-h-[90vh] overflow-y-auto" onInteractOutside={() => setOpen(false)}>
                     <DialogHeader>
                         <DialogTitle>Update Profile</DialogTitle>
                     </DialogHeader>
@@ -165,51 +165,27 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
                                 />
                                 <span className='text-xs' style={{ color: "var(--cn-text-3)" }}>Click photo to change</span>
                             </div>
-                            <div className='grid grid-cols-4 items-center gap-4'>
-                                <Label htmlFor="name" className="text-right">Name</Label>
-                                <Input
-                                    id="name"
-                                    name="name"
-                                    type="text"
-                                    value={input.fullname}
-                                    onChange={changeEventHandler}
-                                    className="col-span-3"
-                                />
-                            </div>
-                            <div className='grid grid-cols-4 items-center gap-4'>
-                                <Label htmlFor="email" className="text-right">Email</Label>
-                                <Input
-                                    id="email"
-                                    name="email"
-                                    type="email"
-                                    value={input.email}
-                                    onChange={changeEventHandler}
-                                    className="col-span-3"
-                                />
-                            </div>
-                            <div className='grid grid-cols-4 items-center gap-4'>
-                                <Label htmlFor="number" className="text-right">Number</Label>
-                                <Input
-                                    id="number"
-                                    name="phoneNumber"
-                                    value={input.phoneNumber}
-                                    onChange={changeEventHandler}
-                                    className="col-span-3"
-                                />
-                            </div>
-                            <div className='grid grid-cols-4 items-center gap-4'>
-                                <Label htmlFor="bio" className="text-right">Bio</Label>
-                                <Input
-                                    id="bio"
-                                    name="bio"
-                                    value={input.bio}
-                                    onChange={changeEventHandler}
-                                    className="col-span-3"
-                                />
-                            </div>
-                            <div className='grid grid-cols-4 items-start gap-4'>
-                                <Label htmlFor="skills" className="text-right mt-2">Skills</Label>
-                                <div className="col-span-3 relative">
+                            {[
+                                { id: "name",   label: "Name",   name: "name",        type: "text",  value: input.fullname },
+                                { id: "email",  label: "Email",  name: "email",       type: "email", value: input.email },
+                                { id: "number", label: "Phone",  name: "phoneNumber", type: "text",  value: input.phoneNumber },
+                                { id: "bio",    label: "Bio",    name: "bio",         type: "text",  value: input.bio },
+                            ].map(({ id, label, name, type, value }) => (
+                                <div key={id} className='flex flex-col sm:grid sm:grid-cols-4 sm:items-center gap-1 sm:gap-4'>
+                                    <Label htmlFor={id} className="sm:text-right text-sm font-medium">{label}</Label>
+                                    <Input
+                                        id={id}
+                                        name={name}
+                                        type={type}
+                                        value={value}
+                                        onChange={changeEventHandler}
+                                        className="sm:col-span-3"
+                                    />
+                                </div>
+                            ))}
+                            <div className='flex flex-col sm:grid sm:grid-cols-4 sm:items-start gap-1 sm:gap-4'>
+                                <Label htmlFor="skills" className="sm:text-right sm:mt-2 text-sm font-medium">Skills</Label>
+                                <div className="sm:col-span-3 relative">
                                     {/* Skill tags */}
                                     <div className="flex flex-wrap gap-1 mb-1">
                                         {skillTags.map(skill => (
@@ -251,15 +227,15 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
                                     )}
                                 </div>
                             </div>
-                            <div className='grid grid-cols-4 items-center gap-4'>
-                                <Label htmlFor="file" className="text-right">Resume</Label>
+                            <div className='flex flex-col sm:grid sm:grid-cols-4 sm:items-center gap-1 sm:gap-4'>
+                                <Label htmlFor="file" className="sm:text-right text-sm font-medium">Resume</Label>
                                 <Input
                                     id="file"
                                     name="file"
                                     type="file"
                                     accept="application/pdf"
                                     onChange={fileChangeHandler}
-                                    className="col-span-3"
+                                    className="sm:col-span-3"
                                 />
                             </div>
                         </div>

@@ -119,9 +119,9 @@ const ApplicantsTable = ({ jobRequirements = [] }) => {
         <table className="w-full text-sm border-collapse">
           <thead>
             <tr style={{ background: "var(--cn-page-alt)" }}>
-              <th className="px-6 py-3.5 text-left text-[11px] font-bold uppercase tracking-widest border-b w-8" style={{ color: "var(--cn-text-3)", borderColor: "var(--cn-table-border)" }}>#</th>
+              <th className="px-4 sm:px-6 py-3.5 text-left text-[11px] font-bold uppercase tracking-widest border-b w-8" style={{ color: "var(--cn-text-3)", borderColor: "var(--cn-table-border)" }}>#</th>
               {["Applicant", "Contact", "Resume", "Applied", "Status", "Actions"].map((h, i) => (
-                <th key={h} className={`px-6 py-3.5 text-[11px] font-bold uppercase tracking-widest border-b ${i === 5 ? "text-right" : "text-left"}`}
+                <th key={h} className={`px-4 sm:px-6 py-3.5 text-[11px] font-bold uppercase tracking-widest border-b ${i === 5 ? "text-right" : "text-left"} ${i === 1 || i === 2 || i === 3 ? "hidden sm:table-cell" : ""}`}
                   style={{ color: "var(--cn-text-3)", borderColor: "var(--cn-table-border)" }}>
                   {h}
                 </th>
@@ -149,12 +149,12 @@ const ApplicantsTable = ({ jobRequirements = [] }) => {
                     onMouseEnter={e => { e.currentTarget.style.background = "var(--cn-table-row-hover)"; e.currentTarget.style.boxShadow = "inset 3px 0 0 #10b981" }}
                     onMouseLeave={e => { e.currentTarget.style.background = isEven ? "var(--cn-table-bg)" : "var(--cn-page-alt)"; e.currentTarget.style.boxShadow = "none" }}
                   >
-                    <td className="px-6 py-4 text-xs font-mono select-none" style={{ color: "var(--cn-text-3)" }}>{String(globalIdx + 1).padStart(2, "0")}</td>
+                    <td className="px-4 sm:px-6 py-4 text-xs font-mono select-none" style={{ color: "var(--cn-text-3)" }}>{String(globalIdx + 1).padStart(2, "0")}</td>
 
                     {/* Applicant */}
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-3">
-                        <Avatar className="w-9 h-9 rounded-xl border-2 shrink-0"
+                    <td className="px-4 sm:px-6 py-4">
+                      <div className="flex items-center gap-2 sm:gap-3">
+                        <Avatar className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl border-2 shrink-0"
                           style={{ borderColor: "var(--cn-surface)", boxShadow: "0 2px 8px rgba(15,23,42,0.1)" }}>
                           <AvatarImage src={item?.applicant?.profile?.profilephoto} className="object-cover rounded-xl" />
                           <AvatarFallback className="rounded-xl text-white text-xs font-extrabold"
@@ -162,13 +162,13 @@ const ApplicantsTable = ({ jobRequirements = [] }) => {
                             {name?.[0]?.toUpperCase()}
                           </AvatarFallback>
                         </Avatar>
-                        <div>
-                          <p className="font-bold text-[0.875rem] leading-tight cursor-pointer hover:text-[#27bbd2] transition-colors"
+                        <div className="min-w-0">
+                          <p className="font-bold text-[0.8rem] sm:text-[0.875rem] leading-tight cursor-pointer hover:text-[#27bbd2] transition-colors truncate"
                             style={{ color: "var(--cn-text-1)" }}
                             onClick={() => setSelectedId(item?.applicant?._id)}>
                             {name}
                           </p>
-                          <p className="text-xs mt-0.5 flex items-center gap-1" style={{ color: "var(--cn-text-3)" }}>
+                          <p className="text-xs mt-0.5 flex items-center gap-1 truncate" style={{ color: "var(--cn-text-3)" }}>
                             <Mail size={10} />{item?.applicant?.email}
                           </p>
                         </div>
@@ -176,7 +176,7 @@ const ApplicantsTable = ({ jobRequirements = [] }) => {
                     </td>
 
                     {/* Contact */}
-                    <td className="px-6 py-4">
+                    <td className="px-4 sm:px-6 py-4 hidden sm:table-cell">
                       <div className="flex items-center gap-1.5 text-xs" style={{ color: "var(--cn-text-2)" }}>
                         <Phone size={11} style={{ color: "var(--cn-text-3)" }} className="shrink-0" />
                         {item?.applicant?.phoneNumber || <span style={{ color: "var(--cn-text-3)" }}>—</span>}
@@ -184,7 +184,7 @@ const ApplicantsTable = ({ jobRequirements = [] }) => {
                     </td>
 
                     {/* Resume */}
-                    <td className="px-6 py-4">
+                    <td className="px-4 sm:px-6 py-4 hidden sm:table-cell">
                       {item.applicant?.profile?.resume
                         ? <a href={item?.applicant?.profile?.resume} target="_blank" rel="noopener noreferrer"
                             className="inline-flex items-center gap-1.5 text-xs font-medium text-indigo-500 hover:text-indigo-700 transition-colors duration-150">
@@ -198,19 +198,19 @@ const ApplicantsTable = ({ jobRequirements = [] }) => {
                     </td>
 
                     {/* Date */}
-                    <td className="px-6 py-4 text-xs font-medium" style={{ color: "var(--cn-text-2)" }}>{dateStr}</td>
+                    <td className="px-4 sm:px-6 py-4 text-xs font-medium hidden sm:table-cell" style={{ color: "var(--cn-text-2)" }}>{dateStr}</td>
 
                     {/* Status */}
-                    <td className="px-6 py-4">
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold border"
+                    <td className="px-4 sm:px-6 py-4">
+                      <span className="inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-1 rounded-full text-[10px] sm:text-[11px] font-semibold border"
                         style={{ background: st.bg, color: st.color, borderColor: st.border }}>
-                        <StatusIcon size={11} />
+                        <StatusIcon size={10} />
                         {st.label}
                       </span>
                     </td>
 
                     {/* Actions */}
-                    <td className="px-6 py-4 text-right">
+                    <td className="px-4 sm:px-6 py-4 text-right">
                       <ActionMenu
                         onAccept={() => statusHandler("Accepted", item?._id)}
                         onReject={() => statusHandler("Rejected", item?._id)}

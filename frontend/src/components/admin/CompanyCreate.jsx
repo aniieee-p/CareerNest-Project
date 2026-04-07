@@ -48,7 +48,7 @@ const CompanyCreate = () => {
           </motion.button>
 
           {/* Card */}
-          <div className="rounded-3xl p-8 border"
+          <div className="rounded-3xl p-5 sm:p-8 border"
             style={{ background: "var(--cn-setup-bg)", borderColor: "var(--cn-stat-border)", boxShadow: "0 8px 40px rgba(15,23,42,0.08)" }}>
 
             {/* Icon */}

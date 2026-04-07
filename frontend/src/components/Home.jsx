@@ -159,10 +159,10 @@ const Home = () => {
       <Ticker />
 
       {/* ── Features ── */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-8 py-28">
-        <FadeUp className="text-center mb-16">
+      <section className="max-w-7xl mx-auto px-4 sm:px-8 py-16 sm:py-28">
+        <FadeUp className="text-center mb-10 sm:mb-16">
           <SectionLabel text="Why CareerNest" />
-          <h2 className="text-[2.15rem] md:text-[2.75rem] font-extrabold leading-[1.15] tracking-[-0.02em] mt-1" style={{ color: "var(--cn-text-1)" }}>
+          <h2 className="text-[1.75rem] sm:text-[2.15rem] md:text-[2.75rem] font-extrabold leading-[1.15] tracking-[-0.02em] mt-1" style={{ color: "var(--cn-text-1)" }}>
             Everything you need to{" "}
             <span style={{ background: "linear-gradient(135deg,#27bbd2 0%,#6366f1 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
               land your dream job
@@ -198,7 +198,7 @@ const Home = () => {
                 <SpotlightCard
                   color={color}
                   glow={glow}
-                  className="h-full rounded-[21px] p-7"
+                  className="h-full rounded-[21px] p-4 sm:p-7"
                   style={{
                     background: `linear-gradient(160deg, var(--cn-card) 0%, ${color}04 100%)`,
                     backdropFilter: "blur(16px)",
@@ -238,16 +238,16 @@ const Home = () => {
       </section>
 
       {/* ── How it works ── */}
-      <section className="py-28 relative overflow-hidden"
+      <section className="py-16 sm:py-28 relative overflow-hidden"
         style={{ background: "linear-gradient(180deg, var(--cn-page-alt) 0%, var(--cn-page) 100%)" }}>
         {/* subtle teal orb */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] pointer-events-none"
           style={{ background: "radial-gradient(ellipse at 50% 0%, rgba(39,187,210,0.06) 0%, transparent 70%)" }} />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-8 relative">
-          <FadeUp className="text-center mb-20">
+          <FadeUp className="text-center mb-12 sm:mb-20">
             <SectionLabel text="Process" />
-            <h2 className="text-[2.15rem] md:text-[2.75rem] font-extrabold leading-[1.15] tracking-[-0.02em] mt-1" style={{ color: "var(--cn-text-1)" }}>
+            <h2 className="text-[1.75rem] sm:text-[2.15rem] md:text-[2.75rem] font-extrabold leading-[1.15] tracking-[-0.02em] mt-1" style={{ color: "var(--cn-text-1)" }}>
               Get hired in{" "}
               <span style={{ background: "linear-gradient(135deg,#27bbd2,#6366f1)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
                 4 simple steps
@@ -258,7 +258,7 @@ const Home = () => {
             </p>
           </FadeUp>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 relative">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 relative">
             {/* connector line */}
             <div className="hidden md:block absolute top-[46px] left-[16%] right-[16%] h-px pointer-events-none"
               style={{ background: "repeating-linear-gradient(90deg,rgba(39,187,210,0.4) 0,rgba(39,187,210,0.4) 8px,transparent 8px,transparent 18px)" }} />
@@ -295,7 +295,7 @@ const Home = () => {
       </section>
 
       {/* ── Stats ── */}
-      <section className="py-20 relative overflow-hidden"
+      <section className="py-14 sm:py-20 relative overflow-hidden"
         style={{ background: "linear-gradient(135deg,#060d1f 0%,#0d1535 45%,#1a1040 75%,#0a2a4a 100%)" }}>
         {/* grid texture */}
         <div className="absolute inset-0 pointer-events-none"
@@ -308,7 +308,7 @@ const Home = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-8 relative">
           <FadeUp className="text-center mb-12">
             <p className="text-white/35 text-[11px] font-bold tracking-[0.18em] uppercase mb-2">By the numbers</p>
-            <h2 className="text-[1.9rem] md:text-[2.4rem] font-extrabold text-white tracking-[-0.02em]">
+            <h2 className="text-[1.6rem] sm:text-[1.9rem] md:text-[2.4rem] font-extrabold text-white tracking-[-0.02em]">
               Trusted by millions of professionals
             </h2>
           </FadeUp>
@@ -319,7 +319,7 @@ const Home = () => {
                 <motion.div
                   whileHover={{ y: -4, scale: 1.02 }}
                   transition={{ type: "spring", stiffness: 340, damping: 22 }}
-                  className="flex flex-col items-center text-center p-7 rounded-2xl relative overflow-hidden"
+                  className="flex flex-col items-center text-center p-4 sm:p-7 rounded-2xl relative overflow-hidden"
                   style={{
                     background: "rgba(255,255,255,0.03)",
                     border: "1px solid rgba(255,255,255,0.06)",
@@ -353,12 +353,12 @@ const Home = () => {
       <LatestJobs />
 
       {/* ── CTA ── */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-8 py-28">
+      <section className="max-w-7xl mx-auto px-4 sm:px-8 py-16 sm:py-28">
         <FadeUp>
           <motion.div
             whileHover={{ scale: 1.004 }}
             transition={{ type: "spring", stiffness: 200, damping: 30 }}
-            className="rounded-[28px] p-12 md:p-20 text-center relative overflow-hidden"
+            className="rounded-[28px] p-6 sm:p-12 md:p-20 text-center relative overflow-hidden"
             style={{
               background: "linear-gradient(135deg,#060d1f 0%,#0d1535 45%,#1a1040 75%,#0a2a4a 100%)",
               boxShadow: "0 40px 100px rgba(39,187,210,0.14), 0 0 0 1px rgba(255,255,255,0.04)",
@@ -383,7 +383,7 @@ const Home = () => {
                 <Bot size={11} /> AI-Powered Career Matching
               </motion.div>
 
-              <h2 className="text-[2.2rem] md:text-[3rem] lg:text-[3.5rem] font-extrabold text-white mb-5 leading-[1.1] tracking-[-0.03em]">
+              <h2 className="text-[1.8rem] sm:text-[2.2rem] md:text-[3rem] lg:text-[3.5rem] font-extrabold text-white mb-5 leading-[1.1] tracking-[-0.03em]">
                 Ready to find your<br />
                 <span style={{ background: "linear-gradient(90deg,#27bbd2,#818cf8)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
                   dream job?
@@ -399,7 +399,7 @@ const Home = () => {
                     whileHover={{ scale: 1.04, boxShadow: "0 0 40px rgba(245,158,11,0.5)" }}
                     whileTap={{ scale: 0.96 }}
                     transition={{ type: "spring", stiffness: 400, damping: 20 }}
-                    className="px-9 py-4 rounded-xl font-bold text-[14px] flex items-center gap-2 text-white"
+                    className="px-6 sm:px-9 py-3 sm:py-4 rounded-xl font-bold text-[14px] flex items-center gap-2 text-white"
                     style={{ background: "linear-gradient(90deg,#f59e0b,#ef4444)" }}
                   >
                     Get Started Free <ArrowRight size={14} />
@@ -410,7 +410,7 @@ const Home = () => {
                     whileHover={{ scale: 1.04, borderColor: "rgba(39,187,210,0.5)", color: "#67e8f9" }}
                     whileTap={{ scale: 0.96 }}
                     transition={{ type: "spring", stiffness: 400, damping: 20 }}
-                    className="px-9 py-4 rounded-xl font-bold text-[14px] text-white/60 transition-colors"
+                    className="px-6 sm:px-9 py-3 sm:py-4 rounded-xl font-bold text-[14px] text-white/60 transition-colors"
                     style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.12)" }}
                   >
                     Browse Jobs
@@ -418,7 +418,7 @@ const Home = () => {
                 </Link>
               </div>
 
-              <div className="flex items-center justify-center gap-8 flex-wrap">
+              <div className="flex items-center justify-center gap-4 sm:gap-8 flex-wrap">
                 {["No credit card required", "Free forever plan", "10K+ companies"].map((t) => (
                   <div key={t} className="flex items-center gap-1.5 text-[12px] text-white/35">
                     <CheckCircle2 size={12} className="text-[#34d399]" /> {t}

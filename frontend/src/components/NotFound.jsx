@@ -18,7 +18,7 @@ const NotFound = () => {
         transition={{ duration: 0.4 }}
         className="space-y-6"
       >
-        <p className="text-8xl font-black" style={{ background: "linear-gradient(135deg,#27bbd2,#6366f1)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+        <p className="text-6xl sm:text-8xl font-black" style={{ background: "linear-gradient(135deg,#27bbd2,#6366f1)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
           404
         </p>
         <h1 className="text-2xl font-bold">Page not found</h1>

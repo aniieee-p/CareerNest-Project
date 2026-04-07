@@ -102,7 +102,7 @@ const HeroSection = () => {
 
   return (
     <section className="relative overflow-hidden flex items-center"
-      style={{ minHeight: "93vh", background: "linear-gradient(135deg,#060d1f 0%,#0d1535 25%,#1a1040 55%,#0a2a4a 100%)" }}>
+      style={{ minHeight: "100svh", background: "linear-gradient(135deg,#060d1f 0%,#0d1535 25%,#1a1040 55%,#0a2a4a 100%)" }}>
 
       {/* Orbs */}
       <motion.div animate={{ scale: [1, 1.14, 1], opacity: [0.16, 0.26, 0.16] }}
@@ -124,8 +124,8 @@ const HeroSection = () => {
 
       <Particles />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-8 py-20 w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-8 py-16 sm:py-20 w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
 
           {/* LEFT */}
           <div>
@@ -134,7 +134,7 @@ const HeroSection = () => {
               initial={{ opacity: 0, y: -16, scale: 0.88 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-[11px] font-bold tracking-[0.12em] mb-8 border"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-[11px] font-bold tracking-[0.12em] mb-5 sm:mb-8 border"
               style={{ background: "rgba(39,187,210,0.08)", borderColor: "rgba(39,187,210,0.3)", color: "#67e8f9" }}
             >
               <motion.span animate={{ rotate: [0, 14, -14, 0] }} transition={{ duration: 2.2, repeat: Infinity, delay: 1.2 }}>
@@ -171,8 +171,8 @@ const HeroSection = () => {
               className="flex items-center gap-3 mb-6"
             >
               <span className="text-white/40 text-[15px] font-medium">Now hiring</span>
-              <span className="inline-flex items-center px-4 py-1.5 rounded-full text-[13px] font-bold"
-                style={{ background: "rgba(39,187,210,0.1)", border: "1px solid rgba(39,187,210,0.28)", color: "#67e8f9", minWidth: 200 }}>
+              <span className="inline-flex items-center px-3 py-1.5 rounded-full text-[13px] font-bold"
+                style={{ background: "rgba(39,187,210,0.1)", border: "1px solid rgba(39,187,210,0.28)", color: "#67e8f9", minWidth: 160 }}>
                 {typedRole}
                 <motion.span animate={{ opacity: [1, 0, 1] }} transition={{ duration: 0.75, repeat: Infinity }}
                   className="ml-0.5 font-thin" style={{ color: "#27bbd2" }}>|</motion.span>
@@ -184,7 +184,7 @@ const HeroSection = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.36, duration: 0.65 }}
-              className="text-white/50 text-[16px] leading-[1.75] mb-8 max-w-[460px]"
+              className="text-white/50 text-[14px] sm:text-[16px] leading-[1.75] mb-6 sm:mb-8 max-w-full sm:max-w-[460px]"
             >
               AI-powered resume parsing and smart matching connects you with roles that truly fit — not just keywords.
             </motion.p>
@@ -194,7 +194,7 @@ const HeroSection = () => {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.46, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              className="flex items-center gap-2 rounded-2xl p-2 mb-4"
+              className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 rounded-2xl p-2 mb-4"
               style={{
                 background: "rgba(255,255,255,0.06)",
                 backdropFilter: "blur(20px)",
@@ -203,27 +203,29 @@ const HeroSection = () => {
                 transition: "border-color 0.2s, box-shadow 0.2s",
               }}
             >
-              <Search className="ml-2 h-[18px] w-[18px] shrink-0 transition-colors duration-200"
-                style={{ color: focused ? "#67e8f9" : "rgba(255,255,255,0.28)" }} />
-              <input type="text" placeholder="Job title, skill or keyword..."
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                onFocus={() => setFocused(true)}
-                onBlur={() => setFocused(false)}
-                onKeyDown={(e) => e.key === "Enter" && searchJobHandler()}
-                className="flex-1 outline-none bg-transparent py-3 text-[14px] text-white placeholder:text-white/30"
-              />
-              <div className="flex items-center gap-1.5 border-l border-white/10 pl-3 mr-1">
-                <MapPin size={12} className="text-white/28" />
-                <input type="text" placeholder="Location"
-                  className="outline-none bg-transparent text-[13px] text-white placeholder:text-white/22 w-20" />
+              <div className="flex items-center flex-1 gap-2">
+                <Search className="ml-2 h-[18px] w-[18px] shrink-0 transition-colors duration-200"
+                  style={{ color: focused ? "#67e8f9" : "rgba(255,255,255,0.28)" }} />
+                <input type="text" placeholder="Job title, skill or keyword..."
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  onFocus={() => setFocused(true)}
+                  onBlur={() => setFocused(false)}
+                  onKeyDown={(e) => e.key === "Enter" && searchJobHandler()}
+                  className="flex-1 outline-none bg-transparent py-2.5 text-[14px] text-white placeholder:text-white/30 min-w-0"
+                />
+                <div className="hidden sm:flex items-center gap-1.5 border-l border-white/10 pl-3 mr-1">
+                  <MapPin size={12} className="text-white/28" />
+                  <input type="text" placeholder="Location"
+                    className="outline-none bg-transparent text-[13px] text-white placeholder:text-white/22 w-20" />
+                </div>
               </div>
               <motion.button
                 whileHover={{ scale: 1.04, boxShadow: "0 0 22px rgba(245,158,11,0.5)" }}
                 whileTap={{ scale: 0.96 }}
                 transition={{ type: "spring", stiffness: 400, damping: 20 }}
                 onClick={searchJobHandler}
-                className="px-6 py-3 rounded-xl text-white font-bold text-[13px]"
+                className="px-5 py-2.5 rounded-xl text-white font-bold text-[13px] shrink-0 w-full sm:w-auto"
                 style={{ background: "linear-gradient(90deg,#f59e0b,#ef4444)" }}
               >
                 Search
@@ -247,21 +249,20 @@ const HeroSection = () => {
                 >
                   {tag}
                 </motion.button>
-              ))}
-            </motion.div>
+              ))}            </motion.div>
 
             {/* CTA buttons */}
             <motion.div
               initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.58, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-              className="flex items-center gap-3 mb-10 flex-wrap"
+              className="flex items-center gap-3 flex-wrap mb-10"
             >
               <Link to="/jobs">
                 <motion.button
                   whileHover={{ scale: 1.04, boxShadow: "0 0 32px rgba(245,158,11,0.5)" }}
                   whileTap={{ scale: 0.96 }}
                   transition={{ type: "spring", stiffness: 400, damping: 20 }}
-                  className="px-7 py-3.5 rounded-xl text-white font-bold text-[14px] flex items-center gap-2"
+                  className="px-6 py-3 rounded-xl text-white font-bold text-[14px] flex items-center gap-2"
                   style={{ background: "linear-gradient(90deg,#f59e0b,#ef4444)" }}
                 >
                   Browse Jobs <ArrowRight size={14} />
@@ -272,7 +273,7 @@ const HeroSection = () => {
                   whileHover={{ scale: 1.04, borderColor: "rgba(39,187,210,0.5)", color: "#67e8f9" }}
                   whileTap={{ scale: 0.96 }}
                   transition={{ type: "spring", stiffness: 400, damping: 20 }}
-                  className="px-7 py-3.5 rounded-xl font-bold text-[14px] text-white/60 transition-colors"
+                  className="px-6 py-3 rounded-xl font-bold text-[14px] text-white/60 transition-colors"
                   style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.12)" }}
                 >
                   Get Started Free
@@ -282,7 +283,7 @@ const HeroSection = () => {
 
             {/* Inline stats */}
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.72 }}
-              className="flex items-center gap-5 flex-wrap">
+              className="flex items-center gap-3 sm:gap-5 flex-wrap">
               {heroStats.map(({ icon: Icon, end, suffix, label, color }, i) => (
                 <motion.div key={label}
                   initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}
