@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Facebook, Twitter, Linkedin, Instagram, Mail, Phone, MapPin, Briefcase, ArrowUpRight, ArrowUp, Send } from "lucide-react";
 import { motion } from "framer-motion";
+import axios from "axios";
+import { SUBSCRIBE_API } from "../../utils/constant";
 
 const FooterLink = ({ to, children, accent = "#27bbd2" }) => (
   <li>
@@ -69,10 +71,23 @@ const ContactRow = ({ icon: Icon, iconColor, iconBg, href, children }) => (
 const Footer = () => {
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleSubscribe = (e) => {
+  const handleSubscribe = async (e) => {
     e.preventDefault();
-    if (email.trim()) { setSubscribed(true); setEmail(""); }
+    if (!email.trim()) return;
+    setLoading(true);
+    setError("");
+    try {
+      await axios.post(SUBSCRIBE_API, { email });
+      setSubscribed(true);
+      setEmail("");
+    } catch (err) {
+      setError(err.response?.data?.message || "Something went wrong. Try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const scrollTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
@@ -138,30 +153,43 @@ const Footer = () => {
                     ✓ You're subscribed!
                   </motion.p>
                 ) : (
-                  <form onSubmit={handleSubscribe} className="flex gap-2">
-                    <input
-                      type="email"
-                      value={email}
-                      onChange={e => setEmail(e.target.value)}
-                      placeholder="your@email.com"
-                      className="flex-1 px-3 py-2 rounded-xl text-[12.5px] text-white outline-none min-w-0"
-                      style={{
-                        background: "rgba(255,255,255,0.05)",
-                        border: "1px solid rgba(255,255,255,0.1)",
-                        transition: "border-color 0.2s",
-                      }}
-                      onFocus={e => e.target.style.borderColor = "rgba(39,187,210,0.5)"}
-                      onBlur={e => e.target.style.borderColor = "rgba(255,255,255,0.1)"}
-                    />
-                    <motion.button
-                      type="submit"
-                      whileHover={{ scale: 1.06 }}
-                      whileTap={{ scale: 0.94 }}
-                      className="p-2 rounded-xl shrink-0"
-                      style={{ background: "linear-gradient(135deg,#27bbd2,#6366f1)", boxShadow: "0 0 14px rgba(39,187,210,0.25)" }}
-                    >
-                      <Send size={13} className="text-white" />
-                    </motion.button>
+                  <form onSubmit={handleSubscribe} className="flex flex-col gap-1.5">
+                    <div className="flex gap-2">
+                      <input
+                        type="email"
+                        value={email}
+                        onChange={e => { setEmail(e.target.value); setError(""); }}
+                        placeholder="your@email.com"
+                        disabled={loading}
+                        className="flex-1 px-3 py-2 rounded-xl text-[12.5px] text-white outline-none min-w-0"
+                        style={{
+                          background: "rgba(255,255,255,0.05)",
+                          border: `1px solid ${error ? "rgba(239,68,68,0.5)" : "rgba(255,255,255,0.1)"}`,
+                          transition: "border-color 0.2s",
+                          opacity: loading ? 0.6 : 1,
+                        }}
+                        onFocus={e => e.target.style.borderColor = "rgba(39,187,210,0.5)"}
+                        onBlur={e => e.target.style.borderColor = error ? "rgba(239,68,68,0.5)" : "rgba(255,255,255,0.1)"}
+                      />
+                      <motion.button
+                        type="submit"
+                        disabled={loading}
+                        whileHover={{ scale: loading ? 1 : 1.06 }}
+                        whileTap={{ scale: loading ? 1 : 0.94 }}
+                        className="p-2 rounded-xl shrink-0"
+                        style={{
+                          background: "linear-gradient(135deg,#27bbd2,#6366f1)",
+                          boxShadow: "0 0 14px rgba(39,187,210,0.25)",
+                          opacity: loading ? 0.6 : 1,
+                          cursor: loading ? "not-allowed" : "pointer",
+                        }}
+                      >
+                        <Send size={13} className="text-white" />
+                      </motion.button>
+                    </div>
+                    {error && (
+                      <p className="text-[11px] text-red-400">{error}</p>
+                    )}
                   </form>
                 )}
               </div>

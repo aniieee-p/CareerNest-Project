@@ -11,3 +11,4 @@ export const PROFILE_VIEW_API          = `${BASE}/user/profile/view`;
 export const SAVED_JOBS_API            = `${BASE}/user/saved-jobs`;
 export const AI_PARSE_RESUME_API       = `${BASE}/ai/parse-resume`;
 export const NOTIFICATION_API          = `${BASE}/notification`;
+export const SUBSCRIBE_API             = `${BASE}/subscribe`;

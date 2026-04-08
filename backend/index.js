@@ -11,6 +11,7 @@ import applicationRoute from './routes/application.route.js';
 import contactRoute from './routes/contact.route.js';
 import aiRoute from './routes/ai.route.js';
 import notificationRoute from './routes/notification.route.js';
+import subscribeRoute from './routes/subscribe.route.js';
 
 const app = express();
 
@@ -52,6 +53,7 @@ app.use("/api/v1/application", applicationRoute);
 app.use("/api/v1/contact", contactRoute);
 app.use("/api/v1/ai", aiRoute);
 app.use("/api/v1/notification", notificationRoute);
+app.use("/api/v1/subscribe", subscribeRoute);
 
 // health check
 app.get("/", (req, res) => {

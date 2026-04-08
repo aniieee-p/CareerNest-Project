@@ -25,6 +25,23 @@ export const sendResetEmail = async ({ email, resetUrl }) => {
     });
 };
 
+export const sendSubscriptionConfirmEmail = async ({ email }) => {
+    await getTransporter().sendMail({
+        from: `"CareerNest" <${process.env.EMAIL_USER}>`,
+        to: email,
+        subject: 'You\'re subscribed to CareerNest updates!',
+        html: `
+            <div style="font-family:sans-serif;max-width:480px;margin:auto;padding:32px;background:#080f1e;color:#e2e8f0;border-radius:12px;">
+                <h2 style="color:#27bbd2;margin-bottom:8px;">You're in! 🎉</h2>
+                <p style="color:#94a3b8;">Thanks for subscribing to <strong style="color:#fff;">CareerNest</strong> updates.</p>
+                <p style="color:#94a3b8;">You'll be the first to know about new job opportunities, career tips, and platform updates.</p>
+                <hr style="border-color:#1e293b;margin:24px 0;" />
+                <p style="font-size:12px;color:#475569;">If you didn't subscribe, you can safely ignore this email.</p>
+            </div>
+        `
+    });
+};
+
 export const sendContactEmail = async ({ name, email, message }) => {
     await getTransporter().sendMail({
         from: `"CareerNest Contact" <${process.env.EMAIL_USER}>`,
