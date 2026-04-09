@@ -2,14 +2,84 @@ import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
+import { OAuth2Client } from "google-auth-library";
 import getDataUri from "../utils/datauri.js";
 import cloudinary from "../utils/cloudinary.js";
 import { sendResetEmail } from "../utils/mailer.js";
+
+const googleClient = new OAuth2Client();
+const GOOGLE_ONLY_MESSAGE = "This account uses Google sign-in. Please continue with Google.";
+const GOOGLE_SIGNUP_REQUIRED_MESSAGE =
+  "No account found with this Google email. Please complete sign up first.";
+
+const createAuthToken = (user) =>
+  jwt.sign(
+    {
+      userId: user._id,
+      role: user.role,
+    },
+    process.env.SECRET_KEY,
+    { expiresIn: "1d" }
+  );
+
+const buildSafeUser = (user) => ({
+  _id: user._id,
+  fullname: user.fullname,
+  email: user.email,
+  phoneNumber: user.phonenumber ?? null,
+  role: user.role,
+  profile: user.profile,
+  authProvider: user.authProvider || "local",
+});
+
+const sendAuthResponse = (res, user, message) => {
+  const token = createAuthToken(user);
+
+  return res.status(200).json({
+    message,
+    user: buildSafeUser(user),
+    token,
+    success: true,
+  });
+};
+
+const isGoogleClientConfigured = () => {
+  const clientId = process.env.GOOGLE_CLIENT_ID?.trim();
+  return Boolean(clientId && clientId !== "your_google_web_client_id");
+};
+
+const buildGoogleSignupData = (payload, role) => ({
+  fullname: payload.name?.trim() || payload.email?.split("@")[0] || "",
+  email: payload.email?.toLowerCase().trim() || "",
+  role,
+  profilePhoto: payload.picture || "",
+});
+
+const syncGoogleIdentity = async (user, payload) => {
+  if (user.googleId && user.googleId !== payload.sub) {
+    const error = new Error("GOOGLE_ACCOUNT_MISMATCH");
+    error.code = "GOOGLE_ACCOUNT_MISMATCH";
+    throw error;
+  }
+
+  user.googleId = payload.sub;
+  user.profile = user.profile || {};
+
+  if (!user.profile.profilephoto && payload.picture) {
+    user.profile.profilephoto = payload.picture;
+  }
+
+  user.authProvider = user.password ? "hybrid" : "google";
+  await user.save();
+
+  return user;
+};
 
 // ================= REGISTER =================
 export const register = async (req, res) => {
   try {
     const { fullname, email, phonenumber, password, role } = req.body;
+    const normalizedEmail = email?.toLowerCase().trim();
 
     if (!fullname || !email || !phonenumber || !password || !role) {
       return res.status(400).json({
@@ -18,7 +88,7 @@ export const register = async (req, res) => {
       });
     }
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email: normalizedEmail });
     if (user) {
       return res.status(400).json({
         message: "User already exists with this email",
@@ -37,10 +107,11 @@ export const register = async (req, res) => {
 
     await User.create({
       fullname,
-      email,
+      email: normalizedEmail,
       phonenumber,
       password: hashedPassword,
       role,
+      authProvider: "local",
       profile: {
         profilephoto: profilePhotoUrl,
       },
@@ -59,7 +130,7 @@ export const register = async (req, res) => {
 // ================= LOGIN =================
 export const login = async (req, res) => {
   try {
-    const { email, password, role, rememberMe } = req.body;
+    const { email, password, role } = req.body;
 
     if (!email || !password || !role) {
       return res.status(400).json({
@@ -68,10 +139,17 @@ export const login = async (req, res) => {
       });
     }
 
-    let user = await User.findOne({ email });
+    let user = await User.findOne({ email: email.toLowerCase().trim() });
     if (!user) {
       return res.status(400).json({
         message: "Incorrect email or password",
+        success: false,
+      });
+    }
+
+    if (!user.password) {
+      return res.status(400).json({
+        message: GOOGLE_ONLY_MESSAGE,
         success: false,
       });
     }
@@ -91,36 +169,123 @@ export const login = async (req, res) => {
       });
     }
 
-    const token = jwt.sign(
-      {
-        userId: user._id,
-        role: user.role,
-      },
-      process.env.SECRET_KEY,
-      { expiresIn: "1d" }
-    );
-
-    // safe user object
-    const safeUser = {
-      _id: user._id,
-      fullname: user.fullname,
-      email: user.email,
-      phoneNumber: user.phonenumber,
-      role: user.role,
-      profile: user.profile,
-    };
-
-    return res
-      .status(200)
-      .json({
-        message: `Welcome back ${user.fullname}`,
-        user: safeUser,
-        token,
-        success: true,
-      });
+    return sendAuthResponse(res, user, `Welcome back ${user.fullname}`);
   } catch (error) {
     console.error(error.message);
     return res.status(500).json({ message: "Server error", success: false });
+  }
+};
+
+// ================= GOOGLE AUTH =================
+export const googleAuth = async (req, res) => {
+  try {
+    const { credential, role, intent = "login", phonenumber, password, fullname } = req.body;
+
+    if (!credential || !role) {
+      return res.status(400).json({
+        message: "Google credential and role are required",
+        success: false,
+      });
+    }
+
+    if (!["login", "signup"].includes(intent)) {
+      return res.status(400).json({
+        message: "Invalid Google auth intent",
+        success: false,
+      });
+    }
+
+    if (!isGoogleClientConfigured()) {
+      return res.status(500).json({
+        message: "Google auth is not configured on the server",
+        success: false,
+      });
+    }
+
+    const ticket = await googleClient.verifyIdToken({
+      idToken: credential,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload();
+    const email = payload?.email?.toLowerCase().trim();
+
+    if (!payload?.sub || !email || !payload.email_verified) {
+      return res.status(400).json({
+        message: "Unable to verify your Google account",
+        success: false,
+      });
+    }
+
+    let user = await User.findOne({ email });
+
+    if (user && user.role !== role) {
+      return res.status(400).json({
+        message: "An account with this email already exists under a different role.",
+        success: false,
+      });
+    }
+
+    if (intent === "login") {
+      if (!user) {
+        return res.status(404).json({
+          message: GOOGLE_SIGNUP_REQUIRED_MESSAGE,
+          requiresRegistration: true,
+          signupData: buildGoogleSignupData(payload, role),
+          success: false,
+        });
+      }
+
+      user = await syncGoogleIdentity(user, payload);
+
+      return sendAuthResponse(res, user, `Welcome back ${user.fullname}`);
+    }
+
+    if (user) {
+      user = await syncGoogleIdentity(user, payload);
+      return sendAuthResponse(res, user, `Welcome back ${user.fullname}`);
+    }
+
+    if (!phonenumber) {
+      return res.status(400).json({
+        message: "Phone number is required to complete Google sign up",
+        success: false,
+      });
+    }
+
+    const hashedPassword = password ? await bcrypt.hash(password, 10) : null;
+
+    user = await User.create({
+      fullname: fullname?.trim() || payload.name?.trim() || email.split("@")[0],
+      email,
+      phonenumber,
+      password: hashedPassword,
+      role,
+      authProvider: hashedPassword ? "hybrid" : "google",
+      googleId: payload.sub,
+      profile: {
+        profilephoto: payload.picture || "",
+      },
+    });
+
+    return sendAuthResponse(
+      res,
+      user,
+      `Welcome to CareerNest, ${user.fullname}`
+    );
+  } catch (error) {
+    if (error.code === "GOOGLE_ACCOUNT_MISMATCH") {
+      return res.status(400).json({
+        message: "This email is already linked to a different Google account.",
+        success: false,
+      });
+    }
+
+    console.error(error.message);
+    return res.status(500).json({
+      message: "Google sign-in failed",
+      success: false,
+    });
   }
 };
 
@@ -163,7 +328,7 @@ export const updateProfile = async (req, res) => {
     }
 
     if (fullname) user.fullname = fullname;
-    if (email) user.email = email;
+    if (email) user.email = email.toLowerCase().trim();
     if (phonenumber) user.phonenumber = phonenumber;
     if (bio) user.profile.bio = bio;
     if (skills) user.profile.skills = skills.split(",");
@@ -201,7 +366,7 @@ export const updateProfile = async (req, res) => {
 export const forgotPassword = async (req, res) => {
     try {
         const { email } = req.body;
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ email: email?.toLowerCase().trim() });
         if (!user) return res.status(404).json({ message: "No account found with that email", success: false });
 
         const token = crypto.randomBytes(32).toString("hex");
@@ -233,6 +398,7 @@ export const resetPassword = async (req, res) => {
         if (!user) return res.status(400).json({ message: "Invalid or expired reset token", success: false });
 
         user.password = await bcrypt.hash(password, 10);
+        user.authProvider = user.googleId ? "hybrid" : "local";
         user.resetPasswordToken = undefined;
         user.resetPasswordExpiry = undefined;
         user.markModified('password');

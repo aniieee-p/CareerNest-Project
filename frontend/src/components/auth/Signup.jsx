@@ -1,10 +1,15 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { USER_API_END_POINT } from "@/utils/constant";
 import { toast } from "sonner";
 import { useDispatch, useSelector } from "react-redux";
-import { setLoading } from "@/redux/authSlice";
+import { setLoading, setUser } from "@/redux/authSlice";
+import GoogleAuthButton, {
+  clearGoogleSignup,
+  readGoogleSignup,
+  storeGoogleSignup,
+} from "./GoogleAuthButton";
 import {
   Loader2, Eye, EyeOff, CheckCircle2, Briefcase,
   TrendingUp, Zap, GraduationCap, Building2,
@@ -121,10 +126,12 @@ const Signup = () => {
   const [showPass, setShowPass]   = useState(false);
   const [focusedField, setFocused] = useState(null);
   const [btnState, setBtnState]   = useState("idle");
+  const [googleSignup, setGoogleSignup] = useState(null);
 
   const { loading } = useSelector((s) => s.auth ?? {});
   const dispatch    = useDispatch();
   const navigate    = useNavigate();
+  const location    = useLocation();
 
   /* Parallax */
   const mouseX  = useMotionValue(0);
@@ -146,27 +153,72 @@ const Signup = () => {
     return () => window.removeEventListener("mousemove", onMouseMove);
   }, [onMouseMove]);
 
+  useEffect(() => {
+    const pendingGoogleSignup = location.state?.googleSignup || readGoogleSignup();
+
+    if (!pendingGoogleSignup?.credential) {
+      return;
+    }
+
+    setGoogleSignup(pendingGoogleSignup);
+    setInput((prev) => ({
+      ...prev,
+      fullname: pendingGoogleSignup.fullname || prev.fullname,
+      email: pendingGoogleSignup.email || prev.email,
+      role: pendingGoogleSignup.role || prev.role,
+    }));
+  }, [location.state]);
+
   const onChange     = (e) => setInput({ ...input, [e.target.name]: e.target.value });
   const onFileChange = (e) => setInput({ ...input, file: e.target.files?.[0] });
 
   const onSubmit = async (e) => {
     e.preventDefault();
     setBtnState("loading");
-    const formData = new FormData();
-    formData.append("fullname", input.fullname);
-    formData.append("email", input.email);
-    formData.append("phonenumber", input.phonenumber);
-    formData.append("password", input.password);
-    formData.append("role", input.role);
-    if (input.file) formData.append("file", input.file);
     try {
       dispatch(setLoading(true));
-      const res = await axios.post(`${USER_API_END_POINT}/register`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-        withCredentials: true,
-      });
+
+      let res;
+      if (googleSignup?.credential) {
+        res = await axios.post(
+          `${USER_API_END_POINT}/google`,
+          {
+            credential: googleSignup.credential,
+            intent: "signup",
+            fullname: input.fullname,
+            phonenumber: input.phonenumber,
+            password: input.password || undefined,
+            role: input.role,
+          },
+          {
+            headers: { "Content-Type": "application/json" },
+            withCredentials: true,
+          }
+        );
+      } else {
+        const formData = new FormData();
+        formData.append("fullname", input.fullname);
+        formData.append("email", input.email);
+        formData.append("phonenumber", input.phonenumber);
+        formData.append("password", input.password);
+        formData.append("role", input.role);
+        if (input.file) formData.append("file", input.file);
+
+        res = await axios.post(`${USER_API_END_POINT}/register`, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+          withCredentials: true,
+        });
+      }
+
       if (res.data.success) {
-        navigate("/login");
+        if (googleSignup?.credential) {
+          clearGoogleSignup();
+          dispatch(setUser(res.data.user));
+          localStorage.setItem("token", res.data.token);
+          navigate(res.data.user?.role === "recruiter" ? "/admin/companies" : "/");
+        } else {
+          navigate("/login");
+        }
         toast.success(res.data.message);
       }
     } catch (err) {
@@ -329,12 +381,25 @@ const Signup = () => {
               </h1>
               <p className="text-[0.8125rem] mt-2 leading-relaxed" style={{ color: "var(--cn-text-3)" }}>
               Already have an account?{" "}
-              <Link to="/login" className="font-semibold transition-colors duration-150 hover:opacity-80"
+              <Link to="/login" onClick={clearGoogleSignup} className="font-semibold transition-colors duration-150 hover:opacity-80"
                 style={{ color: "#6366f1" }}>
                 Sign in
               </Link>
               </p>
             </div>
+
+            {googleSignup?.credential && (
+              <div
+                className="mb-5 rounded-xl border px-4 py-3 text-[0.78rem] leading-relaxed"
+                style={{
+                  borderColor: "rgba(99,102,241,0.18)",
+                  background: "rgba(99,102,241,0.08)",
+                  color: "var(--cn-text-2)",
+                }}
+              >
+                Google account verified for <strong>{googleSignup.email}</strong>. Add the remaining details to finish your sign up.
+              </div>
+            )}
 
             <form onSubmit={onSubmit} className="space-y-[1.1rem]">
 
@@ -346,7 +411,14 @@ const Signup = () => {
                 { value: "recruiter", label: "Recruiter", Icon: Building2 },
               ].map(({ value, label, Icon }) => (
                 <button key={value} type="button"
-                  onClick={() => setInput({ ...input, role: value })}
+                  onClick={() => {
+                    setInput((prev) => ({ ...prev, role: value }));
+                    if (googleSignup?.credential) {
+                      const nextGoogleSignup = { ...googleSignup, role: value };
+                      setGoogleSignup(nextGoogleSignup);
+                      storeGoogleSignup(nextGoogleSignup);
+                    }
+                  }}
                   className="relative flex-1 flex items-center justify-center gap-2 py-[0.6rem] rounded-[0.6rem] text-[0.8125rem] font-semibold transition-colors duration-150 z-10"
                   style={{ color: input.role === value ? "#fff" : "#818cf8" }}>
                   <AnimatePresence>
@@ -396,6 +468,7 @@ const Signup = () => {
                 </motion.div>
                 <input id="email" type="email" name="email" value={input.email}
                   onChange={onChange} placeholder="you@example.com" required
+                  readOnly={Boolean(googleSignup?.credential)}
                   onFocus={() => setFocused("email")} onBlur={() => setFocused(null)}
                   className="w-full py-[0.72rem] pr-4 rounded-xl border text-[0.8125rem] placeholder-slate-300 outline-none"
                   style={inputStyle("email")} />
@@ -421,7 +494,9 @@ const Signup = () => {
 
             {/* Password */}
             <div className="space-y-2">
-              <label htmlFor="password" className="block text-[0.8125rem] font-semibold tracking-wide" style={{ color: "var(--cn-text-2)" }}>Password</label>
+              <label htmlFor="password" className="block text-[0.8125rem] font-semibold tracking-wide" style={{ color: "var(--cn-text-2)" }}>
+                {googleSignup?.credential ? "Password (optional)" : "Password"}
+              </label>
               <div className="relative">
                 <motion.div className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"
                   animate={{ color: focusedField === "password" ? "#6366f1" : "#b0bac9", scale: focusedField === "password" ? 1.1 : 1 }}
@@ -429,7 +504,7 @@ const Signup = () => {
                   <Lock size={15} strokeWidth={2} />
                 </motion.div>
                 <input id="password" type={showPass ? "text" : "password"} name="password"
-                  value={input.password} onChange={onChange} placeholder="••••••••" required
+                  value={input.password} onChange={onChange} placeholder={googleSignup?.credential ? "Optional for email login too" : "********"} required={!googleSignup?.credential}
                   onFocus={() => setFocused("password")} onBlur={() => setFocused(null)}
                   className="w-full py-[0.72rem] pr-11 rounded-xl border text-[0.8125rem] placeholder-slate-300 outline-none"
                   style={inputStyle("password")} />
@@ -509,7 +584,7 @@ const Signup = () => {
             {/* Submit */}
             <motion.button
               type="submit"
-              disabled={btnState === "loading"}
+              disabled={loading || btnState === "loading"}
               variants={btnVariants}
               animate={btnState}
               whileHover={btnState === "idle" ? { scale: 1.012, boxShadow: "0 10px 28px rgba(245,158,11,0.38)" } : {}}
@@ -536,6 +611,14 @@ const Signup = () => {
             </motion.button>
             </form>
 
+            <div className="flex items-center gap-3 mt-5">
+              <div className="flex-1 h-px" style={{ background: "linear-gradient(to right, transparent, #e2e8f0)" }} />
+              <span className="text-[0.72rem] text-slate-400 font-medium tracking-wide uppercase">or</span>
+              <div className="flex-1 h-px" style={{ background: "linear-gradient(to left, transparent, #e2e8f0)" }} />
+            </div>
+
+            <GoogleAuthButton role={input.role} text="signup_with" />
+
             <p className="text-center text-[0.72rem] mt-8 leading-relaxed" style={{ color: "var(--cn-text-3)" }}>
             By signing up you agree to our{" "}
             <span className="underline cursor-pointer transition-colors duration-150" style={{ color: "var(--cn-text-2)" }}>Terms</span>{" "}&{" "}
@@ -549,3 +632,4 @@ const Signup = () => {
 };
 
 export default Signup;
+

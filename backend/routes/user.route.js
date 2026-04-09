@@ -1,6 +1,7 @@
 import { singleUpload, multiUpload } from "../middlewares/multer.js";
 import express from "express";
 import {
+  googleAuth,
   login,
   logout,
   register,
@@ -19,6 +20,7 @@ const router = express.Router();
 
 router.route("/register").post(singleUpload, register);
 router.route("/login").post(login);
+router.route("/google").post(googleAuth);
 router.route("/logout").get(logout);
 router.route("/profile/update").post(isAuthenticated, multiUpload, updateProfile);
 router.route("/profile/stats").get(isAuthenticated, getProfileStats);

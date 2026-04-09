@@ -5,6 +5,7 @@ import { USER_API_END_POINT } from "@/utils/constant";
 import { toast } from "sonner";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoading, setUser } from "@/redux/authSlice";
+import GoogleAuthButton from "./GoogleAuthButton";
 import {
   Loader2, Eye, EyeOff, CheckCircle2, Briefcase,
   TrendingUp, Zap, GraduationCap, Building2,
@@ -517,7 +518,7 @@ const Login = () => {
             {/* Submit */}
             <motion.button
               type="submit"
-              disabled={btnState === "loading" || btnState === "success"}
+              disabled={loading || btnState === "loading" || btnState === "success"}
               variants={btnVariants}
               animate={btnState}
               whileHover={btnState === "idle" ? { scale: 1.012, boxShadow: "0 10px 28px rgba(245,158,11,0.38)" } : {}}
@@ -568,24 +569,10 @@ const Login = () => {
             <div className="flex-1 h-px" style={{ background: "linear-gradient(to left, transparent, #e2e8f0)" }} />
           </div>
 
-          {/* Google button */}
-          <motion.button
-            type="button"
-            whileHover={{ y: -1.5, boxShadow: "0 6px 22px rgba(15,23,42,0.09)", borderColor: "#c7d2fe" }}
-            whileTap={{ scale: 0.985, y: 0 }}
-            onClick={() => toast.info("Google login coming soon")}
-            className="w-full flex items-center justify-center gap-3 py-[0.72rem] rounded-xl border text-[0.8125rem] font-semibold mt-4"
-            style={{
-              background: "var(--cn-input-bg)",
-              color: "var(--cn-text-1)",
-              borderColor: "var(--cn-input-border)",
-              boxShadow: "0 1px 3px rgba(15,23,42,0.05)",
-              transition: "box-shadow 0.18s ease, border-color 0.18s ease, transform 0.18s ease",
-            }}
-          >
+          <span className="sr-only" aria-hidden="true">
             <GoogleIcon />
-            Continue with Google
-          </motion.button>
+          </span>
+          <GoogleAuthButton role={input.role} text="signin_with" />
 
             <p className="text-center text-[0.72rem] mt-8 leading-relaxed" style={{ color: "var(--cn-text-3)" }}>
             By signing in you agree to our{" "}

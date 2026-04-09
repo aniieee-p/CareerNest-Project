@@ -19,14 +19,18 @@ const app = express();
 app.set("trust proxy", 1);
 
 // CORS configuration
-const allowedOrigins = [
-  "https://careernest-anisha.netlify.app",
-  "http://localhost:5173"
-];
+const allowedOrigins = new Set(
+  [
+    process.env.FRONTEND_URL,
+    "https://careernest-anisha.netlify.app",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+  ].filter(Boolean)
+);
 
 const corsOptions = {
   origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
+    if (!origin || allowedOrigins.has(origin)) {
       callback(null, true);
     } else {
       callback(new Error("Not allowed by CORS"));

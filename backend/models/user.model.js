@@ -8,20 +8,32 @@ const userSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
+        lowercase: true,
+        trim: true
     },
     phonenumber: {
         type: Number,
-        required: true
+        default: null
     },
     password: {
         type: String,
-        required: true
+        default: null
     },
     role: {
         type: String,
         enum: ['student', 'recruiter'],
         required: true
+    },
+    authProvider: {
+        type: String,
+        enum: ['local', 'google', 'hybrid'],
+        default: 'local'
+    },
+    googleId: {
+        type: String,
+        unique: true,
+        sparse: true
     },
     profile:{
         bio: {type: String},
