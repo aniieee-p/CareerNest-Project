@@ -1,5 +1,5 @@
 import api from '@/utils/axiosInstance';
-import { setAllJobs } from '@/redux/jobSlice';
+import { setSingleJob } from '@/redux/jobSlice';
 import { JOB_API_END_POINT } from '@/utils/constant';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
@@ -11,7 +11,7 @@ const useGetSingleJob = (jobId) => {
             try {
                 const res = await api.get(`${JOB_API_END_POINT}/get/${jobId}`);
                 if (res.data.success) {
-                    dispatch(setAllJobs(res.data.jobs)); 
+                    dispatch(setSingleJob(res.data.job)); 
                 }
             } catch (error) {}
         }

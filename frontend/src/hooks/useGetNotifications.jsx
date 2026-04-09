@@ -17,6 +17,8 @@ const useGetNotifications = () => {
             } catch {}
         };
         fetch();
+        const interval = setInterval(fetch, 30000);
+        return () => clearInterval(interval);
     }, [user]);
 };
 
