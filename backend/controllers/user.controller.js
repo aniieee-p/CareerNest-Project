@@ -5,7 +5,6 @@ import crypto from "crypto";
 import getDataUri from "../utils/datauri.js";
 import cloudinary from "../utils/cloudinary.js";
 import { sendResetEmail } from "../utils/mailer.js";
-import { track } from "../utils/pulseiq.js";
 
 // ================= REGISTER =================
 export const register = async (req, res) => {
@@ -36,7 +35,7 @@ export const register = async (req, res) => {
       profilePhotoUrl = cloudResponse.secure_url;
     }
 
-    const newUser = await User.create({
+    await User.create({
       fullname,
       email,
       phonenumber,
@@ -46,8 +45,6 @@ export const register = async (req, res) => {
         profilephoto: profilePhotoUrl,
       },
     });
-
-    await track("user_registered", null, { email, role });
 
     return res.status(201).json({
       message: "Account created successfully",
@@ -102,8 +99,6 @@ export const login = async (req, res) => {
       process.env.SECRET_KEY,
       { expiresIn: "1d" }
     );
-
-    await track("user_logged_in", user._id, { role: user.role });
 
     // safe user object
     const safeUser = {

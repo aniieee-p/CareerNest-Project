@@ -1,7 +1,6 @@
 import { Company } from "../models/company.model.js";
 import getDataUri from "../utils/datauri.js";
 import cloudinary from "../utils/cloudinary.js";
-import { track } from "../utils/pulseiq.js";
 
 export const registerCompany = async (req, res) => {
     try {
@@ -26,8 +25,6 @@ export const registerCompany = async (req, res) => {
             name: companyName,
             userId: req.id
         });
-
-        await track("company_registered", req.id, { companyId: company._id, name: companyName });
 
         return res.status(201).json({
             message: "Company registered successfully.",

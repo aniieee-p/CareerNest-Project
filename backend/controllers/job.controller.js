@@ -1,7 +1,6 @@
 import { Job } from "../models/job.model.js";
 import { Notification } from "../models/notification.model.js";
 import User from "../models/user.model.js";
-import { track } from "../utils/pulseiq.js";
 
 // admin posts a job
 export const PostJob = async (req, res) => {
@@ -41,7 +40,6 @@ export const PostJob = async (req, res) => {
             }));
             if (notes.length) Notification.insertMany(notes).catch(() => {});
         }).catch(() => {});
-        await track("job_posted", userId, { jobId: job._id, title });
         return res.status(201).json({
             message: "Job posted successfully.",
             success: true,
