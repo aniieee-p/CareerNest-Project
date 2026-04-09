@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Facebook, Twitter, Linkedin, Instagram, Mail, Phone, MapPin, Briefcase, ArrowUpRight, ArrowUp, Send } from "lucide-react";
+import { Facebook, Twitter, Linkedin, Instagram, Mail, MapPin, Briefcase, ArrowUpRight, ArrowUp, Send } from "lucide-react";
 import { motion } from "framer-motion";
 import axios from "axios";
 import { SUBSCRIBE_API } from "../../utils/constant";
@@ -228,9 +228,6 @@ const Footer = () => {
                 </ContactRow>
                 <ContactRow icon={Mail} iconColor="#27bbd2" iconBg="rgba(39,187,210,0.15)" href="mailto:support@careernest.com">
                   support@careernest.com
-                </ContactRow>
-                <ContactRow icon={Phone} iconColor="#f59e0b" iconBg="rgba(245,158,11,0.15)" href="tel:+919119078783">
-                  +91 9119078783
                 </ContactRow>
               </div>
             </div>
