@@ -1,6 +1,7 @@
 import { Application } from "../models/application.model.js";
 import { Job } from "../models/job.model.js";
 import { Notification } from "../models/notification.model.js";
+import { track } from "../utils/pulseiq.js";
 
 export const applyJob = async (req, res) => {
     try {
@@ -30,6 +31,7 @@ export const applyJob = async (req, res) => {
             type: "application",
             jobId: job._id,
         });
+        await track("job_applied", userId, { jobId, company: job.company?.name || 'unknown' });
         return res.status(201).json({ message: "Application submitted successfully.", success: true, application });
     } catch (error) {
         console.error(error.message);
@@ -91,6 +93,7 @@ export const updateStatus = async (req, res) => {
         };
         const msg = statusMsg[status.toLowerCase()] || `Your application status was updated to "${status}".`;
         await Notification.create({ userId: application.applicant, message: msg, type: "application", jobId: populated.job?._id });
+        await track("application_status_updated", req.id, { applicationId, status });
         return res.status(200).json({ message: "Application status updated successfully.", success: true });
     } catch (error) {
         console.error(error.message);
