@@ -1,8 +1,9 @@
-import { createBrowserRouter, RouterProvider, Navigate } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Navigate, Outlet } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setUser } from "./redux/authSlice";
 import useGetSavedJobs from "./hooks/useGetSavedJobs";
+import { PulseIQRouteTracker } from "./hooks/usePulseIQ";
 import Login from './components/auth/Login';
 import Signup from './components/auth/Signup'
 import ForgotPassword from './components/auth/ForgotPassword';
@@ -28,105 +29,113 @@ import StudentRoute from "./components/auth/StudentRoute";
 import PublicProfile from "./components/PublicProfile";
 import NotFound from "./components/NotFound";
 
+function AppShell() {
+  return (
+    <>
+      <PulseIQRouteTracker />
+      <Outlet />
+    </>
+  );
+}
+
 const appRouter = createBrowserRouter([
-{
-  path:'/',
-  element:<Home />
-},
-{
-  path:'/login',
-  element:<Login />
-},
-{
-  path:'/signup',
-  element:<Signup />
-},
-{
-  path:'/forgot-password',
-  element:<ForgotPassword />
-},
-{
-  path:'/reset-password/:token',
-  element:<ResetPassword />
-},
-{
-  path:'/jobs',
-  element:<StudentRoute><Jobs /></StudentRoute>
-},
-{
-  path:'/description/:id',
-  element:<JobDescription/>
-},
-{
-  path:'/browse',
-  element:<Browse/>
-},
-{
-  path:'/profile',
-  element:<StudentRoute><Profile/></StudentRoute>
-},
-{
-  path:'/profile/:id',
-  element:<PublicProfile/>
-},
-// for admin
-{
-  path:'/admin/companies',
-  element:<ProtectedRoute><Companies/></ProtectedRoute>
-},
-{
-  path:'/admin/companies/create',
-  element:<ProtectedRoute><CompanyCreate/></ProtectedRoute>
-},
-{
-  path:'/admin/companies/:id',
-  element:<ProtectedRoute><CompanySetup/></ProtectedRoute>
-},
-
-// jobs
-{
-  path:'/admin/jobs',
-  element:<ProtectedRoute><AdminJobs/></ProtectedRoute>
-},
-{
-  path:'/admin/jobs/create',
-  element:<ProtectedRoute><PostJob/></ProtectedRoute>
-},
-{
-  path:'/admin/jobs/:id/applicants',
-  element:<ProtectedRoute><Applicants/></ProtectedRoute>
-},
-{
-  path:'/admin/ApplicantsTable',
-  element:<ProtectedRoute><ApplicantsTable/></ProtectedRoute>
-},
-{
-  path:'/career-advice',
-  element:<CareerAdvice/>
-},
-{
-  path:'/saved-jobs',
-  element:<StudentRoute><SavedJobs/></StudentRoute>
-},
-{
-  path:'/recruitment',
-  element:<RecruitmentSolutions/>
-},
-{
-  path:'/contact',
-  element:<ContactSupport/>
-},
-
-{
-  path: '/admin/*',
-  element: <ProtectedRoute><Navigate to="/admin/jobs" replace /></ProtectedRoute>
-},
-{
-  path: "*",
-  element: <NotFound />
-},
-
-
+  {
+    element: <AppShell />,
+    children: [
+      {
+        index: true,
+        element: <Home />
+      },
+      {
+        path: 'login',
+        element: <Login />
+      },
+      {
+        path: 'signup',
+        element: <Signup />
+      },
+      {
+        path: 'forgot-password',
+        element: <ForgotPassword />
+      },
+      {
+        path: 'reset-password/:token',
+        element: <ResetPassword />
+      },
+      {
+        path: 'jobs',
+        element: <StudentRoute><Jobs /></StudentRoute>
+      },
+      {
+        path: 'description/:id',
+        element: <JobDescription />
+      },
+      {
+        path: 'browse',
+        element: <Browse />
+      },
+      {
+        path: 'profile',
+        element: <StudentRoute><Profile /></StudentRoute>
+      },
+      {
+        path: 'profile/:id',
+        element: <PublicProfile />
+      },
+      {
+        path: 'admin/companies',
+        element: <ProtectedRoute><Companies /></ProtectedRoute>
+      },
+      {
+        path: 'admin/companies/create',
+        element: <ProtectedRoute><CompanyCreate /></ProtectedRoute>
+      },
+      {
+        path: 'admin/companies/:id',
+        element: <ProtectedRoute><CompanySetup /></ProtectedRoute>
+      },
+      {
+        path: 'admin/jobs',
+        element: <ProtectedRoute><AdminJobs /></ProtectedRoute>
+      },
+      {
+        path: 'admin/jobs/create',
+        element: <ProtectedRoute><PostJob /></ProtectedRoute>
+      },
+      {
+        path: 'admin/jobs/:id/applicants',
+        element: <ProtectedRoute><Applicants /></ProtectedRoute>
+      },
+      {
+        path: 'admin/ApplicantsTable',
+        element: <ProtectedRoute><ApplicantsTable /></ProtectedRoute>
+      },
+      {
+        path: 'career-advice',
+        element: <CareerAdvice />
+      },
+      {
+        path: 'saved-jobs',
+        element: <StudentRoute><SavedJobs /></StudentRoute>
+      },
+      {
+        path: 'recruitment',
+        element: <RecruitmentSolutions />
+      },
+      {
+        path: 'contact',
+        element: <ContactSupport />
+      },
+      {
+        path: 'admin/*',
+        element: <ProtectedRoute><Navigate to="/admin/jobs" replace /></ProtectedRoute>
+      },
+      {
+        path: "*",
+        element: <NotFound />
+      },
+    ],
+  },
 ])
 function App() {
   const dispatch = useDispatch();

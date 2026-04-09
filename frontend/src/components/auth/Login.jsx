@@ -309,20 +309,36 @@ const Login = () => {
         className="flex-1 overflow-y-auto"
         style={{ background: "var(--cn-auth-right)" }}
       >
-      <motion.div
-        style={{ x: rightX, y: rightY }}
-        className="min-h-full flex items-center justify-center px-4 sm:px-8 py-10"
-            <p className="text-[0.8125rem] mt-2 leading-relaxed" style={{ color: "var(--cn-text-3)" }}>
+        <motion.div
+          style={{ x: rightX, y: rightY }}
+          className="min-h-full flex items-center justify-center px-4 sm:px-8 py-10"
+        >
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, delay: 0.15, ease: "easeOut" }}
+            className="w-full max-w-[28.5rem] rounded-[1.75rem] p-6 sm:p-7"
+            style={{
+              background: "var(--cn-auth-card)",
+              border: "1px solid var(--cn-border)",
+              boxShadow: "0 24px 60px rgba(15,23,42,0.12)",
+            }}
+          >
+            <div className="mb-6">
+              <h1 className="text-[1.75rem] font-extrabold tracking-[-0.02em]" style={{ color: "var(--cn-text-1)" }}>
+                Sign in to CareerNest
+              </h1>
+              <p className="text-[0.8125rem] mt-2 leading-relaxed" style={{ color: "var(--cn-text-3)" }}>
               Don't have an account?{" "}
               <Link to="/signup"
                 className="font-semibold transition-colors duration-150 hover:opacity-80"
                 style={{ color: "#6366f1" }}>
                 Sign up free
               </Link>
-            </p>
-          </div>
+              </p>
+            </div>
 
-          <form onSubmit={onSubmit} className="space-y-[1.1rem]">
+            <form onSubmit={onSubmit} className="space-y-[1.1rem]">
 
             {/* Role toggle */}
             <div className="relative flex gap-1.5 p-1 rounded-xl"
@@ -543,7 +559,7 @@ const Login = () => {
                 )}
               </AnimatePresence>
             </motion.button>
-          </form>
+            </form>
 
           {/* OR divider */}
           <div className="flex items-center gap-3 mt-5">
@@ -571,13 +587,13 @@ const Login = () => {
             Continue with Google
           </motion.button>
 
-          <p className="text-center text-[0.72rem] mt-8 leading-relaxed" style={{ color: "var(--cn-text-3)" }}>
+            <p className="text-center text-[0.72rem] mt-8 leading-relaxed" style={{ color: "var(--cn-text-3)" }}>
             By signing in you agree to our{" "}
             <span className="underline cursor-pointer transition-colors duration-150" style={{ color: "var(--cn-text-2)" }}>Terms</span>{" "}&{" "}
             <span className="underline cursor-pointer transition-colors duration-150" style={{ color: "var(--cn-text-2)" }}>Privacy Policy</span>.
-          </p>
+            </p>
+          </motion.div>
         </motion.div>
-      </motion.div>
       </div>
     </div>
   );
