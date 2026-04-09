@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setUser } from "./redux/authSlice";
 import useGetSavedJobs from "./hooks/useGetSavedJobs";
+
 import Login from './components/auth/Login';
 import Signup from './components/auth/Signup'
 import ForgotPassword from './components/auth/ForgotPassword';
@@ -131,6 +132,7 @@ const appRouter = createBrowserRouter([
 function App() {
   const dispatch = useDispatch();
   useGetSavedJobs();
+
 
   // Clear any stale localStorage-based auth (old "remember me" flow that didn't restore cookies)
   useEffect(() => {
