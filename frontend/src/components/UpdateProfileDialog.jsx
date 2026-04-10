@@ -192,15 +192,17 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
                             image={cropSrc}
                             crop={crop}
                             zoom={zoom}
+                            minZoom={0.5}
+                            maxZoom={5}
                             aspect={1}
                             cropShape="round"
                             showGrid={false}
+                            restrictPosition={false}
                             onCropChange={setCrop}
                             onZoomChange={setZoom}
                             onCropComplete={onCropComplete}
                             style={{
                                 containerStyle: { width: "100%", height: "100%", background: "#000" },
-                                mediaStyle: { maxHeight: "none" },
                             }}
                         />
                     </div>
@@ -213,7 +215,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
                         {/* zoom slider */}
                         <div className="flex items-center gap-3 w-full max-w-xs">
                             <ZoomOut size={16} className="text-white/50 shrink-0" />
-                            <input type="range" min={1} max={3} step={0.05} value={zoom}
+                            <input type="range" min={0.5} max={5} step={0.05} value={zoom}
                                 onChange={e => setZoom(Number(e.target.value))}
                                 className="flex-1 accent-[#27bbd2]" />
                             <ZoomIn size={16} className="text-white/50 shrink-0" />
