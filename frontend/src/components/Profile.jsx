@@ -37,7 +37,7 @@ const Profile = () => {
 
   React.useEffect(() => {
     if (!user) navigate("/login");
-  }, [user]);
+  }, [user, navigate]);
 
   useEffect(() => {
     if (!user) return;
@@ -48,10 +48,10 @@ const Profile = () => {
           profileViews: res.data.profileViews ?? 0,
           jobMatches: res.data.jobMatches ?? 0,
         });
-      } catch (e) {}
+      } catch {}
     };
     const trackView = async () => {
-      try { await api.post(`${PROFILE_VIEW_API}/${user._id}`, {}); } catch (e) {}
+      try { await api.post(`${PROFILE_VIEW_API}/${user._id}`, {}); } catch {}
     };
     fetchStats();
     trackView();

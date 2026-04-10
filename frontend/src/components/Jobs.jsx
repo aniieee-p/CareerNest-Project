@@ -93,7 +93,7 @@ const applyFilters = (jobs, filters, query) => {
     // experience level
     if (filters.experience) {
       const exp = filters.experience;
-      const lvl = Number(job.experienceLevel) ?? -1;
+      const lvl = Number(job.experienceLevel) || -1;
       if (exp === "Fresher"   && lvl !== 0)                  return false;
       if (exp === "1–3 years" && !(lvl >= 1 && lvl <= 3))    return false;
       if (exp === "3–5 years" && !(lvl >= 3 && lvl <= 5))    return false;
@@ -121,10 +121,10 @@ const Jobs = () => {
       try {
         const res = await api.get(`${JOB_API_END_POINT}/get`);
         if (res.data.success) dispatch(setAllJobs(res.data.jobs));
-      } catch (e) { }
+      } catch { }
     };
     fetchJobs();
-  }, []);
+  }, [dispatch]);
 
   const filterJobs = applyFilters(allJobs, filters, localQuery);
 
@@ -275,7 +275,7 @@ const Jobs = () => {
                   {Object.entries(filters).map(([key, val]) => {
                     if (!val) return null;
                     const section = FILTER_SECTIONS.find(s => s.key === key);
-                    const { color = "#27bbd2", grad = "linear-gradient(135deg,#27bbd2,#6366f1)", icon: Icon } = section || {};
+                    const { color = "#27bbd2", icon: Icon } = section || {};
                     const items = Array.isArray(val) ? val : [val];
                     return items.map((v) => (
                       <motion.span

@@ -50,7 +50,7 @@ const AIChatButton = () => {
       const reply = data.reply || "Sorry, I couldn't get a response. Please try again.";
       historyRef.current = [...updatedHistory, { role: "assistant", content: reply }];
       setMessages((prev) => [...prev, { from: "ai", text: reply }]);
-    } catch (err) {
+    } catch {
       const errMsg = "Oops! Something went wrong. Please try again.";
       setMessages((prev) => [...prev, { from: "ai", text: errMsg }]);
     } finally {

@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 
 // ─── Spotlight card wrapper ───────────────────────────────────────────────────
-const SpotlightCard = ({ children, className = "", style = {}, color = "#27bbd2", glow = "rgba(39,187,210,0.15)" }) => {
+const SpotlightCard = ({ children, className = "", style = {}, glow = "rgba(39,187,210,0.15)" }) => {
   const cardRef = useRef(null);
   const spotRef = useRef(null);
 
@@ -149,7 +149,7 @@ const Home = () => {
   const navigate = useNavigate();
   useEffect(() => {
     if (user?.role === "recruiter") navigate("/admin/companies");
-  }, [user]);
+  }, [user, navigate]);
 
   return (
     <div className="relative" style={{ backgroundColor: "var(--cn-page)",

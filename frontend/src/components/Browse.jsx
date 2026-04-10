@@ -15,7 +15,7 @@ const Browse = () => {
 
     useEffect(() => {
         return () => { dispatch(setSearchedQuery("")); }
-    }, [])
+    }, [dispatch])
 
     const filteredJobs = searchedQuery
         ? allJobs.filter(job => {
