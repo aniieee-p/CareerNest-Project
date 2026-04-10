@@ -166,9 +166,9 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
         <div>
             {/* ── Crop modal ── */}
             {cropSrc && (
-                <div className="fixed inset-0 z-100 flex flex-col" style={{ background: "rgba(0,0,0,0.92)" }}>
+                <div className="fixed inset-0 z-100 flex flex-col overflow-hidden" style={{ background: "rgba(0,0,0,0.95)" }}>
                     {/* cropper area */}
-                    <div className="relative flex-1">
+                    <div className="relative w-full" style={{ height: "calc(100vh - 160px)" }}>
                         <Cropper
                             image={cropSrc}
                             crop={crop}
@@ -179,6 +179,10 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
                             onCropChange={setCrop}
                             onZoomChange={setZoom}
                             onCropComplete={onCropComplete}
+                            style={{
+                                containerStyle: { width: "100%", height: "100%", background: "#000" },
+                                mediaStyle: { maxHeight: "none" },
+                            }}
                         />
                     </div>
 
