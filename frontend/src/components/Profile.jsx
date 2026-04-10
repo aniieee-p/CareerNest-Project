@@ -16,8 +16,9 @@ import Footer from "./shared/Footer";
 import api from "@/utils/axiosInstance";
 import { PROFILE_STATS_API, PROFILE_VIEW_API } from "@/utils/constant";
 
-const FadeUp = ({ children, delay = 0 }) => (
+const FadeUp = ({ children, delay = 0, className = "" }) => (
   <motion.div
+    className={className}
     initial={{ opacity: 0, y: 24 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.45, delay }}
@@ -168,8 +169,8 @@ const Profile = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
 
           {/* Left sidebar */}
-          <FadeUp delay={0.14}>
-            <div className="md:col-span-1 space-y-4">
+          <FadeUp delay={0.14} className="md:col-span-1">
+            <div className="space-y-4">
 
               {/* Contact */}
               <div className="rounded-2xl p-5"
@@ -234,8 +235,8 @@ const Profile = () => {
           </FadeUp>
 
           {/* Right: Applications */}
-          <FadeUp delay={0.2}>
-            <div className="rounded-2xl p-5 sm:p-6 md:col-span-3"
+          <FadeUp delay={0.2} className="md:col-span-3">
+            <div className="rounded-2xl p-5 sm:p-6"
               style={{ background: "var(--cn-card)", backdropFilter: "blur(12px)", border: "1px solid var(--cn-border)", boxShadow: "var(--cn-card-shadow)" }}>
               <div className="flex items-center justify-between mb-5">
                 <div className="flex items-center gap-2">
