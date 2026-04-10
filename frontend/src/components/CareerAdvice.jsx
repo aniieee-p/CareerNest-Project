@@ -1,4 +1,7 @@
 ﻿import React, { useRef, useCallback, useState } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { setSearchedQuery } from "@/redux/jobSlice";
 import Navbar from "./shared/Navbar";
 import Footer from "./shared/Footer";
 import { motion, AnimatePresence } from "framer-motion";
@@ -108,6 +111,14 @@ const RoleCard = ({ role, why, skills, salary, index }) => {
   const color = roleColors[index % roleColors.length];
   const bg    = `${color}12`;
   const border= `${color}30`;
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleFindJobs = () => {
+    dispatch(setSearchedQuery(role));
+    navigate("/browse");
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
@@ -149,11 +160,22 @@ const RoleCard = ({ role, why, skills, salary, index }) => {
         </div>
 
         {/* salary */}
-        <div className="flex items-center gap-2 pt-3" style={{ borderTop: `1px solid ${border}` }}>
+        <div className="flex items-center gap-2 pt-3 mb-4" style={{ borderTop: `1px solid ${border}` }}>
           <DollarSign size={13} style={{ color }} />
           <span className="text-[12.5px] font-bold" style={{ color }}>{salary}</span>
           <span className="text-[11px] text-[#94a3b8]">avg. in India</span>
         </div>
+
+        {/* find jobs button */}
+        <motion.button
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.97 }}
+          onClick={handleFindJobs}
+          className="w-full py-2.5 rounded-xl text-[13px] font-bold flex items-center justify-center gap-1.5 transition-all"
+          style={{ background: `linear-gradient(135deg,${color},${color}cc)`, color: "#fff" }}
+        >
+          Find Jobs <ArrowRight size={13} />
+        </motion.button>
       </div>
     </motion.div>
   );
