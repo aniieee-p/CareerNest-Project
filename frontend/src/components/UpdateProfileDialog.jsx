@@ -138,13 +138,29 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
             const croppedFile = new File([blob], 'profile.jpg', { type: 'image/jpeg' });
             const previewUrl = URL.createObjectURL(blob);
             photoFileRef.current = croppedFile;
-            setInput(prev => ({ ...prev, photo: croppedFile }));
             setPhotoPreview(previewUrl);
             setCropSrc(null);
-            toast.success("Photo cropped successfully.");
+
+            // auto-upload immediately
+            const formData = new FormData();
+            formData.append("fullname", input.fullname);
+            formData.append("email", input.email);
+            formData.append("phonenumber", input.phoneNumber);
+            formData.append("bio", input.bio);
+            formData.append("skills", skillTags.join(","));
+            formData.append("photo", croppedFile);
+            setLoading(true);
+            const res = await api.post(`${USER_API_END_POINT}/profile/update`, formData);
+            if (res.data.success) {
+                dispatch(setUser(res.data.user));
+                setPhotoPreview(res.data.user?.profile?.profilephoto || previewUrl);
+                toast.success("Profile photo updated.");
+            }
         } catch (err) {
-            console.error("Crop error:", err);
-            toast.error("Failed to crop image. Please try again.");
+            console.error("Crop/upload error:", err);
+            toast.error("Failed to update photo. Please try again.");
+        } finally {
+            setLoading(false);
         }
     };
 
