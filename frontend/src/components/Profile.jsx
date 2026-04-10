@@ -149,7 +149,7 @@ const Profile = () => {
         </FadeUp>
 
         {/* Two column layout */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           {/* Left: Profile info */}
           <FadeUp delay={0.15}>
             <div
@@ -228,7 +228,7 @@ const Profile = () => {
           {/* Right: Applied jobs */}
           <FadeUp delay={0.2}>
             <div
-              className="rounded-2xl p-4 sm:p-6 md:col-span-2"
+              className="rounded-2xl p-4 sm:p-6 md:col-span-3"
               style={{
                 background: "var(--cn-card)",
                 backdropFilter: "blur(12px)",

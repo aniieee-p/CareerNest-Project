@@ -1,17 +1,22 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-import { sendResetEmail } from './utils/mailer.js';
+import { sendResetEmail, sendSubscriptionConfirmEmail } from './utils/mailer.js';
 
-// Change this to your own email to receive the test
 const TEST_EMAIL = process.env.EMAIL_USER;
 
+// Test subscription email
 try {
-    await sendResetEmail({
-        email: TEST_EMAIL,
-        resetUrl: 'https://example.com/reset?token=test123'
-    });
-    console.log(`Test email sent successfully to ${TEST_EMAIL}`);
+    await sendSubscriptionConfirmEmail({ email: TEST_EMAIL });
+    console.log(`✅ Subscription email sent to ${TEST_EMAIL}`);
 } catch (err) {
-    console.error('Failed to send test email:', err.message);
+    console.error('❌ Subscription email failed:', err.message);
+}
+
+// Test reset email
+try {
+    await sendResetEmail({ email: TEST_EMAIL, resetUrl: 'https://example.com/reset?token=test123' });
+    console.log(`✅ Reset email sent to ${TEST_EMAIL}`);
+} catch (err) {
+    console.error('❌ Reset email failed:', err.message);
 }
