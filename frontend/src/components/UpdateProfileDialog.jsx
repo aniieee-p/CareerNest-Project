@@ -18,18 +18,30 @@ const createImage = (url) =>
     const img = new Image();
     img.addEventListener('load', () => resolve(img));
     img.addEventListener('error', reject);
-    img.setAttribute('crossOrigin', 'anonymous');
+    // only set crossOrigin for non-blob URLs
+    if (!url.startsWith('blob:')) img.setAttribute('crossOrigin', 'anonymous');
     img.src = url;
   });
 
 const getCroppedImg = async (imageSrc, pixelCrop) => {
   const image = await createImage(imageSrc);
   const canvas = document.createElement('canvas');
-  canvas.width = pixelCrop.width;
-  canvas.height = pixelCrop.height;
+  const size = Math.min(pixelCrop.width, pixelCrop.height, 400); // cap at 400px
+  canvas.width = size;
+  canvas.height = size;
   const ctx = canvas.getContext('2d');
-  ctx.drawImage(image, pixelCrop.x, pixelCrop.y, pixelCrop.width, pixelCrop.height, 0, 0, pixelCrop.width, pixelCrop.height);
-  return new Promise((resolve) => canvas.toBlob(resolve, 'image/jpeg', 0.92));
+  ctx.drawImage(
+    image,
+    pixelCrop.x, pixelCrop.y,
+    pixelCrop.width, pixelCrop.height,
+    0, 0, size, size
+  );
+  return new Promise((resolve, reject) => {
+    canvas.toBlob(
+      (blob) => blob ? resolve(blob) : reject(new Error('Canvas is empty')),
+      'image/jpeg', 0.92
+    );
+  });
 };
 
 // ── skill map ─────────────────────────────────────────────────────────────────
@@ -82,7 +94,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
     // cropper state
     const [cropSrc, setCropSrc] = useState(null);
     const [crop, setCrop] = useState({ x: 0, y: 0 });
-    const [zoom, setZoom] = useState(1);
+    const [zoom, setZoom] = useState(1.5);
     const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
 
     const dispatch = useDispatch();
@@ -96,22 +108,29 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
         const url = URL.createObjectURL(file);
         setCropSrc(url);
         setCrop({ x: 0, y: 0 });
-        setZoom(1);
-        // reset input so same file can be re-selected
+        setZoom(1.5);
+        setCroppedAreaPixels(null);
         e.target.value = "";
     };
 
     const onCropComplete = useCallback((_, pixels) => setCroppedAreaPixels(pixels), []);
 
     const handleCropConfirm = async () => {
+        if (!croppedAreaPixels) {
+            toast.error("Please adjust the crop area first.");
+            return;
+        }
         try {
             const blob = await getCroppedImg(cropSrc, croppedAreaPixels);
-            const file = new File([blob], 'profile.jpg', { type: 'image/jpeg' });
-            setInput(prev => ({ ...prev, photo: file }));
-            setPhotoPreview(URL.createObjectURL(blob));
+            const croppedFile = new File([blob], 'profile.jpg', { type: 'image/jpeg' });
+            const previewUrl = URL.createObjectURL(blob);
+            setInput(prev => ({ ...prev, photo: croppedFile }));
+            setPhotoPreview(previewUrl);
             setCropSrc(null);
-        } catch {
-            toast.error("Failed to crop image.");
+            toast.success("Photo cropped successfully.");
+        } catch (err) {
+            console.error("Crop error:", err);
+            toast.error("Failed to crop image. Please try again.");
         }
     };
 
