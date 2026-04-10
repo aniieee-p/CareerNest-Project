@@ -368,7 +368,7 @@ const Signup = () => {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.45, delay: 0.15, ease: "easeOut" }}
-            className="w-full max-w-[30rem] rounded-[1.75rem] p-6 sm:p-7"
+            className="w-full max-w-120 rounded-[1.75rem] p-6 sm:p-7"
             style={{
               background: "var(--cn-auth-card)",
               border: "1px solid var(--cn-border)",
