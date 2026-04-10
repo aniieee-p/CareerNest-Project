@@ -91,14 +91,17 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
     });
     const [photoPreview, setPhotoPreview] = useState(user?.profile?.profilephoto || "");
     const photoFileRef = useRef(null);
+    const prevOpenRef = useRef(false);
 
-    // sync preview when dialog opens
+    // sync preview only when dialog transitions from closed → open
     React.useEffect(() => {
-        if (open) {
+        if (open && !prevOpenRef.current) {
             setPhotoPreview(user?.profile?.profilephoto || "");
             photoFileRef.current = null;
+            setCropSrc(null);
         }
-    }, [open, user?.profile?.profilephoto]);
+        prevOpenRef.current = open;
+    }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
 
     // cropper state
     const [cropSrc, setCropSrc] = useState(null);
@@ -228,7 +231,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
                         {/* zoom slider */}
                         <div className="flex items-center gap-3 w-full max-w-xs">
                             <ZoomOut size={16} className="text-white/50 shrink-0" />
-                            <input type="range" min={0.5} max={5} step={0.05} value={zoom}
+                            <input id="crop-zoom" name="crop-zoom" type="range" min={0.5} max={5} step={0.05} value={zoom}
                                 onChange={e => setZoom(Number(e.target.value))}
                                 className="flex-1 accent-[#27bbd2]" />
                             <ZoomIn size={16} className="text-white/50 shrink-0" />
@@ -252,9 +255,10 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
 
             {/* ── Profile dialog ── */}
             <Dialog open={open} onOpenChange={setOpen}>
-                <DialogContent className="w-[calc(100vw-2rem)] sm:max-w-[425px] max-h-[90vh] overflow-y-auto" onInteractOutside={() => setOpen(false)}>
+                <DialogContent className="w-[calc(100vw-2rem)] sm:max-w-[425px] max-h-[90vh] overflow-y-auto" aria-describedby="profile-dialog-desc" onInteractOutside={() => setOpen(false)}>
                     <DialogHeader>
                         <DialogTitle>Update Profile</DialogTitle>
+                        <p id="profile-dialog-desc" className="sr-only">Update your profile information including photo, name, bio and skills</p>
                     </DialogHeader>
                     <form onSubmit={submitHandler}>
                         <div className='grid gap-4 py-4'>
