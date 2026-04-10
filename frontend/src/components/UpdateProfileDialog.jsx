@@ -90,7 +90,15 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
         photo: null,
     });
     const [photoPreview, setPhotoPreview] = useState(user?.profile?.profilephoto || "");
-    const photoFileRef = useRef(null); // always holds latest cropped file
+    const photoFileRef = useRef(null);
+
+    // sync preview when dialog opens
+    React.useEffect(() => {
+        if (open) {
+            setPhotoPreview(user?.profile?.profilephoto || "");
+            photoFileRef.current = null;
+        }
+    }, [open, user?.profile?.profilephoto]);
 
     // cropper state
     const [cropSrc, setCropSrc] = useState(null);
@@ -174,6 +182,8 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
             const res = await api.post(`${USER_API_END_POINT}/profile/update`, formData);
             if (res.data.success) {
                 dispatch(setUser(res.data.user));
+                setPhotoPreview(res.data.user?.profile?.profilephoto || photoPreview);
+                photoFileRef.current = null;
                 toast.success(res.data.message);
             }
         } catch (error) {
