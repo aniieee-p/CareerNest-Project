@@ -246,7 +246,7 @@ const Signup = () => {
       {/* ══ LEFT PANEL ══ */}
       <motion.div
         style={{ x: leftX, y: leftY }}
-        className="hidden lg:flex flex-col justify-between w-[52%] relative overflow-hidden p-12 sticky top-0 h-screen"
+        className="hidden lg:flex flex-col justify-between w-[52%] overflow-hidden p-12 sticky top-0 h-screen"
         initial={{ opacity: 0, x: -40 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
