@@ -204,7 +204,8 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
             {cropSrc && (
                 <div className="fixed inset-0 z-100 flex flex-col overflow-hidden" style={{ background: "rgba(0,0,0,0.95)" }}>
                     {/* cropper area */}
-                    <div className="relative w-full" style={{ height: "calc(100vh - 140px)" }}>
+                    <div className="relative w-full" style={{ height: "calc(100vh - 140px)" }}
+                        onMouseDown={e => e.preventDefault()}>
                         <Cropper
                             image={cropSrc}
                             crop={crop}
@@ -261,7 +262,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
                         <DialogTitle>Update Profile</DialogTitle>
                         <p id="profile-dialog-desc" className="sr-only">Update your profile information including photo, name, bio and skills</p>
                     </DialogHeader>
-                    <form onSubmit={submitHandler}>
+                    <form onSubmit={submitHandler} autoComplete="off">
                         <div className='grid gap-4 py-4'>
                             {/* Profile Photo */}
                             <div className='flex flex-col items-center gap-2 mb-2'>
