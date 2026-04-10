@@ -90,6 +90,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
         photo: null,
     });
     const [photoPreview, setPhotoPreview] = useState(user?.profile?.profilephoto || "");
+    const photoFileRef = useRef(null); // always holds latest cropped file
 
     // cropper state
     const [cropSrc, setCropSrc] = useState(null);
@@ -124,6 +125,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
             const blob = await getCroppedImg(cropSrc, croppedAreaPixels);
             const croppedFile = new File([blob], 'profile.jpg', { type: 'image/jpeg' });
             const previewUrl = URL.createObjectURL(blob);
+            photoFileRef.current = croppedFile;
             setInput(prev => ({ ...prev, photo: croppedFile }));
             setPhotoPreview(previewUrl);
             setCropSrc(null);
@@ -165,7 +167,8 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
         formData.append("bio", input.bio);
         formData.append("skills", skillTags.join(","));
         if (input.file) formData.append("file", input.file);
-        if (input.photo) formData.append("photo", input.photo);
+        if (photoFileRef.current) formData.append("photo", photoFileRef.current);
+        else if (input.photo) formData.append("photo", input.photo);
         try {
             setLoading(true);
             const res = await api.post(`${USER_API_END_POINT}/profile/update`, formData);
