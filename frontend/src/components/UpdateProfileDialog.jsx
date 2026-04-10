@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback } from 'react'
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from './ui/dialog'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from './ui/dialog'
 import { Label } from './ui/label'
 import { Input } from './ui/input'
 import { Button } from './ui/button'
@@ -257,10 +257,10 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
 
             {/* ── Profile dialog ── */}
             <Dialog open={open} onOpenChange={setOpen}>
-                <DialogContent className="w-[calc(100vw-2rem)] sm:max-w-[425px] max-h-[90vh] overflow-y-auto" aria-describedby="profile-dialog-desc" onInteractOutside={() => setOpen(false)}>
+                <DialogContent className="w-[calc(100vw-2rem)] sm:max-w-[425px] max-h-[90vh] overflow-y-auto" onInteractOutside={() => setOpen(false)}>
                     <DialogHeader>
                         <DialogTitle>Update Profile</DialogTitle>
-                        <p id="profile-dialog-desc" className="sr-only">Update your profile information including photo, name, bio and skills</p>
+                        <DialogDescription className="sr-only">Update your profile information including photo, name, bio and skills</DialogDescription>
                     </DialogHeader>
                     <form onSubmit={submitHandler} autoComplete="off">
                         <div className='grid gap-4 py-4'>
@@ -281,7 +281,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
                             </div>
 
                             {[
-                                { id: "name",   label: "Name",  name: "name",        type: "text",  value: input.fullname },
+                                { id: "name",   label: "Name",  name: "fullname",    type: "text",  value: input.fullname },
                                 { id: "email",  label: "Email", name: "email",       type: "email", value: input.email },
                                 { id: "number", label: "Phone", name: "phoneNumber", type: "text",  value: input.phoneNumber },
                                 { id: "bio",    label: "Bio",   name: "bio",         type: "text",  value: input.bio },
