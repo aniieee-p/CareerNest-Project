@@ -118,9 +118,10 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
         const file = e.target.files?.[0];
         if (!file) return;
         const url = URL.createObjectURL(file);
+        // pre-position crop at top 30% of image where face usually is
         setCropSrc(url);
-        setCrop({ x: 0, y: 0 });
-        setZoom(1.5);
+        setCrop({ x: 0, y: -30 });
+        setZoom(1.8);
         setCroppedAreaPixels(null);
         e.target.value = "";
     };
@@ -203,7 +204,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
             {cropSrc && (
                 <div className="fixed inset-0 z-100 flex flex-col overflow-hidden" style={{ background: "rgba(0,0,0,0.95)" }}>
                     {/* cropper area */}
-                    <div className="relative w-full" style={{ height: "calc(100vh - 160px)" }}>
+                    <div className="relative w-full" style={{ height: "calc(100vh - 140px)" }}>
                         <Cropper
                             image={cropSrc}
                             crop={crop}
