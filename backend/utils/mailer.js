@@ -161,3 +161,68 @@ export const sendContactEmail = async ({ name, email, message }) => {
         `)
     });
 };
+
+export const sendApplicationStatusEmail = async ({ email, applicantName, jobTitle, status }) => {
+    const statusConfig = {
+        accepted: {
+            emoji: "🎉",
+            subject: `Congratulations! Your application for "${jobTitle}" was accepted`,
+            heading: "You got accepted!",
+            body: `Great news, <strong style="color:#0f172a;">${applicantName}</strong>! Your application for <strong style="color:#0f172a;">${jobTitle}</strong> has been <strong style="color:#10b981;">accepted</strong>. The recruiter will be in touch with next steps soon.`,
+            badgeColor: "#10b981",
+            badgeBg: "rgba(16,185,129,0.1)",
+            badgeText: "Accepted",
+        },
+        rejected: {
+            emoji: "📋",
+            subject: `Update on your application for "${jobTitle}"`,
+            heading: "Application update",
+            body: `Hi <strong style="color:#0f172a;">${applicantName}</strong>, thank you for applying for <strong style="color:#0f172a;">${jobTitle}</strong>. After careful consideration, the team has decided not to move forward with your application at this time. Don't be discouraged — keep applying!`,
+            badgeColor: "#ef4444",
+            badgeBg: "rgba(239,68,68,0.1)",
+            badgeText: "Not Selected",
+        },
+        shortlisted: {
+            emoji: "⭐",
+            subject: `You've been shortlisted for "${jobTitle}"`,
+            heading: "You're shortlisted!",
+            body: `Hi <strong style="color:#0f172a;">${applicantName}</strong>, exciting news — you've been <strong style="color:#6366f1;">shortlisted</strong> for <strong style="color:#0f172a;">${jobTitle}</strong>. Stay tuned, the recruiter will reach out with further details.`,
+            badgeColor: "#6366f1",
+            badgeBg: "rgba(99,102,241,0.1)",
+            badgeText: "Shortlisted",
+        },
+    };
+
+    const cfg = statusConfig[status] ?? {
+        emoji: "🔔",
+        subject: `Your application status was updated`,
+        heading: "Application update",
+        body: `Hi <strong style="color:#0f172a;">${applicantName}</strong>, your application for <strong style="color:#0f172a;">${jobTitle}</strong> has been updated to <strong>${status}</strong>.`,
+        badgeColor: "#64748b",
+        badgeBg: "rgba(100,116,139,0.1)",
+        badgeText: status,
+    };
+
+    await getTransporter().sendMail({
+        from: `"CareerNest" <${process.env.EMAIL_USER}>`,
+        to: email,
+        subject: cfg.subject,
+        html: emailWrapper(`
+            <div style="text-align:center;margin-bottom:28px;">
+              <div style="display:inline-block;background:${cfg.badgeBg};border-radius:50%;padding:18px;margin-bottom:16px;">
+                <span style="font-size:36px;">${cfg.emoji}</span>
+              </div>
+              <h2 style="margin:0 0 8px;font-size:24px;font-weight:800;color:#0f172a;letter-spacing:-0.5px;">${cfg.heading}</h2>
+              <span style="display:inline-block;padding:4px 14px;border-radius:999px;font-size:13px;font-weight:700;color:${cfg.badgeColor};background:${cfg.badgeBg};">${cfg.badgeText}</span>
+            </div>
+
+            <div style="background:#f8fafc;border-radius:14px;padding:20px 24px;border:1px solid #e2e8f0;margin-bottom:24px;">
+              <p style="margin:0;font-size:15px;color:#475569;line-height:1.7;">${cfg.body}</p>
+            </div>
+
+            <p style="margin:0;font-size:12px;color:#cbd5e1;text-align:center;">
+              You're receiving this because you applied via CareerNest.
+            </p>
+        `)
+    });
+};

@@ -107,15 +107,47 @@ export const parseResume = async (req, res) => {
   }
 };
 
-// ================= ROLE MATCH (kept for existing route) =================
+// ================= ROLE MATCH =================
 export const roleMatch = async (req, res) => {
   try {
     const { answers } = req.body;
     if (!answers || typeof answers !== "object") {
       return res.status(400).json({ success: false, message: "Answers are required." });
     }
-    return res.status(200).json({ success: true, roles: [] });
+
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-lite" });
+
+    const prompt = `You are a career advisor. Based on the following quiz answers, suggest exactly 3 suitable career roles.
+
+Quiz answers:
+- Strongest skill: ${answers.skill}
+- Preferred work style: ${answers.workStyle}
+- Experience level: ${answers.experience}
+- Interest area: ${answers.interest}
+- Preferred company size: ${answers.companySize}
+
+Respond ONLY with a valid JSON array (no markdown, no explanation) with exactly 3 objects, each having:
+- "role": job title (string)
+- "why": one sentence explaining why it fits (string)
+- "skills": array of 3-4 key skills needed (strings)
+- "salary": typical salary range e.g. "$60k–$90k" (string)
+
+Example format:
+[{"role":"Frontend Developer","why":"...","skills":["React","CSS","JavaScript"],"salary":"$70k–$100k"}]`;
+
+    const result = await model.generateContent(prompt);
+    let text = result.response.text().trim();
+    console.log("[roleMatch] raw Gemini response:", text);
+
+    // Strip markdown code fences if present
+    text = text.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "").trim();
+    console.log("[roleMatch] cleaned text:", text);
+
+    const roles = JSON.parse(text);
+    console.log("[roleMatch] parsed roles:", roles);
+    return res.status(200).json({ success: true, roles });
   } catch (error) {
-    return res.status(500).json({ success: false, message: "Something went wrong" });
+    console.error("roleMatch error:", error.message);
+    return res.status(500).json({ success: false, message: "Failed to generate role matches." });
   }
 };

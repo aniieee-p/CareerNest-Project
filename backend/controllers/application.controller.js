@@ -1,6 +1,7 @@
 import { Application } from "../models/application.model.js";
 import { Job } from "../models/job.model.js";
 import { Notification } from "../models/notification.model.js";
+import { sendApplicationStatusEmail } from "../utils/mailer.js";
 
 export const applyJob = async (req, res) => {
     try {
@@ -83,7 +84,10 @@ export const updateStatus = async (req, res) => {
         application.status = status.toLowerCase();
         await application.save();
         // notify applicant about status change
-        const populated = await application.populate({ path: "job", select: "title" });
+        const populated = await application.populate([
+            { path: "job", select: "title" },
+            { path: "applicant", select: "fullname email" },
+        ]);
         const statusMsg = {
             accepted: `Congratulations! Your application for "${populated.job?.title}" was accepted.`,
             rejected: `Your application for "${populated.job?.title}" was not selected this time.`,
@@ -91,6 +95,16 @@ export const updateStatus = async (req, res) => {
         };
         const msg = statusMsg[status.toLowerCase()] || `Your application status was updated to "${status}".`;
         await Notification.create({ userId: application.applicant, message: msg, type: "application", jobId: populated.job?._id });
+
+        // send email notification
+        if (populated.applicant?.email) {
+            sendApplicationStatusEmail({
+                email: populated.applicant.email,
+                applicantName: populated.applicant.fullname || "there",
+                jobTitle: populated.job?.title || "the position",
+                status: status.toLowerCase(),
+            }).catch(err => console.error("Status email error:", err.message));
+        }
         return res.status(200).json({ message: "Application status updated successfully.", success: true });
     } catch (error) {
         console.error(error.message);
