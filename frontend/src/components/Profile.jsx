@@ -92,7 +92,7 @@ const Profile = () => {
             }}>
 
             {/* Avatar */}
-            <div className="relative flex-shrink-0">
+            <div className="relative shrink-0">
               <Avatar className="h-20 w-20 sm:h-24 sm:w-24 shadow-xl"
                 style={{ border: "4px solid var(--cn-surface)" }}>
                 <AvatarImage src={user?.profile?.profilephoto} alt={user?.fullname} />
@@ -152,7 +152,7 @@ const Profile = () => {
                 transition={{ type: "spring", stiffness: 300, damping: 22 }}
                 className="rounded-2xl p-4 flex items-center gap-3"
                 style={{ background: "var(--cn-card)", backdropFilter: "blur(12px)", border: "1px solid var(--cn-border)", boxShadow: "var(--cn-card-shadow)" }}>
-                <div className="p-2.5 rounded-xl flex-shrink-0" style={{ background: bg }}>
+                <div className="p-2.5 rounded-xl shrink-0" style={{ background: bg }}>
                   <Icon size={17} style={{ color }} />
                 </div>
                 <div>

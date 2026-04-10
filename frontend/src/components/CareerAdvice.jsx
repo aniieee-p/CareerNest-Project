@@ -125,7 +125,7 @@ const RoleCard = ({ role, why, skills, salary, index }) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
       whileHover={{ y: -4 }}
-      className="rounded-[22px] p-[1px] h-full"
+      className="rounded-[22px] p-px h-full"
       style={{ background: `linear-gradient(145deg,${border},rgba(99,102,241,0.06),${border})`, boxShadow: `0 4px 24px ${color}18` }}
     >
       <div className="rounded-[21px] p-6 h-full flex flex-col"
@@ -133,7 +133,7 @@ const RoleCard = ({ role, why, skills, salary, index }) => {
 
         {/* role name */}
         <div className="flex items-start justify-between gap-3 mb-4">
-          <div className="p-2.5 rounded-xl flex-shrink-0" style={{ background: bg, border: `1px solid ${border}` }}>
+          <div className="p-2.5 rounded-xl shrink-0" style={{ background: bg, border: `1px solid ${border}` }}>
             <Briefcase size={17} style={{ color }} />
           </div>
           <span className="text-[11px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full ml-auto"
