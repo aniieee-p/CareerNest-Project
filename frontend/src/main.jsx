@@ -1,5 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+import '@fontsource-variable/geist'
 import './index.css'
 import './utils/axiosInstance.js' // registers Authorization header interceptor globally
 import App from './App.jsx'
