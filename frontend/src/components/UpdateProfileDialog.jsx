@@ -1,6 +1,6 @@
 import React, { useCallback, useRef, useState } from 'react'
 import Cropper from 'react-easy-crop'
-import { Check, Loader2, RotateCcw, X, ZoomIn, ZoomOut } from 'lucide-react'
+import { Check, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Loader2, RotateCcw, X, ZoomIn, ZoomOut } from 'lucide-react'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'sonner'
 
@@ -116,6 +116,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
   const [photoPreview, setPhotoPreview] = useState(user?.profile?.profilephoto || '');
   const [cropSrc, setCropSrc] = useState(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [cropSize, setCropSize] = useState({ width: 300, height: 300 });
   const [zoom, setZoom] = useState(1.2);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
 
@@ -211,6 +212,19 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
     revokeObjectUrl(cropObjectUrlRef.current);
   }, []);
 
+  React.useEffect(() => {
+    if (!cropSrc || typeof window === 'undefined') return undefined;
+
+    const updateCropSize = () => {
+      const nextSize = Math.min(Math.max(window.innerWidth - 56, 220), 340);
+      setCropSize({ width: nextSize, height: nextSize });
+    };
+
+    updateCropSize();
+    window.addEventListener('resize', updateCropSize);
+    return () => window.removeEventListener('resize', updateCropSize);
+  }, [cropSrc]);
+
   const changeEventHandler = (e) => {
     const { name, value } = e.target;
     setInput((prev) => ({ ...prev, [name]: value }));
@@ -264,20 +278,16 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
       setInput((prev) => ({ ...prev, photo: croppedFile, removePhoto: false }));
       setPhotoPreview(previewUrl);
       resetCropState();
-      await persistProfile({
-        photoFile: croppedFile,
-        removePhoto: false,
-        includeAllFields: false,
-        successMessage: 'Profile photo updated successfully.',
-        closeDialog: false,
-      });
+      toast.success('Photo cropped. Click Update to save it.');
     } catch (error) {
       console.error('Crop error:', error);
-      if (!error?.response) {
-        toast.error('Failed to crop image. Please try again.');
-      }
+      toast.error('Failed to crop image. Please try again.');
       setIsCropping(false);
     }
+  };
+
+  const nudgeCrop = (axis, amount) => {
+    setCrop((prev) => ({ ...prev, [axis]: prev[axis] + amount }));
   };
 
   const addSkill = (skill) => {
@@ -363,6 +373,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
             <Cropper
               image={cropSrc}
               crop={crop}
+              cropSize={cropSize}
               zoom={zoom}
               minZoom={0.8}
               maxZoom={5}
@@ -373,13 +384,9 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
               onCropChange={setCrop}
               onZoomChange={setZoom}
               onCropComplete={onCropComplete}
-              onMediaLoaded={({ height, naturalHeight, naturalWidth }) => {
-                const isPortrait = naturalHeight > naturalWidth;
-                setZoom(isPortrait ? 0.95 : 0.9);
-                setCrop({ x: 0, y: isPortrait ? -Math.min(height * 0.08, 60) : 0 });
-              }}
               style={{
                 containerStyle: { width: '100%', height: '100%', background: '#000' },
+                mediaStyle: { cursor: 'grab' },
               }}
             />
           </div>
@@ -404,6 +411,42 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
                 className="flex-1 accent-[#27bbd2]"
               />
               <ZoomIn size={16} className="text-white/50 shrink-0" />
+            </div>
+
+            <div className="grid grid-cols-3 gap-2 items-center">
+              <span />
+              <button
+                type="button"
+                onClick={() => nudgeCrop('y', -20)}
+                className="flex items-center justify-center rounded-lg bg-white/10 p-2 text-white"
+              >
+                <ChevronUp size={16} />
+              </button>
+              <span />
+              <button
+                type="button"
+                onClick={() => nudgeCrop('x', -20)}
+                className="flex items-center justify-center rounded-lg bg-white/10 p-2 text-white"
+              >
+                <ChevronLeft size={16} />
+              </button>
+              <div className="px-3 text-center text-xs text-white/60">Drag or use arrows</div>
+              <button
+                type="button"
+                onClick={() => nudgeCrop('x', 20)}
+                className="flex items-center justify-center rounded-lg bg-white/10 p-2 text-white"
+              >
+                <ChevronRight size={16} />
+              </button>
+              <span />
+              <button
+                type="button"
+                onClick={() => nudgeCrop('y', 20)}
+                className="flex items-center justify-center rounded-lg bg-white/10 p-2 text-white"
+              >
+                <ChevronDown size={16} />
+              </button>
+              <span />
             </div>
 
             <div className="flex gap-3">
