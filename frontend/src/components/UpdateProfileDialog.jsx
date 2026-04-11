@@ -101,6 +101,7 @@ const buildInputState = (user) => ({
   file: null,
   photo: null,
   removePhoto: false,
+  removeResume: false,
 });
 
 const UpdateProfileDialog = ({ open, setOpen }) => {
@@ -130,6 +131,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
   const persistProfile = async ({
     photoFile = null,
     removePhoto = false,
+    removeResume = false,
     includeAllFields = false,
     successMessage = 'Profile updated successfully',
     closeDialog = false,
@@ -146,6 +148,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
     }
 
     formData.append('removePhoto', String(removePhoto));
+    formData.append('removeResume', String(removeResume));
     if (photoFile) formData.append('photo', photoFile);
 
     setLoading(true);
@@ -161,6 +164,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
           file: includeAllFields ? null : prev.file,
           photo: null,
           removePhoto: false,
+          removeResume: false,
         }));
         toast.success(successMessage);
         if (closeDialog) setOpen(false);
@@ -231,7 +235,11 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
   };
 
   const fileChangeHandler = (e) => {
-    setInput((prev) => ({ ...prev, file: e.target.files?.[0] || null }));
+    setInput((prev) => ({
+      ...prev,
+      file: e.target.files?.[0] || null,
+      removeResume: false,
+    }));
   };
 
   const photoChangeHandler = (e) => {
@@ -327,6 +335,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
       await persistProfile({
         photoFile: photoFileRef.current || input.photo,
         removePhoto: input.removePhoto,
+        removeResume: input.removeResume,
         includeAllFields: true,
         successMessage: 'Profile updated successfully',
         closeDialog: true,
@@ -353,12 +362,28 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
     persistProfile({
       photoFile: null,
       removePhoto: true,
+      removeResume: false,
       includeAllFields: false,
       successMessage: 'Profile photo removed successfully.',
       closeDialog: false,
     }).catch(() => {
       setPhotoPreview(user?.profile?.profilephoto || '');
       setInput((prev) => ({ ...prev, removePhoto: false }));
+    });
+  };
+  const hasResume = Boolean(input.file || user?.profile?.resume);
+  const resumeLabel = input.file?.name || user?.profile?.resumeOriginalName || 'Resume uploaded';
+  const handleRemoveResume = () => {
+    setInput((prev) => ({ ...prev, file: null, removeResume: true }));
+    persistProfile({
+      photoFile: null,
+      removePhoto: false,
+      removeResume: true,
+      includeAllFields: false,
+      successMessage: 'Resume removed successfully.',
+      closeDialog: false,
+    }).catch(() => {
+      setInput((prev) => ({ ...prev, removeResume: false }));
     });
   };
 
@@ -601,7 +626,22 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
                 <Label htmlFor="file" className="sm:text-right text-sm font-medium">
                   Resume
                 </Label>
-                <Input id="file" name="file" type="file" accept="application/pdf" onChange={fileChangeHandler} className="sm:col-span-3" />
+                <div className="sm:col-span-3 space-y-2">
+                  <Input id="file" name="file" type="file" accept="application/pdf" onChange={fileChangeHandler} />
+                  {hasResume && (
+                    <div className="flex items-center justify-between gap-3 rounded-lg border px-3 py-2 text-xs"
+                      style={{ borderColor: 'var(--cn-border)', color: 'var(--cn-text-2)' }}>
+                      <span className="truncate">{resumeLabel}</span>
+                      <button
+                        type="button"
+                        onClick={handleRemoveResume}
+                        className="shrink-0 font-medium text-rose-500 hover:text-rose-600"
+                      >
+                        Remove resume
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 
