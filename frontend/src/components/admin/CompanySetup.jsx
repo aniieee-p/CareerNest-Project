@@ -74,7 +74,7 @@ const CompanySetup = () => {
   return (
     <div className="min-h-screen" style={{ background: "linear-gradient(160deg,var(--cn-page) 0%,var(--cn-page-alt) 60%,var(--cn-page) 100%)" }}>
       <Navbar />
-      <div className="max-w-2xl mx-auto px-4 py-8 sm:py-10">
+      <div className="max-w-2xl mx-auto px-4 py-8 sm:py-10 pt-20">
 
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45, ease: "easeOut" }}>

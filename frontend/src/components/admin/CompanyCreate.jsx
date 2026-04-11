@@ -34,7 +34,7 @@ const CompanyCreate = () => {
   return (
     <div className="min-h-screen" style={{ background: "linear-gradient(160deg,var(--cn-page) 0%,var(--cn-page-alt) 60%,var(--cn-page) 100%)" }}>
       <Navbar />
-      <div className="max-w-lg mx-auto px-4 py-16">
+      <div className="max-w-lg mx-auto px-4 py-16 pt-20">
 
         <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45, ease: "easeOut" }}>
