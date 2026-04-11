@@ -126,6 +126,52 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
   const cropObjectUrlRef = useRef(null);
   const previewObjectUrlRef = useRef(null);
 
+  const persistProfile = async ({
+    photoFile = null,
+    removePhoto = false,
+    includeAllFields = false,
+    successMessage = 'Profile updated successfully',
+    closeDialog = false,
+  } = {}) => {
+    const formData = new FormData();
+
+    if (includeAllFields) {
+      formData.append('fullname', input.fullname);
+      formData.append('email', input.email);
+      formData.append('phonenumber', input.phoneNumber);
+      formData.append('bio', input.bio);
+      formData.append('skills', skillTags.join(','));
+      if (input.file) formData.append('file', input.file);
+    }
+
+    formData.append('removePhoto', String(removePhoto));
+    if (photoFile) formData.append('photo', photoFile);
+
+    setLoading(true);
+    try {
+      const res = await api.post(`${USER_API_END_POINT}/profile/update`, formData);
+
+      if (res.data.success) {
+        dispatch(setUser(res.data.user));
+        photoFileRef.current = null;
+        setPhotoPreview(res.data.user?.profile?.profilephoto || '');
+        setInput((prev) => ({
+          ...prev,
+          file: includeAllFields ? null : prev.file,
+          photo: null,
+          removePhoto: false,
+        }));
+        toast.success(successMessage);
+        if (closeDialog) setOpen(false);
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message || 'Failed to update profile.');
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const resetCropState = useCallback(() => {
     revokeObjectUrl(cropObjectUrlRef.current);
     cropObjectUrlRef.current = null;
@@ -218,10 +264,18 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
       setInput((prev) => ({ ...prev, photo: croppedFile, removePhoto: false }));
       setPhotoPreview(previewUrl);
       resetCropState();
-      toast.success('Photo cropped successfully.');
+      await persistProfile({
+        photoFile: croppedFile,
+        removePhoto: false,
+        includeAllFields: false,
+        successMessage: 'Profile photo updated successfully.',
+        closeDialog: false,
+      });
     } catch (error) {
       console.error('Crop error:', error);
-      toast.error('Failed to crop image. Please try again.');
+      if (!error?.response) {
+        toast.error('Failed to crop image. Please try again.');
+      }
       setIsCropping(false);
     }
   };
@@ -259,36 +313,18 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
       return;
     }
 
-    const formData = new FormData();
-    formData.append('fullname', input.fullname);
-    formData.append('email', input.email);
-    formData.append('phonenumber', input.phoneNumber);
-    formData.append('bio', input.bio);
-    formData.append('skills', skillTags.join(','));
-    formData.append('removePhoto', String(input.removePhoto));
-
-    if (input.file) formData.append('file', input.file);
-    if (photoFileRef.current) formData.append('photo', photoFileRef.current);
-    else if (input.photo) formData.append('photo', input.photo);
-
     try {
-      setLoading(true);
-      const res = await api.post(`${USER_API_END_POINT}/profile/update`, formData);
-
-      if (res.data.success) {
-        dispatch(setUser(res.data.user));
-        revokeObjectUrl(previewObjectUrlRef.current);
-        previewObjectUrlRef.current = null;
-        photoFileRef.current = null;
-        setPhotoPreview(res.data.user?.profile?.profilephoto || '');
-        setInput((prev) => ({ ...prev, file: null, photo: null }));
-        toast.success(res.data.message);
-        setOpen(false);
-      }
-    } catch (error) {
-      toast.error(error?.response?.data?.message || 'Failed to update profile.');
-    } finally {
-      setLoading(false);
+      await persistProfile({
+        photoFile: photoFileRef.current || input.photo,
+        removePhoto: input.removePhoto,
+        includeAllFields: true,
+        successMessage: 'Profile updated successfully',
+        closeDialog: true,
+      });
+      revokeObjectUrl(previewObjectUrlRef.current);
+      previewObjectUrlRef.current = null;
+    } catch {
+      // Error toast is handled in persistProfile.
     }
   };
 
@@ -304,31 +340,42 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
     resetCropState();
     setPhotoPreview('');
     setInput((prev) => ({ ...prev, photo: null, removePhoto: true }));
-    toast.success('Profile photo will be removed when you update.');
+    persistProfile({
+      photoFile: null,
+      removePhoto: true,
+      includeAllFields: false,
+      successMessage: 'Profile photo removed successfully.',
+      closeDialog: false,
+    }).catch(() => {
+      setPhotoPreview(user?.profile?.profilephoto || '');
+      setInput((prev) => ({ ...prev, removePhoto: false }));
+    });
   };
 
   return (
     <div>
       {cropSrc && (
-        <div className="fixed inset-0 z-100 flex flex-col overflow-hidden" style={{ background: 'rgba(0,0,0,0.95)' }}>
+        <div
+          className="fixed inset-0 flex flex-col overflow-hidden"
+          style={{ background: 'rgba(0,0,0,0.95)', zIndex: 1000 }}
+        >
           <div className="relative w-full" style={{ height: 'calc(100vh - 140px)' }}>
             <Cropper
               image={cropSrc}
               crop={crop}
               zoom={zoom}
-              minZoom={1}
+              minZoom={0.8}
               maxZoom={5}
               aspect={1}
               cropShape="round"
               showGrid={false}
               objectFit="cover"
-              restrictPosition
               onCropChange={setCrop}
               onZoomChange={setZoom}
               onCropComplete={onCropComplete}
               onMediaLoaded={({ height, naturalHeight, naturalWidth }) => {
                 const isPortrait = naturalHeight > naturalWidth;
-                setZoom(isPortrait ? 1.1 : 1);
+                setZoom(isPortrait ? 0.95 : 0.9);
                 setCrop({ x: 0, y: isPortrait ? -Math.min(height * 0.08, 60) : 0 });
               }}
               style={{
@@ -349,7 +396,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
                 id="crop-zoom"
                 name="crop-zoom"
                 type="range"
-                min={1}
+                min={0.8}
                 max={5}
                 step={0.05}
                 value={zoom}
