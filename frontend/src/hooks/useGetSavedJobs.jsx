@@ -9,13 +9,16 @@ const useGetSavedJobs = () => {
     const { user } = useSelector(store => store.auth);
 
     useEffect(() => {
-        if (!user) return;
+        // Only fetch saved jobs if user is authenticated and is a student
+        if (!user || user.role !== 'student') return;
+        
         const fetch = async () => {
             try {
                 const res = await api.get(SAVED_JOBS_API);
                 if (res.data.success) dispatch(setSavedJobs(res.data.savedJobs));
             } catch (err) {
-
+                // Silently handle errors - user might not be authenticated
+                console.log('Failed to fetch saved jobs:', err.message);
             }
         };
         fetch();
