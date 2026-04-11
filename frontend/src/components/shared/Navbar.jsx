@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { LogOut, User, BookmarkIcon, Building2, Menu, X, Moon, Sun, ChevronDown, Bell } from "lucide-react";
+import { LogOut, User, BookmarkIcon, Building2, Menu, X, Moon, Sun } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { Button } from "../ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { setUser } from "../../redux/authSlice";
 import api from "../../utils/axiosInstance";
@@ -21,10 +20,13 @@ const Navbar = () => {
 
   // Initialize dark mode from localStorage
   useEffect(() => {
-    const savedDarkMode = localStorage.getItem('darkMode') === 'true';
-    setDarkMode(savedDarkMode);
-    if (savedDarkMode) {
+    const savedDarkMode = localStorage.getItem('darkMode');
+    const isDark = savedDarkMode === 'true'; // Default to false (light mode) if not set
+    setDarkMode(isDark);
+    if (isDark) {
       document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
     }
   }, []);
 
@@ -81,184 +83,183 @@ const Navbar = () => {
   };
 
   return (
-    <nav className={`sticky top-0 z-50 w-full backdrop-blur-md border-b transition-shadow duration-300 ${
+    <nav className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-md transition-all duration-300 ${
       scrolled ? 'shadow-sm' : ''
     }`} style={{ 
       backgroundColor: 'var(--cn-nav-bg)', 
-      borderColor: 'var(--cn-nav-border)' 
+      borderBottom: scrolled ? '1px solid var(--cn-nav-border)' : 'none'
     }}>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
-          {/* Logo */}
+          
+          {/* Left: Logo */}
           <div className="flex items-center">
             <Link to="/" className="flex items-center space-x-2 group">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-linear-to-br from-[#27bbd2] to-[#1fa8be] transition-transform duration-200 group-hover:scale-105">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#27bbd2] transition-transform duration-200 group-hover:scale-105">
                 <span className="text-sm font-bold text-white">CN</span>
               </div>
-              <span className="text-xl font-semibold text-[#27bbd2]">
+              <span className="text-xl font-semibold text-[#27bbd2] hidden sm:block">
                 CareerNest
               </span>
             </Link>
           </div>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex md:items-center md:space-x-8">
-            {/* Navigation Links */}
-            <div className="flex items-center space-x-1">
-              {navItems.map((item) => (
-                <Link
-                  key={item.name}
-                  to={item.path}
-                  className={`relative px-4 py-2 text-sm font-medium rounded-full transition-all duration-200 ${
-                    isActivePath(item.path)
-                      ? "bg-[#27bbd2]/20 text-[#27bbd2]"
-                      : "hover:bg-gray-100/10 dark:hover:bg-white/5"
-                  }`}
-                  style={{ 
-                    color: isActivePath(item.path) ? '#27bbd2' : 'var(--cn-text-2)' 
-                  }}
-                >
-                  {item.name}
-                </Link>
-              ))}
-            </div>
-
-            {/* Right Side Actions */}
-            <div className="flex items-center space-x-3">
-              {/* Dark Mode Toggle */}
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={toggleDarkMode}
-                className="h-9 w-9 rounded-lg p-0 text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white transition-all duration-200"
+          {/* Center: Navigation Links (Desktop) */}
+          <div className="hidden md:flex items-center space-x-8">
+            {navItems.map((item) => (
+              <Link
+                key={item.name}
+                to={item.path}
+                className={`relative text-sm font-medium transition-colors duration-200 ${
+                  isActivePath(item.path)
+                    ? "text-[#27bbd2]"
+                    : "hover:text-[#27bbd2]"
+                }`}
+                style={{ 
+                  color: isActivePath(item.path) ? '#27bbd2' : 'var(--cn-text-2)' 
+                }}
               >
-                {darkMode ? (
-                  <Sun className="h-4 w-4" />
-                ) : (
-                  <Moon className="h-4 w-4" />
+                {item.name}
+                {isActivePath(item.path) && (
+                  <div className="absolute -bottom-4 left-0 right-0 h-0.5 bg-[#27bbd2] rounded-full" />
                 )}
-              </Button>
+              </Link>
+            ))}
+          </div>
 
-              {!user ? (
-                <div className="flex items-center space-x-3">
-                  <Link to="/login">
-                    <Button 
-                      variant="ghost" 
-                      size="sm"
-                      className="h-9 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white transition-all duration-200"
-                    >
-                      Sign in
-                    </Button>
-                  </Link>
-                  <Link to="/signup">
-                    <Button 
-                      size="sm"
-                      className="h-9 rounded-lg bg-linear-to-r from-[#27bbd2] to-[#1fa8be] px-4 text-white hover:from-[#1fa8be] hover:to-[#27bbd2] transition-all duration-200 shadow-sm hover:shadow-md"
-                    >
-                      Get started
-                    </Button>
-                  </Link>
-                </div>
+          {/* Right: Actions */}
+          <div className="flex items-center space-x-3">
+            {/* Dark Mode Toggle */}
+            <button
+              onClick={toggleDarkMode}
+              className="p-2 rounded-lg transition-colors duration-200 hover:bg-gray-100/50 dark:hover:bg-white/5"
+              style={{ color: 'var(--cn-text-2)' }}
+            >
+              {darkMode ? (
+                <Sun className="h-5 w-5" />
               ) : (
-                <div className="flex items-center space-x-3">
-                  {/* Notifications for students */}
-                  {user.role === "student" && (
-                    <div className="relative">
-                      <NotificationDropdown />
-                    </div>
-                  )}
-                  
-                  {/* User Menu */}
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        className="flex h-9 items-center space-x-2 rounded-lg px-2 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200"
-                      >
-                        <Avatar className="h-7 w-7">
+                <Moon className="h-5 w-5" />
+              )}
+            </button>
+
+            {!user ? (
+              <div className="hidden md:flex items-center space-x-3">
+                <Link to="/login">
+                  <button className="px-4 py-2 text-sm font-medium rounded-lg transition-colors duration-200 hover:bg-gray-100/50 dark:hover:bg-white/5" style={{ color: 'var(--cn-text-2)' }}>
+                    Sign in
+                  </button>
+                </Link>
+                <Link to="/signup">
+                  <button className="px-4 py-2 text-sm font-medium text-white bg-[#27bbd2] rounded-lg hover:bg-[#1fa8be] transition-colors duration-200">
+                    Get started
+                  </button>
+                </Link>
+              </div>
+            ) : (
+              <div className="hidden md:flex items-center space-x-3">
+                {/* Notifications for students */}
+                {user.role === "student" && (
+                  <div className="relative">
+                    <NotificationDropdown />
+                  </div>
+                )}
+                
+                {/* User Avatar Dropdown */}
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <button className="flex items-center space-x-2 p-1 rounded-lg hover:bg-gray-100/50 dark:hover:bg-white/5 transition-colors duration-200">
+                      <Avatar className="h-8 w-8">
+                        <AvatarImage
+                          src={user?.profile?.profilePhoto}
+                          alt={user?.fullname}
+                        />
+                        <AvatarFallback className="bg-[#27bbd2] text-white text-sm">
+                          {user?.fullname?.charAt(0)?.toUpperCase()}
+                        </AvatarFallback>
+                      </Avatar>
+                    </button>
+                  </PopoverTrigger>
+                  <PopoverContent 
+                    className="w-56 p-0 animate-in fade-in-0 zoom-in-95" 
+                    align="end"
+                    sideOffset={8}
+                    style={{ backgroundColor: 'var(--cn-popover)', borderColor: 'var(--cn-border)' }}
+                  >
+                    {/* User Info */}
+                    <div className="p-3 border-b" style={{ borderColor: 'var(--cn-border)' }}>
+                      <div className="flex items-center space-x-3">
+                        <Avatar className="h-9 w-9">
                           <AvatarImage
                             src={user?.profile?.profilePhoto}
                             alt={user?.fullname}
                           />
-                          <AvatarFallback className="bg-linear-to-br from-[#27bbd2] to-[#1fa8be] text-xs text-white">
+                          <AvatarFallback className="bg-[#27bbd2] text-white">
                             {user?.fullname?.charAt(0)?.toUpperCase()}
                           </AvatarFallback>
                         </Avatar>
-                        <ChevronDown className="h-3 w-3 text-gray-500 transition-transform duration-200" />
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent 
-                      className="w-56 p-0 animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2" 
-                      align="end"
-                      sideOffset={8}
-                    >
-                      {/* User Info Header */}
-                      <div className="p-3 border-b border-gray-100 dark:border-gray-700">
-                        <div className="flex items-center space-x-3">
-                          <Avatar className="h-9 w-9">
-                            <AvatarImage
-                              src={user?.profile?.profilePhoto}
-                              alt={user?.fullname}
-                            />
-                            <AvatarFallback className="bg-linear-to-br from-[#27bbd2] to-[#1fa8be] text-white text-sm">
-                              {user?.fullname?.charAt(0)?.toUpperCase()}
-                            </AvatarFallback>
-                          </Avatar>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
-                              {user?.fullname}
-                            </p>
-                            <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
-                              {user?.email}
-                            </p>
-                          </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium truncate" style={{ color: 'var(--cn-text-1)' }}>
+                            {user?.fullname}
+                          </p>
+                          <p className="text-xs truncate" style={{ color: 'var(--cn-text-3)' }}>
+                            {user?.email}
+                          </p>
                         </div>
                       </div>
+                    </div>
+                    
+                    {/* Menu Items */}
+                    <div className="py-1">
+                      <button
+                        onClick={() => navigate("/profile")}
+                        className="flex w-full items-center px-3 py-2 text-sm transition-colors duration-200 hover:bg-gray-100/50 dark:hover:bg-white/5"
+                        style={{ color: 'var(--cn-text-2)' }}
+                      >
+                        <User className="mr-3 h-4 w-4" />
+                        Profile
+                      </button>
                       
-                      {/* Menu Items */}
-                      <div className="py-1">
+                      {user.role === "student" && (
                         <button
-                          onClick={() => navigate("/profile")}
-                          className="flex w-full items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors duration-200"
+                          onClick={() => navigate("/saved-jobs")}
+                          className="flex w-full items-center px-3 py-2 text-sm transition-colors duration-200 hover:bg-gray-100/50 dark:hover:bg-white/5"
+                          style={{ color: 'var(--cn-text-2)' }}
                         >
-                          <User className="mr-3 h-4 w-4" />
-                          Profile
+                          <BookmarkIcon className="mr-3 h-4 w-4" />
+                          Saved Jobs
                         </button>
-                        
-                        <button
-                          onClick={logoutHandler}
-                          className="flex w-full items-center px-3 py-2 text-sm text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20 transition-colors duration-200"
-                        >
-                          <LogOut className="mr-3 h-4 w-4" />
-                          Sign out
-                        </button>
-                      </div>
-                    </PopoverContent>
-                  </Popover>
-                </div>
-              )}
-            </div>
-          </div>
+                      )}
+                      
+                      <button
+                        onClick={logoutHandler}
+                        className="flex w-full items-center px-3 py-2 text-sm text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20 transition-colors duration-200"
+                      >
+                        <LogOut className="mr-3 h-4 w-4" />
+                        Sign out
+                      </button>
+                    </div>
+                  </PopoverContent>
+                </Popover>
+              </div>
+            )}
 
-          {/* Mobile menu button */}
-          <div className="md:hidden">
-            <Button
-              variant="ghost"
-              size="sm"
+            {/* Mobile Menu Button */}
+            <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="h-9 w-9 rounded-lg p-0 transition-all duration-200"
+              className="md:hidden p-2 rounded-lg transition-colors duration-200 hover:bg-gray-100/50 dark:hover:bg-white/5"
+              style={{ color: 'var(--cn-text-2)' }}
             >
               {mobileMenuOpen ? (
                 <X className="h-5 w-5" />
               ) : (
                 <Menu className="h-5 w-5" />
               )}
-            </Button>
+            </button>
           </div>
         </div>
       </div>
 
-      {/* Mobile Navigation - Slide-in Drawer */}
+      {/* Mobile Slide-in Drawer */}
       <div className={`fixed inset-0 z-40 md:hidden ${mobileMenuOpen ? 'pointer-events-auto' : 'pointer-events-none'}`}>
         {/* Backdrop */}
         <div 
@@ -269,44 +270,43 @@ const Navbar = () => {
         />
         
         {/* Drawer */}
-        <div className={`fixed right-0 top-0 h-full w-80 max-w-[85vw] backdrop-blur-md border-l shadow-xl transform transition-transform duration-300 ease-out ${
+        <div className={`fixed right-0 top-0 h-full w-80 max-w-[85vw] backdrop-blur-md shadow-xl transform transition-transform duration-300 ease-out ${
           mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
         }`} style={{ 
           backgroundColor: 'var(--cn-mobile-drawer)', 
-          borderColor: 'var(--cn-border)' 
+          borderLeft: '1px solid var(--cn-border)' 
         }}>
           {/* Drawer Header */}
           <div className="flex items-center justify-between p-4 border-b" style={{ borderColor: 'var(--cn-border)' }}>
             <span className="text-lg font-semibold text-[#27bbd2]">
               Menu
             </span>
-            <Button
-              variant="ghost"
-              size="sm"
+            <button
               onClick={() => setMobileMenuOpen(false)}
-              className="h-8 w-8 rounded-lg p-0 transition-all duration-200"
+              className="p-2 rounded-lg transition-colors duration-200 hover:bg-gray-100/50 dark:hover:bg-white/5"
+              style={{ color: 'var(--cn-text-2)' }}
             >
               <X className="h-5 w-5" />
-            </Button>
+            </button>
           </div>
 
           {/* Drawer Content */}
           <div className="flex flex-col h-full">
-            <div className="flex-1 overflow-y-auto p-4">
+            <div className="flex-1 p-4 space-y-6">
               {/* Navigation Links */}
-              <div className="space-y-2 mb-6">
-                <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
-                  Navigation
-                </h3>
+              <div className="space-y-1">
                 {navItems.map((item) => (
                   <Link
                     key={item.name}
                     to={item.path}
-                    className={`flex items-center rounded-lg px-3 py-3 text-base font-medium transition-all duration-200 ${
+                    className={`flex items-center px-3 py-3 text-base font-medium rounded-lg transition-colors duration-200 ${
                       isActivePath(item.path)
-                        ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300"
-                        : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
+                        ? "bg-[#27bbd2]/10 text-[#27bbd2]"
+                        : "hover:bg-gray-100/50 dark:hover:bg-white/5"
                     }`}
+                    style={{ 
+                      color: isActivePath(item.path) ? '#27bbd2' : 'var(--cn-text-2)' 
+                    }}
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     {item.name}
@@ -314,103 +314,69 @@ const Navbar = () => {
                 ))}
               </div>
 
-              {/* Settings */}
-              <div className="space-y-2 mb-6">
-                <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
-                  Settings
-                </h3>
-                <button
-                  onClick={toggleDarkMode}
-                  className="flex w-full items-center rounded-lg px-3 py-3 text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white transition-all duration-200"
-                >
-                  {darkMode ? (
-                    <>
-                      <Sun className="mr-3 h-5 w-5" />
-                      Light mode
-                    </>
-                  ) : (
-                    <>
-                      <Moon className="mr-3 h-5 w-5" />
-                      Dark mode
-                    </>
-                  )}
-                </button>
-              </div>
-
-              {/* User Section */}
+              {/* User Section (if logged in) */}
               {user && (
-                <div className="space-y-2">
-                  <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
-                    Account
-                  </h3>
-                  <div className="flex items-center p-3 rounded-lg bg-gray-50 dark:bg-gray-800/50">
+                <div className="pt-4 border-t" style={{ borderColor: 'var(--cn-border)' }}>
+                  <div className="flex items-center p-3 rounded-lg mb-3" style={{ backgroundColor: 'var(--cn-surface-hover)' }}>
                     <Avatar className="h-10 w-10">
                       <AvatarImage
                         src={user?.profile?.profilePhoto}
                         alt={user?.fullname}
                       />
-                      <AvatarFallback className="bg-linear-to-br from-[#27bbd2] to-[#1fa8be] text-white">
+                      <AvatarFallback className="bg-[#27bbd2] text-white">
                         {user?.fullname?.charAt(0)?.toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
                     <div className="ml-3 flex-1 min-w-0">
-                      <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                      <p className="text-sm font-medium truncate" style={{ color: 'var(--cn-text-1)' }}>
                         {user?.fullname}
                       </p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                      <p className="text-xs truncate" style={{ color: 'var(--cn-text-3)' }}>
                         {user?.email}
                       </p>
                     </div>
                   </div>
                   
-                  {user.role === "student" && (
-                    <>
-                      <Link
-                        to="/profile"
-                        className="flex items-center rounded-lg px-3 py-3 text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white transition-all duration-200"
-                        onClick={() => setMobileMenuOpen(false)}
-                      >
-                        <User className="mr-3 h-5 w-5" />
-                        View Profile
-                      </Link>
+                  <div className="space-y-1">
+                    <Link
+                      to="/profile"
+                      className="flex items-center px-3 py-3 text-base font-medium rounded-lg transition-colors duration-200 hover:bg-gray-100/50 dark:hover:bg-white/5"
+                      style={{ color: 'var(--cn-text-2)' }}
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <User className="mr-3 h-5 w-5" />
+                      Profile
+                    </Link>
+                    
+                    {user.role === "student" && (
                       <Link
                         to="/saved-jobs"
-                        className="flex items-center rounded-lg px-3 py-3 text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white transition-all duration-200"
+                        className="flex items-center px-3 py-3 text-base font-medium rounded-lg transition-colors duration-200 hover:bg-gray-100/50 dark:hover:bg-white/5"
+                        style={{ color: 'var(--cn-text-2)' }}
                         onClick={() => setMobileMenuOpen(false)}
                       >
                         <BookmarkIcon className="mr-3 h-5 w-5" />
                         Saved Jobs
                       </Link>
-                    </>
-                  )}
-                  
-                  {user.role === "recruiter" && (
-                    <Link
-                      to="/admin/companies"
-                      className="flex items-center rounded-lg px-3 py-3 text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white transition-all duration-200"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      <Building2 className="mr-3 h-5 w-5" />
-                      Manage Companies
-                    </Link>
-                  )}
+                    )}
+                  </div>
                 </div>
               )}
             </div>
 
             {/* Drawer Footer */}
-            <div className="border-t border-gray-100 dark:border-gray-800 p-4">
+            <div className="p-4 border-t" style={{ borderColor: 'var(--cn-border)' }}>
               {!user ? (
                 <div className="space-y-3">
                   <Link to="/login" onClick={() => setMobileMenuOpen(false)}>
-                    <Button variant="outline" className="w-full rounded-lg transition-all duration-200">
+                    <button className="w-full px-4 py-3 text-sm font-medium rounded-lg border transition-colors duration-200" style={{ color: 'var(--cn-text-2)', borderColor: 'var(--cn-border)' }}>
                       Sign in
-                    </Button>
+                    </button>
                   </Link>
                   <Link to="/signup" onClick={() => setMobileMenuOpen(false)}>
-                    <Button className="w-full rounded-lg bg-linear-to-r from-[#27bbd2] to-[#1fa8be] hover:from-[#1fa8be] hover:to-[#27bbd2] transition-all duration-200">
+                    <button className="w-full px-4 py-3 text-sm font-medium text-white bg-[#27bbd2] rounded-lg hover:bg-[#1fa8be] transition-colors duration-200">
                       Get started
-                    </Button>
+                    </button>
                   </Link>
                 </div>
               ) : (
@@ -419,7 +385,7 @@ const Navbar = () => {
                     logoutHandler();
                     setMobileMenuOpen(false);
                   }}
-                  className="flex w-full items-center justify-center rounded-lg px-4 py-3 text-base font-medium text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20 transition-all duration-200 border border-red-200 dark:border-red-800"
+                  className="flex w-full items-center justify-center px-4 py-3 text-base font-medium text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20 rounded-lg transition-colors duration-200 border border-red-200 dark:border-red-800"
                 >
                   <LogOut className="mr-2 h-5 w-5" />
                   Sign out

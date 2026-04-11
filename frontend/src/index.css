@@ -44,8 +44,8 @@
     --cn-input-bg:      #ffffff;
     --cn-input-focus:   #fafbff;
     --cn-input-border:  #e8edf4;
-    --cn-nav-bg:        rgba(255,255,255,0.94);
-    --cn-nav-border:    rgba(39,187,210,0.18);
+    --cn-nav-bg:        rgba(255,255,255,0.95);
+    --cn-nav-border:    rgba(226,232,240,0.8);
     --cn-card:          rgba(255,255,255,0.75);
     --cn-card-solid:    #ffffff;
     --cn-card-shadow:   0 4px 24px rgba(39,187,210,0.07);
@@ -148,8 +148,8 @@
     --cn-input-bg:      #1e293b;
     --cn-input-focus:   #1e293b;
     --cn-input-border:  #334155;
-    --cn-nav-bg:        rgba(8,14,26,0.95);
-    --cn-nav-border:    rgba(39,187,210,0.12);
+    --cn-nav-bg:        rgba(15,23,42,0.95);
+    --cn-nav-border:    rgba(71,85,105,0.3);
     --cn-card:          rgba(15,23,42,0.8);
     --cn-card-solid:    #0f172a;
     --cn-card-shadow:   0 4px 24px rgba(0,0,0,0.4);

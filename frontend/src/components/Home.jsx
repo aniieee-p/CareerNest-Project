@@ -152,11 +152,12 @@ const Home = () => {
   }, [user, navigate]);
 
   return (
-    <div className="relative" style={{ backgroundColor: "var(--cn-page)",
+    <div className="relative min-h-screen flex flex-col" style={{ backgroundColor: "var(--cn-page)",
       backgroundImage: "radial-gradient(ellipse 80% 50% at 20% -10%, rgba(39,187,210,0.06) 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 80% 110%, rgba(99,102,241,0.06) 0%, transparent 60%)" }}>
       <Navbar />
-      <HeroSection />
-      <Ticker />
+      <div className="flex-1">
+        <HeroSection />
+        <Ticker />
 
       {/* ── Features ── */}
       <section className="max-w-7xl mx-auto px-4 sm:px-8 py-16 sm:py-28">
@@ -429,6 +430,7 @@ const Home = () => {
           </motion.div>
         </FadeUp>
       </section>
+      </div>
 
       <Footer />
       <AIChatButton />

@@ -31,10 +31,12 @@ import NotFound from "./components/NotFound";
 
 function AppShell() {
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
       <PulseIQRouteTracker />
-      <Outlet />
-    </>
+      <div className="flex-1">
+        <Outlet />
+      </div>
+    </div>
   );
 }
 

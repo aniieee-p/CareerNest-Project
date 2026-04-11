@@ -34,9 +34,9 @@ const Browse = () => {
         : allJobs;
 
     return (
-        <div className="min-h-screen" style={{ background: "var(--cn-page)" }}>
+        <div className="min-h-screen flex flex-col" style={{ background: "var(--cn-page-alt)" }}>
             <Navbar />
-            <div className='max-w-7xl mx-auto px-4 py-8 sm:py-12'>
+            <div className='flex-1 max-w-7xl mx-auto px-4 pt-20 pb-8 sm:pb-12 w-full'>
                 <h1 className='font-bold text-lg sm:text-xl mb-6' style={{ color: "var(--cn-text-1)" }}>
                     {searchedQuery ? `Results for "${searchedQuery}"` : "All Jobs"} ({filteredJobs.length})
                 </h1>

@@ -156,7 +156,7 @@ const Jobs = () => {
   }, 0);
 
   return (
-    <div className="min-h-screen" style={{ background: "var(--cn-page-alt)" }}>
+    <div className="min-h-screen flex flex-col" style={{ background: "var(--cn-page-alt)" }}>
       <Navbar />
 
       {/* ── Hero bar ── */}
@@ -218,7 +218,7 @@ const Jobs = () => {
       </div>
 
       {/* ── Content ── */}
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="flex-1 max-w-7xl mx-auto px-4 py-8 w-full">
 
         {/* ── Active Filters ── */}
         <AnimatePresence>
