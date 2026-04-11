@@ -65,7 +65,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
   const [skillTags, setSkillTags] = useState(user?.profile?.skills || []);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [input, setInput] = useState(buildInputState(user));
-  const [photoPreview, setPhotoPreview] = useState(user?.profile?.profilephoto || '');
+  const [photoPreview, setPhotoPreview] = useState(user?.profile?.profilePhoto || '');
 
   const skillRef = useRef(null);
   const photoInputRef = useRef(null);
@@ -100,7 +100,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
 
       if (res.data.success) {
         dispatch(setUser(res.data.user));
-        setPhotoPreview(res.data.user?.profile?.profilephoto || '');
+        setPhotoPreview(res.data.user?.profile?.profilePhoto || '');
         setInput((prev) => ({
           ...prev,
           file: includeAllFields ? null : prev.file,
@@ -126,7 +126,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
     setSkillInput('');
     setSkillTags(user?.profile?.skills || []);
     setShowSuggestions(false);
-    setPhotoPreview(user?.profile?.profilephoto || '');
+    setPhotoPreview(user?.profile?.profilePhoto || '');
   }, [user]);
 
   React.useEffect(() => {
@@ -226,7 +226,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
   const filteredSuggestions = skillInput.trim()
     ? profileSuggestions.filter((skill) => skill.toLowerCase().includes(skillInput.toLowerCase()))
     : profileSuggestions.slice(0, 8);
-  const hasPhoto = Boolean(photoPreview || user?.profile?.profilephoto || input.photo);
+  const hasPhoto = Boolean(photoPreview || user?.profile?.profilePhoto || input.photo);
   const hasResume = Boolean(input.file || user?.profile?.resume);
   const resumeLabel = input.file?.name || user?.profile?.resumeOriginalName || 'Resume uploaded';
 
@@ -242,7 +242,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
       successMessage: 'Profile photo removed successfully.',
       closeDialog: false,
     }).catch(() => {
-      setPhotoPreview(user?.profile?.profilephoto || '');
+      setPhotoPreview(user?.profile?.profilePhoto || '');
       setInput((prev) => ({ ...prev, removePhoto: false }));
     });
   };

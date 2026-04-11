@@ -82,7 +82,7 @@ const CandidateSheet = ({ applicantId, jobRequirements = [], onClose }) => {
                 {/* Avatar + name */}
                 <div className="flex items-center gap-4">
                   <Avatar className="h-16 w-16 border-2" style={{ borderColor: "var(--cn-border)" }}>
-                    <AvatarImage src={profile?.profile?.profilephoto} />
+                    <AvatarImage src={profile?.profile?.profilePhoto} />
                     <AvatarFallback className="text-xl font-extrabold text-white"
                       style={{ background: `linear-gradient(135deg,${g1},${g2})` }}>
                       {profile?.fullname?.charAt(0)?.toUpperCase()}

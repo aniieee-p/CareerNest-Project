@@ -57,7 +57,7 @@ const PublicProfile = () => {
                             style={{ background: "var(--cn-card)", borderColor: "var(--cn-border)", boxShadow: "var(--cn-card-shadow)" }}>
                             <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
                                 <Avatar className="h-16 w-16 sm:h-20 sm:w-20 border-4 shadow-lg shrink-0" style={{ borderColor: "var(--cn-surface)" }}>
-                                    <AvatarImage src={profile?.profile?.profilephoto} />
+                                    <AvatarImage src={profile?.profile?.profilePhoto} />
                                     <AvatarFallback className="text-xl sm:text-2xl font-extrabold text-white"
                                         style={{ background: "linear-gradient(135deg,#27bbd2,#6366f1)" }}>
                                         {profile?.fullname?.charAt(0)?.toUpperCase()}

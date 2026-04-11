@@ -156,7 +156,7 @@ const ApplicantsTable = ({ jobRequirements = [] }) => {
                       <div className="flex items-center gap-2 sm:gap-3">
                         <Avatar className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl border-2 shrink-0"
                           style={{ borderColor: "var(--cn-surface)", boxShadow: "0 2px 8px rgba(15,23,42,0.1)" }}>
-                          <AvatarImage src={item?.applicant?.profile?.profilephoto} className="object-cover rounded-xl" />
+                          <AvatarImage src={item?.applicant?.profile?.profilePhoto} className="object-cover rounded-xl" />
                           <AvatarFallback className="rounded-xl text-white text-xs font-extrabold"
                             style={{ background: `linear-gradient(135deg,${g1},${g2})` }}>
                             {name?.[0]?.toUpperCase()}

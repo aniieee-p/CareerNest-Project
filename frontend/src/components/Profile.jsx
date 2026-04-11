@@ -35,7 +35,7 @@ const Profile = () => {
 
   const profileComplete = !!(user?.profile?.bio && user?.profile?.skills?.length && user?.profile?.resume);
   const completionChecks = [
-    !!user?.profile?.profilephoto,
+    !!user?.profile?.profilePhoto,
     !!user?.profile?.bio,
     !!user?.profile?.skills?.length,
     !!user?.profile?.resume,
@@ -107,7 +107,7 @@ const Profile = () => {
               <div className="relative">
                 <Avatar className="h-20 w-20">
                   <AvatarImage
-                    src={user?.profile?.profilephoto}
+                    src={user?.profile?.profilePhoto}
                     alt={user?.fullname}
                   />
                   <AvatarFallback className="bg-[#27bbd2] text-white text-xl">
