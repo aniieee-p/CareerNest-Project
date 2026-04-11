@@ -20,6 +20,7 @@ import AdminJobs from "./components/admin/AdminJobs";
 import PostJob from "./components/admin/PostJob";
 import Applicants from "./components/admin/Applicants";
 import ApplicantsTable from "./components/admin/ApplicantsTable";
+import RecruiterProfile from "./components/admin/RecruiterProfile";
 import CareerAdvice from "./components/CareerAdvice";
 import SavedJobs from "./components/SavedJobs";
 import RecruitmentSolutions from "./components/RecruitmentSolutions";
@@ -87,6 +88,10 @@ const appRouter = createBrowserRouter([
       {
         path: 'admin/companies',
         element: <ProtectedRoute><Companies /></ProtectedRoute>
+      },
+      {
+        path: 'admin/profile',
+        element: <ProtectedRoute><RecruiterProfile /></ProtectedRoute>
       },
       {
         path: 'admin/companies/create',

@@ -211,7 +211,7 @@ const Navbar = () => {
                     {/* Menu Items */}
                     <div className="py-1">
                       <button
-                        onClick={() => navigate("/profile")}
+                        onClick={() => navigate(user.role === "recruiter" ? "/admin/profile" : "/profile")}
                         className="flex w-full items-center px-3 py-2 text-sm transition-colors duration-200 hover:bg-gray-100/50 dark:hover:bg-white/5"
                         style={{ color: 'var(--cn-text-2)' }}
                       >
@@ -339,7 +339,7 @@ const Navbar = () => {
                   
                   <div className="space-y-1">
                     <Link
-                      to="/profile"
+                      to={user.role === "recruiter" ? "/admin/profile" : "/profile"}
                       className="flex items-center px-3 py-3 text-base font-medium rounded-lg transition-colors duration-200 hover:bg-gray-100/50 dark:hover:bg-white/5"
                       style={{ color: 'var(--cn-text-2)' }}
                       onClick={() => setMobileMenuOpen(false)}
