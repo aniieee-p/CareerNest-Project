@@ -94,12 +94,15 @@ const Navbar = () => {
           
           {/* Left: Logo */}
           <div className="flex items-center">
-            <Link to="/" className="flex items-center space-x-2 group">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#27bbd2] transition-transform duration-200 group-hover:scale-105">
-                <span className="text-sm font-bold text-white">CN</span>
-              </div>
-              <span className="text-xl font-semibold text-[#27bbd2] hidden sm:block">
-                CareerNest
+            <Link to="/" className="flex items-center space-x-3 group">
+              <img 
+                src="/careernest-favicon-glass.svg" 
+                alt="CareerNest Logo" 
+                className="h-8 w-8 transition-transform duration-200 group-hover:scale-105"
+              />
+              <span className="text-xl font-semibold hidden sm:block">
+                <span style={{ color: 'var(--cn-text-1)' }}>Career</span>
+                <span className="text-[#27bbd2]">Nest</span>
               </span>
             </Link>
           </div>
