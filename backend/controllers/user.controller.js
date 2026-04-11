@@ -65,8 +65,8 @@ const syncGoogleIdentity = async (user, payload) => {
   user.googleId = payload.sub;
   user.profile = user.profile || {};
 
-  if (!user.profile.profilephoto && payload.picture) {
-    user.profile.profilephoto = payload.picture;
+  if (!user.profile.profilePhoto && payload.picture) {
+    user.profile.profilePhoto = payload.picture;
   }
 
   user.authProvider = user.password ? "hybrid" : "google";
@@ -113,7 +113,7 @@ export const register = async (req, res) => {
       role,
       authProvider: "local",
       profile: {
-        profilephoto: profilePhotoUrl,
+        profilePhoto: profilePhotoUrl,
       },
     });
 
@@ -264,7 +264,7 @@ export const googleAuth = async (req, res) => {
       authProvider: hashedPassword ? "hybrid" : "google",
       googleId: payload.sub,
       profile: {
-        profilephoto: payload.picture || "",
+        profilePhoto: payload.picture || "",
       },
     });
 
@@ -349,13 +349,13 @@ export const updateProfile = async (req, res) => {
     }
 
     if (removePhoto === "true" && !photoFile) {
-      user.profile.profilephoto = "";
+      user.profile.profilePhoto = "";
     }
 
     if (photoFile) {
       const fileUri = getDataUri(photoFile);
       const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
-      user.profile.profilephoto = cloudResponse.secure_url;
+      user.profile.profilePhoto = cloudResponse.secure_url;
     }
 
     await user.save();
