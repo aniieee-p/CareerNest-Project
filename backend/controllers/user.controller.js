@@ -314,7 +314,7 @@ export const logout = async (req, res) => {
 // ================= UPDATE PROFILE =================
 export const updateProfile = async (req, res) => {
   try {
-    const { fullname, email, phonenumber, bio, skills } = req.body;
+    const { fullname, email, phonenumber, bio, skills, removePhoto } = req.body;
 
     const resumeFile = req.files?.file?.[0];
     const photoFile = req.files?.photo?.[0];
@@ -341,6 +341,10 @@ export const updateProfile = async (req, res) => {
       });
       user.profile.resume = cloudResponse.secure_url;
       user.profile.resumeOriginalName = resumeFile.originalname;
+    }
+
+    if (removePhoto === "true" && !photoFile) {
+      user.profile.profilephoto = "";
     }
 
     if (photoFile) {

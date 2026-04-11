@@ -100,6 +100,7 @@ const buildInputState = (user) => ({
   bio: user?.profile?.bio || '',
   file: null,
   photo: null,
+  removePhoto: false,
 });
 
 const UpdateProfileDialog = ({ open, setOpen }) => {
@@ -190,6 +191,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
     setCrop({ x: 0, y: 0 });
     setZoom(1.2);
     setCroppedAreaPixels(null);
+    setInput((prev) => ({ ...prev, photo: null, removePhoto: false }));
     e.target.value = '';
   };
 
@@ -213,7 +215,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
       previewObjectUrlRef.current = previewUrl;
       photoFileRef.current = croppedFile;
 
-      setInput((prev) => ({ ...prev, photo: croppedFile }));
+      setInput((prev) => ({ ...prev, photo: croppedFile, removePhoto: false }));
       setPhotoPreview(previewUrl);
       resetCropState();
       toast.success('Photo cropped successfully.');
@@ -263,6 +265,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
     formData.append('phonenumber', input.phoneNumber);
     formData.append('bio', input.bio);
     formData.append('skills', skillTags.join(','));
+    formData.append('removePhoto', String(input.removePhoto));
 
     if (input.file) formData.append('file', input.file);
     if (photoFileRef.current) formData.append('photo', photoFileRef.current);
@@ -293,16 +296,22 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
   const filteredSuggestions = skillInput.trim()
     ? profileSuggestions.filter((skill) => skill.toLowerCase().includes(skillInput.toLowerCase()))
     : profileSuggestions.slice(0, 8);
+  const hasPhoto = Boolean(photoPreview || user?.profile?.profilephoto || photoFileRef.current || input.photo);
+  const handleRemovePhoto = () => {
+    revokeObjectUrl(previewObjectUrlRef.current);
+    previewObjectUrlRef.current = null;
+    photoFileRef.current = null;
+    resetCropState();
+    setPhotoPreview('');
+    setInput((prev) => ({ ...prev, photo: null, removePhoto: true }));
+    toast.success('Profile photo will be removed when you update.');
+  };
 
   return (
     <div>
       {cropSrc && (
         <div className="fixed inset-0 z-100 flex flex-col overflow-hidden" style={{ background: 'rgba(0,0,0,0.95)' }}>
-          <div
-            className="relative w-full"
-            style={{ height: 'calc(100vh - 140px)' }}
-            onMouseDown={(e) => e.preventDefault()}
-          >
+          <div className="relative w-full" style={{ height: 'calc(100vh - 140px)' }}>
             <Cropper
               image={cropSrc}
               crop={crop}
@@ -319,8 +328,8 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
               onCropComplete={onCropComplete}
               onMediaLoaded={({ height, naturalHeight, naturalWidth }) => {
                 const isPortrait = naturalHeight > naturalWidth;
-                setZoom(isPortrait ? 1.35 : 1.1);
-                setCrop({ x: 0, y: isPortrait ? -Math.min(height * 0.18, 140) : 0 });
+                setZoom(isPortrait ? 1.1 : 1);
+                setCrop({ x: 0, y: isPortrait ? -Math.min(height * 0.08, 60) : 0 });
               }}
               style={{
                 containerStyle: { width: '100%', height: '100%', background: '#000' },
@@ -410,6 +419,15 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
                 <span className="text-xs" style={{ color: 'var(--cn-text-3)' }}>
                   Click photo to change
                 </span>
+                {hasPhoto && (
+                  <button
+                    type="button"
+                    onClick={handleRemovePhoto}
+                    className="text-xs font-medium text-rose-500 hover:text-rose-600"
+                  >
+                    Remove photo
+                  </button>
+                )}
               </div>
 
               {[
