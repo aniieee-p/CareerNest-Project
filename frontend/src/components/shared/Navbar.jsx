@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { LogOut, User, Briefcase, BookmarkIcon, Building2, Menu, X } from "lucide-react";
+import { LogOut, User, Briefcase, BookmarkIcon, Building2, Menu, X, Moon, Sun } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
@@ -15,6 +15,28 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
+
+  // Initialize dark mode from localStorage
+  useEffect(() => {
+    const savedDarkMode = localStorage.getItem('darkMode') === 'true';
+    setDarkMode(savedDarkMode);
+    if (savedDarkMode) {
+      document.documentElement.classList.add('dark');
+    }
+  }, []);
+
+  // Toggle dark mode
+  const toggleDarkMode = () => {
+    const newDarkMode = !darkMode;
+    setDarkMode(newDarkMode);
+    localStorage.setItem('darkMode', newDarkMode.toString());
+    if (newDarkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  };
 
   const logoutHandler = async () => {
     try {
@@ -36,9 +58,9 @@ const Navbar = () => {
         { name: "Jobs", path: "/admin/jobs" },
       ]
     : [
-        { name: "Home", path: "/" },
-        { name: "Jobs", path: "/jobs" },
+        { name: "Find Jobs", path: "/jobs" },
         { name: "Browse", path: "/browse" },
+        { name: "Advice", path: "/advice" },
       ];
 
   return (
@@ -67,6 +89,16 @@ const Navbar = () => {
               </li>
             ))}
           </ul>
+
+          {/* Dark Mode Toggle */}
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={toggleDarkMode}
+            className="p-2"
+          >
+            {darkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+          </Button>
 
           {!user ? (
             <div className="flex items-center gap-2">
@@ -179,6 +211,15 @@ const Navbar = () => {
                 {item.name}
               </Link>
             ))}
+            
+            {/* Mobile Dark Mode Toggle */}
+            <button
+              onClick={toggleDarkMode}
+              className="flex items-center gap-2 px-3 py-2 text-gray-700 hover:text-[#27bbd2] transition-colors w-full"
+            >
+              {darkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+              {darkMode ? 'Light Mode' : 'Dark Mode'}
+            </button>
             
             {!user ? (
               <div className="flex flex-col gap-2 pt-2">
