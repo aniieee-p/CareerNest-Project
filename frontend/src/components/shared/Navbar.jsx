@@ -81,18 +81,21 @@ const Navbar = () => {
   };
 
   return (
-    <nav className={`sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-gray-100 dark:bg-gray-950/80 dark:border-gray-800 transition-shadow duration-300 ${
+    <nav className={`sticky top-0 z-50 w-full backdrop-blur-md border-b transition-shadow duration-300 ${
       scrolled ? 'shadow-sm' : ''
-    }`}>
+    }`} style={{ 
+      backgroundColor: 'var(--cn-nav-bg)', 
+      borderColor: 'var(--cn-nav-border)' 
+    }}>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <div className="flex items-center">
             <Link to="/" className="flex items-center space-x-2 group">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 transition-transform duration-200 group-hover:scale-105">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-linear-to-br from-[#27bbd2] to-[#1fa8be] transition-transform duration-200 group-hover:scale-105">
                 <span className="text-sm font-bold text-white">CN</span>
               </div>
-              <span className="text-xl font-semibold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+              <span className="text-xl font-semibold text-[#27bbd2]">
                 CareerNest
               </span>
             </Link>
@@ -108,9 +111,12 @@ const Navbar = () => {
                   to={item.path}
                   className={`relative px-4 py-2 text-sm font-medium rounded-full transition-all duration-200 ${
                     isActivePath(item.path)
-                      ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300"
-                      : "text-gray-600 hover:text-gray-900 hover:bg-gray-50 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-800/50"
+                      ? "bg-[#27bbd2]/20 text-[#27bbd2]"
+                      : "hover:bg-gray-100/10 dark:hover:bg-white/5"
                   }`}
+                  style={{ 
+                    color: isActivePath(item.path) ? '#27bbd2' : 'var(--cn-text-2)' 
+                  }}
                 >
                   {item.name}
                 </Link>
@@ -147,7 +153,7 @@ const Navbar = () => {
                   <Link to="/signup">
                     <Button 
                       size="sm"
-                      className="h-9 rounded-lg bg-gradient-to-r from-emerald-500 to-teal-600 px-4 text-white hover:from-emerald-600 hover:to-teal-700 transition-all duration-200 shadow-sm hover:shadow-md"
+                      className="h-9 rounded-lg bg-linear-to-r from-[#27bbd2] to-[#1fa8be] px-4 text-white hover:from-[#1fa8be] hover:to-[#27bbd2] transition-all duration-200 shadow-sm hover:shadow-md"
                     >
                       Get started
                     </Button>
@@ -174,7 +180,7 @@ const Navbar = () => {
                             src={user?.profile?.profilePhoto}
                             alt={user?.fullname}
                           />
-                          <AvatarFallback className="bg-gradient-to-br from-emerald-500 to-teal-600 text-xs text-white">
+                          <AvatarFallback className="bg-linear-to-br from-[#27bbd2] to-[#1fa8be] text-xs text-white">
                             {user?.fullname?.charAt(0)?.toUpperCase()}
                           </AvatarFallback>
                         </Avatar>
@@ -194,7 +200,7 @@ const Navbar = () => {
                               src={user?.profile?.profilePhoto}
                               alt={user?.fullname}
                             />
-                            <AvatarFallback className="bg-gradient-to-br from-emerald-500 to-teal-600 text-white text-sm">
+                            <AvatarFallback className="bg-linear-to-br from-[#27bbd2] to-[#1fa8be] text-white text-sm">
                               {user?.fullname?.charAt(0)?.toUpperCase()}
                             </AvatarFallback>
                           </Avatar>
@@ -263,12 +269,15 @@ const Navbar = () => {
         />
         
         {/* Drawer */}
-        <div className={`fixed right-0 top-0 h-full w-80 max-w-[85vw] bg-white/95 backdrop-blur-md border-l border-gray-100 dark:bg-gray-950/95 dark:border-gray-800 shadow-xl transform transition-transform duration-300 ease-out ${
+        <div className={`fixed right-0 top-0 h-full w-80 max-w-[85vw] backdrop-blur-md border-l shadow-xl transform transition-transform duration-300 ease-out ${
           mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
-        }`}>
+        }`} style={{ 
+          backgroundColor: 'var(--cn-mobile-drawer)', 
+          borderColor: 'var(--cn-border)' 
+        }}>
           {/* Drawer Header */}
-          <div className="flex items-center justify-between p-4 border-b border-gray-100 dark:border-gray-800">
-            <span className="text-lg font-semibold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+          <div className="flex items-center justify-between p-4 border-b" style={{ borderColor: 'var(--cn-border)' }}>
+            <span className="text-lg font-semibold text-[#27bbd2]">
               Menu
             </span>
             <Button
@@ -340,7 +349,7 @@ const Navbar = () => {
                         src={user?.profile?.profilePhoto}
                         alt={user?.fullname}
                       />
-                      <AvatarFallback className="bg-gradient-to-br from-emerald-500 to-teal-600 text-white">
+                      <AvatarFallback className="bg-linear-to-br from-[#27bbd2] to-[#1fa8be] text-white">
                         {user?.fullname?.charAt(0)?.toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
@@ -399,7 +408,7 @@ const Navbar = () => {
                     </Button>
                   </Link>
                   <Link to="/signup" onClick={() => setMobileMenuOpen(false)}>
-                    <Button className="w-full rounded-lg bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 transition-all duration-200">
+                    <Button className="w-full rounded-lg bg-linear-to-r from-[#27bbd2] to-[#1fa8be] hover:from-[#1fa8be] hover:to-[#27bbd2] transition-all duration-200">
                       Get started
                     </Button>
                   </Link>
