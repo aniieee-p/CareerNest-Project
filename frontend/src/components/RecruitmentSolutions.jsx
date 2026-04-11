@@ -1,7 +1,7 @@
 import React, { useRef, useCallback } from 'react'
 import Navbar from './shared/Navbar'
 import Footer from './shared/Footer'
-import { Building2, Users, BarChart2, CheckCircle } from 'lucide-react'
+import { Building2, Users, BarChart2, CheckCircle, Rocket, ArrowRight } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 
@@ -69,29 +69,79 @@ const FeatureCard = ({ icon: Icon, title, desc, index }) => {
 const RecruitmentSolutions = () => {
     const navigate = useNavigate()
     return (
-        <div style={{ background: "var(--cn-page)", minHeight: "100vh" }}>
+        <div style={{ background: "linear-gradient(160deg,var(--cn-page) 0%,var(--cn-page-alt) 60%,var(--cn-page) 100%)", minHeight: "100vh" }}>
             <Navbar />
-            <div className='max-w-4xl mx-auto px-4 py-12'>
-                <h1 className='text-2xl sm:text-4xl font-bold mb-2' style={{ color: "var(--cn-text-1)" }}>
-                    Recruitment <span className='text-[#27bbd2]'>Solutions</span>
-                </h1>
-                <p className='mb-8 sm:mb-10' style={{ color: "var(--cn-text-2)" }}>Everything you need to hire the right people, faster.</p>
+            <div className='max-w-6xl mx-auto px-4 sm:px-6 py-10'>
+
+                {/* ── Page header ── */}
+                <motion.div
+                    initial={{ opacity: 0, y: -18 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.45, ease: "easeOut" }}
+                    className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-10"
+                >
+                    <div className="flex items-center gap-3.5">
+                        <div className="w-11 h-11 rounded-2xl flex items-center justify-center shrink-0"
+                            style={{ background: "linear-gradient(135deg,#27bbd2,#6366f1)", boxShadow: "0 4px 14px rgba(39,187,210,0.35)" }}>
+                            <Rocket size={20} className="text-white" />
+                        </div>
+                        <div>
+                            <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight leading-none" style={{ color: "var(--cn-text-1)" }}>
+                                Recruitment Solutions
+                            </h1>
+                            <p className="text-xs mt-1" style={{ color: "var(--cn-text-3)" }}>Everything you need to hire the right people, faster</p>
+                        </div>
+                    </div>
+
+                    <motion.button
+                        whileHover={{ scale: 1.04, boxShadow: "0 10px 28px rgba(39,187,210,0.35)" }}
+                        whileTap={{ scale: 0.96 }}
+                        onClick={() => navigate('/admin/companies/create')}
+                        className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-white text-sm font-bold self-start sm:self-auto"
+                        style={{ background: "linear-gradient(135deg,#27bbd2,#6366f1)", boxShadow: "0 4px 14px rgba(39,187,210,0.25)" }}
+                    >
+                        <ArrowRight size={15} strokeWidth={2.8} />
+                        Get Started
+                    </motion.button>
+                </motion.div>
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-10 sm:mb-12'>
                     {features.map(({ icon, title, desc }, i) => (
-                        <FeatureCard key={title} icon={icon} title={title} desc={desc} index={i} />
+                        <motion.div
+                            key={title}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.4, delay: 0.08 + i * 0.08, ease: "easeOut" }}
+                        >
+                            <FeatureCard icon={icon} title={title} desc={desc} index={i} />
+                        </motion.div>
                     ))}
                 </div>
-                <div className='rounded-2xl p-5 sm:p-8 text-center' style={{ background: "rgba(39,187,210,0.08)", border: "1px solid rgba(39,187,210,0.2)" }}>
-                    <h2 className='text-2xl font-bold mb-2' style={{ color: "var(--cn-text-1)" }}>Ready to hire?</h2>
-                    <p className='mb-6 text-sm' style={{ color: "var(--cn-text-2)" }}>Register your company and start posting jobs today.</p>
-                    <button
+
+                {/* ── CTA card ── */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, delay: 0.32 }}
+                    className='rounded-2xl p-5 sm:p-8 text-center border'
+                    style={{ background: "var(--cn-table-bg)", borderColor: "var(--cn-table-border)", boxShadow: "var(--cn-card-shadow)" }}
+                >
+                    <div className="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-4"
+                        style={{ background: "linear-gradient(135deg,#27bbd2,#6366f1)", boxShadow: "0 4px 14px rgba(39,187,210,0.3)" }}>
+                        <Rocket size={20} className="text-white" />
+                    </div>
+                    <h2 className='text-xl font-extrabold mb-2 tracking-tight' style={{ color: "var(--cn-text-1)" }}>Ready to hire?</h2>
+                    <p className='mb-6 text-sm' style={{ color: "var(--cn-text-3)" }}>Register your company and start posting jobs today.</p>
+                    <motion.button
+                        whileHover={{ scale: 1.04, boxShadow: "0 10px 28px rgba(39,187,210,0.35)" }}
+                        whileTap={{ scale: 0.96 }}
                         onClick={() => navigate('/admin/companies/create')}
-                        className='text-white px-8 py-3 rounded-full font-semibold transition-colors'
-                        style={{ background: "linear-gradient(135deg,#27bbd2,#6366f1)" }}
+                        className='inline-flex items-center gap-2 text-white px-8 py-3 rounded-xl font-bold text-sm transition-colors'
+                        style={{ background: "linear-gradient(135deg,#27bbd2,#6366f1)", boxShadow: "0 4px 14px rgba(39,187,210,0.25)" }}
                     >
+                        <ArrowRight size={15} strokeWidth={2.8} />
                         Get Started
-                    </button>
-                </div>
+                    </motion.button>
+                </motion.div>
             </div>
             <Footer />
         </div>
