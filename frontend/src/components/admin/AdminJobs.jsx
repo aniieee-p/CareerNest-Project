@@ -7,6 +7,7 @@ import useGetAllAdminJobs from '@/hooks/useGetAllAdminJobs'
 import { setSearchJobByText } from '@/redux/jobSlice'
 import { Briefcase, Plus, Search, SlidersHorizontal, CheckCircle2, TrendingUp, Clock } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { SkeletonTableRow } from "../ui/skeleton"
 
 const SORT_OPTIONS = [
   { value: "newest", label: "Newest first" },
@@ -21,7 +22,7 @@ const AdminJobs = () => {
   const [filterOpen, setFilterOpen] = useState(false)
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { allAdminJobs = [] } = useSelector(s => s.job)
+  const { allAdminJobs = [], adminJobsLoading } = useSelector(s => s.job)
 
   useEffect(() => { dispatch(setSearchJobByText(input)) }, [input])
 
@@ -165,7 +166,15 @@ const AdminJobs = () => {
           transition={{ duration: 0.4, delay: 0.28 }}
           className="rounded-2xl border overflow-hidden"
           style={{ background: "var(--cn-table-bg)", borderColor: "var(--cn-table-border)", boxShadow: "var(--cn-card-shadow)" }}>
-          <AdminJobsTable sortOrder={sort} />
+          {adminJobsLoading ? (
+            <div className="p-6 space-y-4">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <SkeletonTableRow key={i} />
+              ))}
+            </div>
+          ) : (
+            <AdminJobsTable sortOrder={sort} />
+          )}
         </motion.div>
       </div>
     </div>

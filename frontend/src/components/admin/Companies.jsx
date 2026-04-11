@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setSearchCompanyByText } from '@/redux/companySlice'
 import { Building2, Plus, Search, SlidersHorizontal, TrendingUp, CheckCircle2, Clock, ArrowUpRight, BarChart2, Layers } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { SkeletonTableRow } from "../ui/skeleton"
 
 const SORT_OPTIONS = [
   { value: "newest", label: "Newest first" },
@@ -21,7 +22,7 @@ const Companies = () => {
   const [filterOpen, setFilterOpen] = useState(false)
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { companies = [] } = useSelector(s => s.company)
+  const { companies = [], loading } = useSelector(s => s.company)
 
   useEffect(() => { dispatch(setSearchCompanyByText(input)) }, [input])
 
@@ -258,7 +259,15 @@ const Companies = () => {
           className="rounded-2xl border overflow-hidden"
           style={{ background: "var(--cn-table-bg)", borderColor: "var(--cn-table-border)", boxShadow: "var(--cn-card-shadow)" }}
         >
-          <CompaniesTable sortOrder={sort} />
+          {loading ? (
+            <div className="p-6 space-y-4">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <SkeletonTableRow key={i} />
+              ))}
+            </div>
+          ) : (
+            <CompaniesTable sortOrder={sort} />
+          )}
         </motion.div>
 
       </div>

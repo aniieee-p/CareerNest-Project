@@ -1,4 +1,4 @@
-import { setAllJobs } from '@/redux/jobSlice'
+import { setAllJobs, setLoading } from '@/redux/jobSlice'
 import { JOB_API_END_POINT } from '@/utils/constant'
 import api from '@/utils/axiosInstance'
 import { useEffect } from 'react'
@@ -11,11 +11,15 @@ const useGetAllJobs = () => {
     useEffect(()=>{
         const fetchAllJobs = async () => {
             try {
+                dispatch(setLoading(true));
                 const res = await api.get(`${JOB_API_END_POINT}/get`);
                 if(res.data.success){
                     dispatch(setAllJobs(res.data.jobs));
                 }
-            } catch (error) {}
+            } catch (error) {
+            } finally {
+                dispatch(setLoading(false));
+            }
         }
         fetchAllJobs();
     },[]) // eslint-disable-line

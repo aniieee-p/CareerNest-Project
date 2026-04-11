@@ -5,10 +5,11 @@ import Job from "./Job";
 import { useSelector, useDispatch } from "react-redux";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, MapPin, Briefcase, SlidersHorizontal, X, Tag } from "lucide-react";
-import { setSearchedQuery, setAllJobs } from "@/redux/jobSlice";
+import { setSearchedQuery, setAllJobs, setLoading } from "@/redux/jobSlice";
 import Footer from "./shared/Footer";
 import api from "@/utils/axiosInstance";
 import { JOB_API_END_POINT } from "@/utils/constant";
+import { SkeletonJobCard } from "./ui/skeleton";
 
 const EMPTY_FILTERS = {
   location: null,
@@ -108,7 +109,7 @@ const applyFilters = (jobs, filters, query) => {
 };
 
 const Jobs = () => {
-  const { allJobs, searchedQuery } = useSelector((store) => store.job);
+  const { allJobs, searchedQuery, loading } = useSelector((store) => store.job);
   const dispatch = useDispatch();
 
   const [filters, setFilters]       = useState(EMPTY_FILTERS);
@@ -119,9 +120,12 @@ const Jobs = () => {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
+        dispatch(setLoading(true));
         const res = await api.get(`${JOB_API_END_POINT}/get`);
         if (res.data.success) dispatch(setAllJobs(res.data.jobs));
-      } catch { }
+      } catch { } finally {
+        dispatch(setLoading(false));
+      }
     };
     fetchJobs();
   }, [dispatch]);
@@ -362,7 +366,13 @@ const Jobs = () => {
               </div>
             </div>
 
-            {filterJobs.length === 0 ? (
+            {loading ? (
+              <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <SkeletonJobCard key={i} />
+                ))}
+              </div>
+            ) : filterJobs.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-24 text-center">
                 <div
                   className="h-20 w-20 rounded-2xl flex items-center justify-center mb-4"

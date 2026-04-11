@@ -4,9 +4,10 @@ import { useSelector } from "react-redux";
 import { motion, useInView } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
+import { SkeletonLatestJobs } from "./ui/skeleton";
 
 const LatestJobs = () => {
-  const { allJobs } = useSelector((store) => store.job);
+  const { allJobs, loading } = useSelector((store) => store.job);
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
 
@@ -35,7 +36,13 @@ const LatestJobs = () => {
         </Link>
       </div>
 
-      {allJobs.length === 0 ? (
+      {loading ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <SkeletonLatestJobs key={i} />
+          ))}
+        </div>
+      ) : allJobs.length === 0 ? (
         <p className="text-[#94a3b8] text-sm">No jobs available right now.</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">

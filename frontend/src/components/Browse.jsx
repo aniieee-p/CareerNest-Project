@@ -5,12 +5,13 @@ import Job from './Job';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSearchedQuery } from '@/redux/jobSlice';
 import useGetAllJobs from '@/hooks/useGetAllJobs';
+import { SkeletonJobListing } from "./ui/skeleton";
 
 // const randomJobs = [1, 2,45];
 
 const Browse = () => {
     useGetAllJobs();
-    const { allJobs, searchedQuery } = useSelector(store => store.job);
+    const { allJobs, searchedQuery, loading } = useSelector(store => store.job);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -40,9 +41,15 @@ const Browse = () => {
                     {searchedQuery ? `Results for "${searchedQuery}"` : "All Jobs"} ({filteredJobs.length})
                 </h1>
                 <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
-                    {filteredJobs.map((job) => (
-                        <Job key={job._id} job={job} />
-                    ))}
+                    {loading ? (
+                        Array.from({ length: 6 }).map((_, i) => (
+                            <SkeletonJobListing key={i} />
+                        ))
+                    ) : (
+                        filteredJobs.map((job) => (
+                            <Job key={job._id} job={job} />
+                        ))
+                    )}
                 </div>
             </div>
             <Footer />
