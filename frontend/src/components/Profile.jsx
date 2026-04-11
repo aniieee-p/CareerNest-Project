@@ -1,17 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
 import {
   Mail,
   Phone,
-  Pen,
+  Edit3,
   FileText,
-  Send,
-  Eye,
-  Briefcase,
-  Bookmark,
   Upload,
-  Sparkles,
   CheckCircle2,
+  User,
+  Briefcase,
 } from "lucide-react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -25,18 +21,7 @@ import Footer from "./shared/Footer";
 import Navbar from "./shared/Navbar";
 import UpdateProfileDialog from "./UpdateProfileDialog";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { Badge } from "./ui/badge";
-
-const FadeUp = ({ children, delay = 0, className = "" }) => (
-  <motion.div
-    className={className}
-    initial={{ opacity: 0, y: 24 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.45, delay }}
-  >
-    {children}
-  </motion.div>
-);
+import { Button } from "./ui/button";
 
 const Profile = () => {
   const { user } = useSelector((store) => store.auth ?? {});
@@ -48,7 +33,6 @@ const Profile = () => {
   const [open, setOpen] = useState(false);
   const [profileStats, setProfileStats] = useState({ profileViews: 0, jobMatches: 0 });
 
-  const isRecruiter = user?.role === "recruiter";
   const profileComplete = !!(user?.profile?.bio && user?.profile?.skills?.length && user?.profile?.resume);
   const completionChecks = [
     !!user?.profile?.profilephoto,
@@ -88,17 +72,11 @@ const Profile = () => {
     trackView();
   }, [user?._id]);
 
-  const stats = [
-    { icon: Send, label: "Applications", value: isRecruiter ? 0 : allAppliedJobs.length, color: "#27bbd2", bg: "rgba(39,187,210,0.12)" },
-    { icon: Eye, label: "Profile Views", value: profileStats.profileViews, color: "#6366f1", bg: "rgba(99,102,241,0.12)" },
-    { icon: Briefcase, label: "Job Matches", value: isRecruiter ? 0 : profileStats.jobMatches, color: "#f59e0b", bg: "rgba(245,158,11,0.12)" },
-    { icon: Bookmark, label: "Saved Jobs", value: savedJobs.length, color: "#10b981", bg: "rgba(16,185,129,0.12)" },
-  ];
-
   return (
-    <div className="min-h-screen" style={{ background: "var(--cn-profile-bg)" }}>
+    <div className="min-h-screen flex flex-col" style={{ background: "var(--cn-page-alt)" }}>
       <Navbar />
 
+      {/* Gradient Banner */}
       <div
         className="h-36 sm:h-44 md:h-52 relative overflow-hidden"
         style={{ background: "linear-gradient(135deg,#27bbd2 0%,#6366f1 60%,#8b5cf6 100%)" }}
@@ -117,308 +95,249 @@ const Profile = () => {
         />
       </div>
 
-      <div className="max-w-5xl mx-auto px-4 pb-16">
-        <FadeUp>
-          <div
-            className="relative -mt-16 sm:-mt-20 rounded-2xl p-5 sm:p-7 mb-5 flex flex-col sm:flex-row sm:items-end gap-5"
-            style={{
-              background: "var(--cn-card)",
-              backdropFilter: "blur(20px)",
-              border: "1px solid var(--cn-border)",
-              boxShadow: "0 8px 40px rgba(39,187,210,0.10), 0 2px 8px rgba(0,0,0,0.06)",
-            }}
-          >
-            <div className="relative shrink-0">
-              <div
-                className="absolute inset-0 rounded-full blur-xl opacity-60"
-                style={{ background: "linear-gradient(135deg,rgba(39,187,210,0.35),rgba(99,102,241,0.25))" }}
-              />
-              <Avatar
-                className="relative h-20 w-20 overflow-hidden rounded-full sm:h-24 sm:w-24 shadow-xl"
-                style={{ border: "4px solid var(--cn-surface)" }}
-              >
-                <AvatarImage
-                  src={user?.profile?.profilephoto}
-                  alt={user?.fullname}
-                  className="h-full w-full object-cover"
-                />
-                <AvatarFallback
-                  className="text-2xl sm:text-3xl font-extrabold text-white"
-                  style={{ background: "linear-gradient(135deg,#27bbd2,#6366f1)" }}
-                >
-                  {user?.fullname?.charAt(0)?.toUpperCase()}
-                </AvatarFallback>
-              </Avatar>
-              <span
-                className="absolute bottom-1 right-1 w-3.5 h-3.5 rounded-full border-2 bg-emerald-400"
-                style={{ borderColor: "var(--cn-surface)" }}
-              />
-            </div>
-
-            <div className="flex-1 min-w-0">
-              <div className="flex flex-wrap items-center gap-2 mb-1">
-                <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight" style={{ color: "var(--cn-text-1)" }}>
-                  {user?.fullname || "Your Name"}
-                </h1>
-                <Badge
-                  className="text-[11px] capitalize px-2.5 py-0.5 font-semibold"
-                  style={{ background: "rgba(39,187,210,0.12)", color: "#27bbd2", border: "1px solid rgba(39,187,210,0.25)" }}
-                >
-                  {user?.role}
-                </Badge>
-                {profileComplete ? (
-                  <span className="flex items-center gap-1 text-[11px] font-semibold text-emerald-500">
-                    <CheckCircle2 size={12} /> Complete
-                  </span>
-                ) : (
-                  <span
-                    className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full"
-                    style={{ background: "rgba(245,158,11,0.12)", color: "#f59e0b", border: "1px solid rgba(245,158,11,0.22)" }}
-                  >
-                    {profileCompletion}% complete
-                  </span>
-                )}
-              </div>
-
-              <p className="text-sm mb-3.5 max-w-2xl" style={{ color: "var(--cn-text-2)" }}>
-                {user?.profile?.bio || "No bio added yet - click Edit Profile to add one"}
-              </p>
-
-              <div className="flex flex-wrap items-center gap-2.5 text-xs">
-                <span
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full"
-                  style={{ color: "var(--cn-text-2)", background: "rgba(39,187,210,0.06)" }}
-                >
-                  <Mail size={11} />
-                  {user?.email}
-                </span>
-                {user?.phoneNumber && (
-                  <span
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-full"
-                    style={{ color: "var(--cn-text-2)", background: "rgba(99,102,241,0.06)" }}
-                  >
-                    <Phone size={11} />
-                    {user.phoneNumber}
-                  </span>
-                )}
-                <span
-                  className="px-3 py-1.5 rounded-full text-[11px] font-semibold"
-                  style={{ color: "#27bbd2", background: "rgba(39,187,210,0.1)" }}
-                >
-                  Career profile
-                </span>
-              </div>
-            </div>
-
-            <motion.button
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.97 }}
-              onClick={() => setOpen(true)}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold shrink-0 self-start sm:self-auto"
-              style={{ background: "linear-gradient(135deg,#27bbd2,#6366f1)", color: "#fff", boxShadow: "0 4px 14px rgba(39,187,210,0.3)" }}
-            >
-              <Pen size={13} /> Edit Profile
-            </motion.button>
-          </div>
-        </FadeUp>
-
-        <FadeUp delay={0.08}>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-5">
-            {stats.map(({ icon: Icon, label, value, color, bg }) => (
-              <motion.div
-                key={label}
-                whileHover={{ y: -3 }}
-                transition={{ type: "spring", stiffness: 300, damping: 22 }}
-                className="rounded-2xl p-4 flex items-center gap-3"
-                style={{ background: "var(--cn-card)", backdropFilter: "blur(12px)", border: "1px solid var(--cn-border)", boxShadow: "var(--cn-card-shadow)" }}
-              >
-                <div className="p-2.5 rounded-xl shrink-0" style={{ background: bg }}>
-                  <Icon size={17} style={{ color }} />
-                </div>
-                <div>
-                  <p className="text-xl font-extrabold leading-none mb-0.5" style={{ color: "var(--cn-text-1)" }}>
-                    {value}
-                  </p>
-                  <p className="text-[11px] font-medium" style={{ color: "var(--cn-text-3)" }}>
-                    {label}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </FadeUp>
-
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
-          <FadeUp delay={0.14} className="md:col-span-1">
-            <div className="space-y-4">
-              <div
-                className="rounded-2xl p-5"
-                style={{ background: "var(--cn-card)", backdropFilter: "blur(12px)", border: "1px solid var(--cn-border)", boxShadow: "var(--cn-card-shadow)" }}
-              >
-                <div className="flex items-center justify-between mb-3">
-                  <h2 className="text-sm font-bold" style={{ color: "var(--cn-text-1)" }}>
-                    Profile Strength
-                  </h2>
-                  <span className="text-xs font-semibold" style={{ color: profileCompletion >= 80 ? "#10b981" : "#27bbd2" }}>
-                    {profileCompletion}%
-                  </span>
-                </div>
-                <div className="h-2 rounded-full overflow-hidden mb-3" style={{ background: "rgba(15,23,42,0.08)" }}>
-                  <div
-                    className="h-full rounded-full transition-all duration-500"
-                    style={{ width: `${profileCompletion}%`, background: "linear-gradient(90deg,#27bbd2,#6366f1)" }}
+      <div className="flex-1 max-w-4xl mx-auto px-4 pt-4 pb-8 w-full">
+        {/* Profile Header Card */}
+        <div className="rounded-2xl p-6 mb-6 -mt-16 sm:-mt-20" style={{ 
+          background: "var(--cn-surface)", 
+          border: "1px solid var(--cn-border)",
+          boxShadow: "var(--cn-card-shadow)"
+        }}>
+          <div className="flex items-start justify-between mb-6">
+            <div className="flex items-center space-x-4">
+              <div className="relative">
+                <Avatar className="h-20 w-20">
+                  <AvatarImage
+                    src={user?.profile?.profilephoto}
+                    alt={user?.fullname}
                   />
-                </div>
-                <p className="text-xs leading-5" style={{ color: "var(--cn-text-3)" }}>
-                  Add a photo, bio, phone number, skills, and resume to make your profile more recruiter-ready.
+                  <AvatarFallback className="bg-[#27bbd2] text-white text-xl">
+                    {user?.fullname?.charAt(0)?.toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+                <span
+                  className="absolute bottom-1 right-1 w-3.5 h-3.5 rounded-full border-2 bg-emerald-400"
+                  style={{ borderColor: "var(--cn-surface)" }}
+                />
+              </div>
+              <div>
+                <h2 className="text-xl font-semibold mb-1" style={{ color: "var(--cn-text-1)" }}>
+                  {user?.fullname}
+                </h2>
+                <p className="text-sm mb-2" style={{ color: "var(--cn-text-3)" }}>
+                  Student
                 </p>
-              </div>
-
-              <div
-                className="rounded-2xl p-5"
-                style={{ background: "var(--cn-card)", backdropFilter: "blur(12px)", border: "1px solid var(--cn-border)", boxShadow: "var(--cn-card-shadow)" }}
-              >
-                <h2 className="text-sm font-bold mb-3" style={{ color: "var(--cn-text-1)" }}>
-                  Contact Info
-                </h2>
-                <div className="space-y-2">
-                  <div
-                    className="flex items-center gap-2.5 text-xs rounded-xl px-3 py-2.5"
-                    style={{ background: "rgba(39,187,210,0.06)", color: "var(--cn-text-2)" }}
-                  >
-                    <Mail size={12} className="text-[#27bbd2] shrink-0" />
-                    <span className="truncate">{user?.email || "-"}</span>
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center text-xs px-2 py-1 rounded-full" style={{ 
+                    background: "rgba(39,187,210,0.1)", 
+                    color: "#27bbd2" 
+                  }}>
+                    <User className="h-3 w-3 mr-1" />
+                    Student Account
                   </div>
-                  <div
-                    className="flex items-center gap-2.5 text-xs rounded-xl px-3 py-2.5"
-                    style={{ background: "rgba(99,102,241,0.06)", color: "var(--cn-text-2)" }}
-                  >
-                    <Phone size={12} className="text-[#6366f1] shrink-0" />
-                    <span>{user?.phoneNumber || "-"}</span>
-                  </div>
-                </div>
-              </div>
-
-              <div
-                className="rounded-2xl p-5"
-                style={{ background: "var(--cn-card)", backdropFilter: "blur(12px)", border: "1px solid var(--cn-border)", boxShadow: "var(--cn-card-shadow)" }}
-              >
-                <h2 className="text-sm font-bold mb-3" style={{ color: "var(--cn-text-1)" }}>
-                  Skills
-                </h2>
-                <div className="flex flex-wrap gap-1.5">
-                  {user?.profile?.skills?.length > 0 ? (
-                    user.profile.skills.map((skill, i) => (
-                      <span
-                        key={i}
-                        className="text-[11px] px-2.5 py-1 rounded-full font-semibold"
-                        style={{ background: "rgba(39,187,210,0.1)", color: "#27bbd2", border: "1px solid rgba(39,187,210,0.2)" }}
-                      >
-                        {skill}
-                      </span>
-                    ))
+                  {profileComplete ? (
+                    <span className="flex items-center gap-1 text-xs font-semibold text-emerald-500">
+                      <CheckCircle2 size={12} /> Complete
+                    </span>
                   ) : (
-                    <button
-                      onClick={() => setOpen(true)}
-                      className="w-full text-left rounded-xl border border-dashed px-4 py-4 transition-all"
-                      style={{ borderColor: "rgba(39,187,210,0.25)", background: "rgba(39,187,210,0.04)" }}
+                    <span
+                      className="text-xs font-semibold px-2 py-1 rounded-full"
+                      style={{ background: "rgba(245,158,11,0.12)", color: "#f59e0b" }}
                     >
-                      <p className="text-xs font-semibold text-[#27bbd2] mb-1">+ Add skills</p>
-                      <p className="text-[11px]" style={{ color: "var(--cn-text-3)" }}>
-                        Showcase your strengths so matching jobs feel more relevant.
-                      </p>
-                    </button>
+                      {profileCompletion}% complete
+                    </span>
                   )}
                 </div>
               </div>
-
-              <div
-                className="rounded-2xl p-5"
-                style={{ background: "var(--cn-card)", backdropFilter: "blur(12px)", border: "1px solid var(--cn-border)", boxShadow: "var(--cn-card-shadow)" }}
-              >
-                <h2 className="text-sm font-bold mb-3" style={{ color: "var(--cn-text-1)" }}>
-                  Resume
-                </h2>
-                {user?.profile?.resume ? (
-                  <a
-                    href={user.profile.resume}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex items-center justify-between gap-3 text-xs font-semibold px-3 py-3 rounded-xl hover:underline"
-                    style={{ background: "rgba(39,187,210,0.08)", border: "1px solid rgba(39,187,210,0.2)", color: "#27bbd2" }}
-                  >
-                    <span className="flex items-center gap-2 min-w-0">
-                      <FileText size={13} />
-                      <span className="truncate">{user.profile.resumeOriginalName || "View Resume"}</span>
-                    </span>
-                    <span
-                      className="text-[10px] px-2 py-1 rounded-full"
-                      style={{ background: "rgba(39,187,210,0.12)", color: "#27bbd2" }}
-                    >
-                      PDF
-                    </span>
-                  </a>
-                ) : (
-                  <div
-                    className="border-2 border-dashed rounded-xl p-4 text-center cursor-pointer transition-all"
-                    style={{ borderColor: "rgba(39,187,210,0.3)" }}
-                    onClick={() => setOpen(true)}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.borderColor = "#27bbd2";
-                      e.currentTarget.style.background = "rgba(39,187,210,0.04)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.borderColor = "rgba(39,187,210,0.3)";
-                      e.currentTarget.style.background = "transparent";
-                    }}
-                  >
-                    <Upload size={18} className="text-[#27bbd2] mx-auto mb-1.5" />
-                    <p className="text-xs font-semibold text-[#27bbd2]">Upload Resume</p>
-                    <p className="text-[10px] mt-0.5" style={{ color: "var(--cn-text-3)" }}>
-                      PDF plus AI parsed
-                    </p>
-                  </div>
-                )}
-              </div>
             </div>
-          </FadeUp>
-
-          <FadeUp delay={0.2} className="md:col-span-3">
-            <div
-              className="rounded-2xl p-5 sm:p-6"
-              style={{ background: "var(--cn-card)", backdropFilter: "blur(12px)", border: "1px solid var(--cn-border)", boxShadow: "var(--cn-card-shadow)" }}
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setOpen(true)}
+              className="flex items-center gap-2"
             >
-              <div className="flex items-center justify-between mb-5">
-                <div className="flex items-center gap-2">
-                  <div className="p-1.5 rounded-lg" style={{ background: "rgba(39,187,210,0.1)" }}>
-                    <Sparkles size={14} className="text-[#27bbd2]" />
-                  </div>
-                  <h2 className="font-bold" style={{ color: "var(--cn-text-1)" }}>
-                    {isRecruiter ? "Account Info" : "Recent Applications"}
-                  </h2>
+              <Edit3 className="h-4 w-4" />
+              Edit Profile
+            </Button>
+          </div>
+
+          {/* Profile Information */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-4">
+              <div>
+                <label className="flex items-center text-sm font-medium mb-2" style={{ color: "var(--cn-text-2)" }}>
+                  <User className="h-4 w-4 mr-2" />
+                  Full Name
+                </label>
+                <div className="p-3 rounded-lg" style={{ 
+                  background: "var(--cn-input-bg)", 
+                  border: "1px solid var(--cn-border-input)",
+                  color: "var(--cn-text-1)"
+                }}>
+                  {user?.fullname || 'Not provided'}
                 </div>
-                {!isRecruiter && allAppliedJobs.length > 0 && (
-                  <span
-                    className="text-xs px-2.5 py-1 rounded-full font-semibold"
-                    style={{ background: "rgba(39,187,210,0.1)", color: "#27bbd2", border: "1px solid rgba(39,187,210,0.2)" }}
-                  >
-                    {allAppliedJobs.length} total
-                  </span>
-                )}
               </div>
 
-              {isRecruiter ? (
-                <div
-                  className="rounded-xl p-4 text-sm"
-                  style={{ background: "rgba(99,102,241,0.06)", color: "var(--cn-text-2)", border: "1px solid rgba(99,102,241,0.15)" }}
-                >
-                  Manage your job postings and company profiles from the admin panel.
+              <div>
+                <label className="flex items-center text-sm font-medium mb-2" style={{ color: "var(--cn-text-2)" }}>
+                  <Mail className="h-4 w-4 mr-2" />
+                  Email Address
+                </label>
+                <div className="p-3 rounded-lg" style={{ 
+                  background: "var(--cn-input-bg)", 
+                  border: "1px solid var(--cn-border-input)",
+                  color: "var(--cn-text-1)"
+                }}>
+                  {user?.email || 'Not provided'}
                 </div>
-              ) : (
-                <AppliedJobTable />
-              )}
+              </div>
+
+              <div>
+                <label className="flex items-center text-sm font-medium mb-2" style={{ color: "var(--cn-text-2)" }}>
+                  <Phone className="h-4 w-4 mr-2" />
+                  Phone Number
+                </label>
+                <div className="p-3 rounded-lg" style={{ 
+                  background: "var(--cn-input-bg)", 
+                  border: "1px solid var(--cn-border-input)",
+                  color: "var(--cn-text-1)"
+                }}>
+                  {user?.phoneNumber || 'Not provided'}
+                </div>
+              </div>
             </div>
-          </FadeUp>
+
+            <div className="space-y-4">
+              <div>
+                <label className="text-sm font-medium mb-2 block" style={{ color: "var(--cn-text-2)" }}>
+                  Bio
+                </label>
+                <div className="p-3 rounded-lg min-h-[80px]" style={{ 
+                  background: "var(--cn-input-bg)", 
+                  border: "1px solid var(--cn-border-input)",
+                  color: "var(--cn-text-1)"
+                }}>
+                  {user?.profile?.bio || 'No bio provided'}
+                </div>
+              </div>
+
+              <div>
+                <label className="text-sm font-medium mb-2 block" style={{ color: "var(--cn-text-2)" }}>
+                  Skills
+                </label>
+                <div className="p-3 rounded-lg min-h-[60px]" style={{ 
+                  background: "var(--cn-input-bg)", 
+                  border: "1px solid var(--cn-border-input)",
+                  color: "var(--cn-text-1)"
+                }}>
+                  {user?.profile?.skills?.length > 0 ? (
+                    <div className="flex flex-wrap gap-1.5">
+                      {user.profile.skills.map((skill, i) => (
+                        <span
+                          key={i}
+                          className="text-xs px-2.5 py-1 rounded-full font-semibold"
+                          style={{ background: "rgba(39,187,210,0.1)", color: "#27bbd2", border: "1px solid rgba(39,187,210,0.2)" }}
+                        >
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
+                  ) : (
+                    <span style={{ color: "var(--cn-text-3)" }}>No skills added yet</span>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Profile Strength Card */}
+        <div className="rounded-2xl p-6 mb-6" style={{ 
+          background: "var(--cn-surface)", 
+          border: "1px solid var(--cn-border)",
+          boxShadow: "var(--cn-card-shadow)"
+        }}>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold" style={{ color: "var(--cn-text-1)" }}>
+              Profile Strength
+            </h3>
+            <span className="text-sm font-semibold" style={{ color: profileCompletion >= 80 ? "#10b981" : "#27bbd2" }}>
+              {profileCompletion}%
+            </span>
+          </div>
+          <div className="h-3 rounded-full overflow-hidden mb-3" style={{ background: "rgba(15,23,42,0.08)" }}>
+            <div
+              className="h-full rounded-full transition-all duration-500"
+              style={{ width: `${profileCompletion}%`, background: "linear-gradient(90deg,#27bbd2,#6366f1)" }}
+            />
+          </div>
+          <p className="text-sm" style={{ color: "var(--cn-text-3)" }}>
+            Add a photo, bio, phone number, skills, and resume to make your profile more recruiter-ready.
+          </p>
+          
+          {/* Resume Section */}
+          <div className="mt-4 pt-4" style={{ borderTop: "1px solid var(--cn-border)" }}>
+            <label className="flex items-center text-sm font-medium mb-2" style={{ color: "var(--cn-text-2)" }}>
+              <FileText className="h-4 w-4 mr-2" />
+              Resume
+            </label>
+            {user?.profile?.resume ? (
+              <a
+                href={user.profile.resume}
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center justify-between gap-3 text-sm font-semibold p-3 rounded-lg hover:underline"
+                style={{ background: "rgba(39,187,210,0.08)", border: "1px solid rgba(39,187,210,0.2)", color: "#27bbd2" }}
+              >
+                <span className="flex items-center gap-2 min-w-0">
+                  <FileText size={16} />
+                  <span className="truncate">{user.profile.resumeOriginalName || "View Resume"}</span>
+                </span>
+                <span
+                  className="text-xs px-2 py-1 rounded-full"
+                  style={{ background: "rgba(39,187,210,0.12)", color: "#27bbd2" }}
+                >
+                  PDF
+                </span>
+              </a>
+            ) : (
+              <div
+                className="border-2 border-dashed rounded-lg p-4 text-center cursor-pointer transition-all"
+                style={{ borderColor: "rgba(39,187,210,0.3)" }}
+                onClick={() => setOpen(true)}
+              >
+                <Upload size={20} className="text-[#27bbd2] mx-auto mb-2" />
+                <p className="text-sm font-semibold text-[#27bbd2]">Upload Resume</p>
+                <p className="text-xs mt-1" style={{ color: "var(--cn-text-3)" }}>
+                  PDF format recommended
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Recent Applications */}
+        <div className="rounded-2xl p-6" style={{ 
+          background: "var(--cn-surface)", 
+          border: "1px solid var(--cn-border)",
+          boxShadow: "var(--cn-card-shadow)"
+        }}>
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-2">
+              <Briefcase className="h-5 w-5 text-[#27bbd2]" />
+              <h3 className="text-lg font-semibold" style={{ color: "var(--cn-text-1)" }}>
+                Recent Applications
+              </h3>
+            </div>
+            {allAppliedJobs.length > 0 && (
+              <span
+                className="text-xs px-2.5 py-1 rounded-full font-semibold"
+                style={{ background: "rgba(39,187,210,0.1)", color: "#27bbd2", border: "1px solid rgba(39,187,210,0.2)" }}
+              >
+                {allAppliedJobs.length} total
+              </span>
+            )}
+          </div>
+          <AppliedJobTable />
         </div>
       </div>
 
