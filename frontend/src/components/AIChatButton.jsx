@@ -23,6 +23,12 @@ const AIChatButton = () => {
   const historyRef = useRef([]);
   const bottomRef = useRef(null);
   const inputRef = useRef(null);
+  
+  // Rate limiting
+  const lastRequestTime = useRef(0);
+  const requestCount = useRef(0);
+  const RATE_LIMIT_WINDOW = 60000; // 1 minute
+  const MAX_REQUESTS_PER_MINUTE = 10;
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -35,6 +41,25 @@ const AIChatButton = () => {
   const sendMessage = async (text) => {
     const msg = (text || input).trim();
     if (!msg) return;
+    
+    // Client-side rate limiting
+    const now = Date.now();
+    if (now - lastRequestTime.current > RATE_LIMIT_WINDOW) {
+      requestCount.current = 0;
+    }
+    
+    if (requestCount.current >= MAX_REQUESTS_PER_MINUTE) {
+      setMessages((prev) => [...prev, 
+        { from: "user", text: msg },
+        { from: "ai", text: "Please slow down a bit! You can send up to 10 messages per minute. Try again in a moment. ⏰" }
+      ]);
+      setInput("");
+      return;
+    }
+    
+    requestCount.current++;
+    lastRequestTime.current = now;
+    
     setMessages((prev) => [...prev, { from: "user", text: msg }]);
     setInput("");
     setTyping(true);
@@ -50,8 +75,17 @@ const AIChatButton = () => {
       const reply = data.reply || "Sorry, I couldn't get a response. Please try again.";
       historyRef.current = [...updatedHistory, { role: "assistant", content: reply }];
       setMessages((prev) => [...prev, { from: "ai", text: reply }]);
-    } catch {
-      const errMsg = "Oops! Something went wrong. Please try again.";
+    } catch (error) {
+      let errMsg = "Oops! Something went wrong. Please try again.";
+      
+      if (error.response?.status === 429) {
+        errMsg = "I'm getting a lot of requests right now. Please wait a minute and try again! 🕐";
+      } else if (error.response?.status === 403) {
+        errMsg = "There's an issue with the AI service. Please contact support if this persists.";
+      } else if (error.response?.data?.message) {
+        errMsg = error.response.data.message;
+      }
+      
       setMessages((prev) => [...prev, { from: "ai", text: errMsg }]);
     } finally {
       setTyping(false);

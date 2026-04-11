@@ -37,7 +37,27 @@ export const chat = async (req, res) => {
     return res.status(200).json({ success: true, reply });
   } catch (error) {
     console.error("Gemini chat error:", error.message);
-    return res.status(500).json({ success: false, message: "AI service error." });
+    
+    // Handle specific Gemini API errors
+    if (error.message.includes("429") || error.message.includes("quota") || error.message.includes("rate limit")) {
+      return res.status(429).json({ 
+        success: false, 
+        message: "Rate limit exceeded. Please wait a moment and try again.",
+        retryAfter: 60 // seconds
+      });
+    }
+    
+    if (error.message.includes("403") || error.message.includes("API key")) {
+      return res.status(403).json({ 
+        success: false, 
+        message: "API key issue. Please contact support." 
+      });
+    }
+    
+    return res.status(500).json({ 
+      success: false, 
+      message: "AI service temporarily unavailable. Please try again later." 
+    });
   }
 };
 
