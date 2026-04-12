@@ -74,7 +74,8 @@ export const getAllJobs = async (req, res) => {
             success: true,
         })
     } catch (error) {
-    console.error(error.message);        
+        console.error(error);
+        return res.status(500).json({ success: false, message: "Internal server error" });
     }
 }
 // student can apply for a job
@@ -94,8 +95,9 @@ export const getJobById = async (req, res) => {
             job,
             success: true
         });
-    }   catch (error) {
-        console.error(error.message);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ success: false, message: "Internal server error" });
     }
 }
 // how many jobs has been created by a admin
@@ -118,7 +120,8 @@ export const getAdminJobs = async (req, res) => {
         });  
 
     } catch (error) {
-        console.error(error.message);
+        console.error(error);
+        return res.status(500).json({ success: false, message: "Internal server error" });
     }
 
 }  
@@ -128,8 +131,6 @@ export const deleteJob = async (req, res) => {
     try {
         const jobId = req.params.id;
         const userId = req.id;
-
-        console.log("Delete job request:", { jobId, userId, role: req.role }); // Debug log
 
         // Validate jobId
         if (!jobId) {
@@ -148,8 +149,6 @@ export const deleteJob = async (req, res) => {
             });
         }
 
-        console.log("Job found:", { jobId: job._id, createdBy: job.created_by, userId }); // Debug log
-
         // Check if the logged-in recruiter owns this job
         if (job.created_by.toString() !== userId.toString()) {
             return res.status(403).json({
@@ -161,20 +160,13 @@ export const deleteJob = async (req, res) => {
         // Delete the job
         await Job.findByIdAndDelete(jobId);
 
-        console.log("Job deleted successfully:", jobId); // Debug log
-
         return res.status(200).json({
             message: "Job deleted successfully.",
             success: true
         });
 
     } catch (error) {
-        console.error("Delete job error:", error.message);
-        console.error("Full error:", error); // More detailed error logging
-        return res.status(500).json({ 
-            message: "Server error", 
-            success: false,
-            error: process.env.NODE_ENV === 'development' ? error.message : undefined
-        });
+        console.error(error);
+        return res.status(500).json({ success: false, message: "Internal server error" });
     }
 }
