@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { Avatar, AvatarImage, AvatarFallback } from '../ui/avatar'
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
-import { Edit2, Eye, MoreHorizontal, Briefcase, Calendar,
+import { Edit2, Eye, MoreHorizontal, Briefcase, Calendar, Trash2,
   ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
+import { toast } from 'sonner'
+import api from '../../utils/axiosInstance'
+import { JOB_API_END_POINT } from '../../utils/constant'
+import { removeJob } from '../../redux/jobSlice'
 
 const GRADIENTS = [
   ["#f59e0b","#f97316"], ["#6366f1","#8b5cf6"], ["#0ea5c9","#27bbd2"],
@@ -48,10 +52,32 @@ const TYPE_COLORS = {
 
 const AdminJobsTable = ({ sortOrder = "newest" }) => {
   const { allAdminJobs = [], searchJobByText } = useSelector(s => s.job)
+  const dispatch = useDispatch()
   const [rows,     setRows]     = useState([])
   const [page,     setPage]     = useState(1)
   const [pageSize, setPageSize] = useState(10)
+  const [deleteConfirm, setDeleteConfirm] = useState(null) // { jobId, jobTitle }
+  const [deleting, setDeleting] = useState(false)
   const navigate = useNavigate()
+
+  const handleDeleteJob = async (jobId) => {
+    if (deleting) return
+    
+    setDeleting(true)
+    try {
+      const response = await api.delete(`${JOB_API_END_POINT}/delete/${jobId}`)
+      
+      if (response.data.success) {
+        dispatch(removeJob(jobId))
+        toast.success('Job deleted successfully')
+        setDeleteConfirm(null)
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message || 'Failed to delete job')
+    } finally {
+      setDeleting(false)
+    }
+  }
 
   useEffect(() => {
     let list = allAdminJobs.filter(job => {
@@ -216,6 +242,16 @@ const AdminJobsTable = ({ sortOrder = "newest" }) => {
                             <Eye size={14} />
                           </motion.button>
                         </Tip>
+                        <Tip label="Delete">
+                          <motion.button whileHover={{ scale: 1.12 }} whileTap={{ scale: 0.88 }}
+                            onClick={() => setDeleteConfirm({ jobId: job._id, jobTitle: job.title })}
+                            className="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-150"
+                            style={{ color: "#94a3b8" }}
+                            onMouseEnter={e => { e.currentTarget.style.background = "rgba(239,68,68,0.1)"; e.currentTarget.style.color = "#ef4444" }}
+                            onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#94a3b8" }}>
+                            <Trash2 size={14} />
+                          </motion.button>
+                        </Tip>
                         <Popover>
                           <PopoverTrigger asChild>
                             <Tip label="More">
@@ -243,6 +279,13 @@ const AdminJobsTable = ({ sortOrder = "newest" }) => {
                               onMouseEnter={e => { e.currentTarget.style.background = "rgba(39,187,210,0.1)"; e.currentTarget.style.color = "#27bbd2"; }}
                               onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "var(--cn-text-2)"; }}>
                               <Eye size={13} /> View applicants
+                            </button>
+                            <button onClick={() => setDeleteConfirm({ jobId: job._id, jobTitle: job.title })}
+                              className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] transition-colors duration-150"
+                              style={{ color: "var(--cn-text-2)" }}
+                              onMouseEnter={e => { e.currentTarget.style.background = "rgba(239,68,68,0.1)"; e.currentTarget.style.color = "#ef4444"; }}
+                              onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "var(--cn-text-2)"; }}>
+                              <Trash2 size={13} /> Delete job
                             </button>
                           </PopoverContent>
                         </Popover>
@@ -291,6 +334,60 @@ const AdminJobsTable = ({ sortOrder = "newest" }) => {
           ))}
         </div>
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      {deleteConfirm && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            className="bg-white rounded-2xl p-6 max-w-md w-full mx-4"
+            style={{ background: "var(--cn-surface)", border: "1px solid var(--cn-border)" }}
+          >
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center">
+                <Trash2 size={20} className="text-red-600" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold" style={{ color: "var(--cn-text-1)" }}>
+                  Delete Job
+                </h3>
+                <p className="text-sm" style={{ color: "var(--cn-text-3)" }}>
+                  This action cannot be undone
+                </p>
+              </div>
+            </div>
+            
+            <p className="text-sm mb-6" style={{ color: "var(--cn-text-2)" }}>
+              Are you sure you want to delete <span className="font-semibold">"{deleteConfirm.jobTitle}"</span>? 
+              All applications and data associated with this job will be permanently removed.
+            </p>
+            
+            <div className="flex gap-3">
+              <button
+                onClick={() => setDeleteConfirm(null)}
+                disabled={deleting}
+                className="flex-1 px-4 py-2 rounded-lg border text-sm font-medium transition-colors"
+                style={{ 
+                  borderColor: "var(--cn-border)", 
+                  color: "var(--cn-text-2)",
+                  background: "var(--cn-surface)"
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => handleDeleteJob(deleteConfirm.jobId)}
+                disabled={deleting}
+                className="flex-1 px-4 py-2 rounded-lg text-sm font-medium text-white bg-red-600 hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                {deleting ? 'Deleting...' : 'Delete Job'}
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      )}
     </div>
   )
 }

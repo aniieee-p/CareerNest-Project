@@ -51,6 +51,11 @@ const jobSlice = createSlice({
         },
         setAdminJobsLoading:(state, action) => {
             state.adminJobsLoading = action.payload;
+        },
+        removeJob:(state, action) => {
+            const jobId = action.payload;
+            state.allAdminJobs = state.allAdminJobs.filter(job => job._id !== jobId);
+            state.allJobs = state.allJobs.filter(job => job._id !== jobId);
         }
     }
 });
@@ -65,5 +70,6 @@ export const {
     setSavedJobs,
     setLoading,
     setAdminJobsLoading,
+    removeJob,
 } = jobSlice.actions;
 export default jobSlice.reducer;
