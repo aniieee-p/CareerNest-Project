@@ -13,6 +13,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import useGetAppliedJobs from "@/hooks/useGetAppliedJobs";
+import useGetAllJobs from "@/hooks/useGetAllJobs";
 import api from "@/utils/axiosInstance";
 import { PROFILE_STATS_API, PROFILE_VIEW_API } from "@/utils/constant";
 
@@ -25,10 +26,14 @@ import { Button } from "./ui/button";
 
 const Profile = () => {
   const { user } = useSelector((store) => store.auth ?? {});
-  const { allAppliedJobs = [], savedJobs = [] } = useSelector((store) => store.job ?? {});
+  const { allAppliedJobs = [], savedJobs = [], allJobs = [] } = useSelector((store) => store.job ?? {});
+
+  console.log('Profile component loaded, user:', user);
+  console.log('Current URL:', window.location.href);
 
   const navigate = useNavigate();
   useGetAppliedJobs();
+  useGetAllJobs();
 
   const [open, setOpen] = useState(false);
   const [profileStats, setProfileStats] = useState({ profileViews: 0, jobMatches: 0 });
@@ -50,36 +55,68 @@ const Profile = () => {
   useEffect(() => {
     if (!user) return;
 
-    const fetchStats = async () => {
+    const fetchProfileStats = async () => {
       try {
-        const res = await api.get(PROFILE_STATS_API);
-        if (res.data.success) {
-          setProfileStats({
-            profileViews: res.data.profileViews ?? 0,
-            jobMatches: res.data.jobMatches ?? 0,
-          });
+        // Get current profile stats
+        const statsRes = await api.get(PROFILE_STATS_API);
+        if (statsRes.data.success) {
+          setProfileStats(prev => ({
+            ...prev,
+            profileViews: statsRes.data.profileViews ?? 0
+          }));
         }
-      } catch {}
+      } catch (error) {
+        console.log('Profile stats fetch failed:', error);
+      }
     };
 
-    const trackView = async () => {
-      try {
-        await api.post(`${PROFILE_VIEW_API}/${user._id}`, {});
-      } catch {}
+    const calculateJobMatches = () => {
+      console.log('=== JOB MATCHES CALCULATION DEBUG ===');
+      console.log('User skills from Redux:', user?.profile?.skills);
+      
+      const rawSkills = user?.profile?.skills || [];
+      // Filter out empty strings and whitespace-only strings
+      const userSkills = rawSkills.filter(skill => skill && skill.trim().length > 0);
+      
+      console.log('Filtered user skills:', userSkills);
+      console.log('User skills length after filtering:', userSkills.length);
+      console.log('All jobs count:', allJobs?.length);
+      
+      if (!userSkills.length || !allJobs?.length) {
+        console.log('No valid skills or no jobs - setting matches to 0');
+        setProfileStats(prev => ({ ...prev, jobMatches: 0 }));
+        return;
+      }
+      
+      const skills = userSkills.map(s => s.toLowerCase());
+      console.log('Lowercase skills:', skills);
+      
+      const matches = allJobs.filter(job => {
+        if (!job.requirements?.length) return false;
+        
+        return job.requirements.some(req =>
+          skills.some(skill =>
+            req.toLowerCase().includes(skill) || skill.includes(req.toLowerCase())
+          )
+        );
+      });
+      
+      console.log('Total matching jobs:', matches.length);
+      setProfileStats(prev => ({ ...prev, jobMatches: matches.length }));
     };
 
-    fetchStats();
-    trackView();
-  }, [user?._id]);
+    fetchProfileStats();
+    calculateJobMatches();
+  }, [user?._id, allJobs, user?.profile?.skills]);
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ background: "var(--cn-page-alt)" }}>
+    <div className="min-h-screen flex flex-col" style={{ background: "var(--cn-page-alt)", position: "relative", zIndex: 10 }}>
       <Navbar />
 
       {/* Gradient Banner */}
       <div
         className="h-36 sm:h-44 md:h-52 relative overflow-hidden"
-        style={{ background: "linear-gradient(135deg,#27bbd2 0%,#6366f1 60%,#8b5cf6 100%)" }}
+        style={{ background: "linear-gradient(135deg,#27bbd2 0%,#6366f1 60%,#8b5cf6 100%)", zIndex: 1 }}
       >
         <div
           className="absolute inset-0"
@@ -95,12 +132,14 @@ const Profile = () => {
         />
       </div>
 
-      <div className="flex-1 max-w-4xl mx-auto px-4 pt-4 pb-8 w-full">
+      <div className="flex-1 max-w-4xl mx-auto px-4 pt-4 pb-8 w-full" style={{ position: "relative", zIndex: 5 }}>
         {/* Profile Header Card */}
         <div className="rounded-2xl p-6 mb-6 -mt-16 sm:-mt-20" style={{ 
           background: "var(--cn-surface)", 
           border: "1px solid var(--cn-border)",
-          boxShadow: "var(--cn-card-shadow)"
+          boxShadow: "var(--cn-card-shadow)",
+          position: "relative",
+          zIndex: 10
         }}>
           <div className="flex items-start justify-between mb-6">
             <div className="flex items-center space-x-4">
@@ -153,10 +192,10 @@ const Profile = () => {
               variant="outline"
               size="sm"
               onClick={() => setOpen(true)}
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 shrink-0"
             >
               <Edit3 className="h-4 w-4" />
-              Edit Profile
+              <span className="hidden sm:inline">Edit Profile</span>
             </Button>
           </div>
 
@@ -245,6 +284,53 @@ const Profile = () => {
                     <span style={{ color: "var(--cn-text-3)" }}>No skills added yet</span>
                   )}
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Profile Stats Card */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6" style={{ position: "relative", zIndex: 5 }}>
+          <div className="rounded-2xl p-6" style={{ 
+            background: "var(--cn-surface)", 
+            border: "1px solid var(--cn-border)",
+            boxShadow: "var(--cn-card-shadow)",
+            position: "relative",
+            zIndex: 5
+          }}>
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-2xl font-bold" style={{ color: "var(--cn-text-1)" }}>
+                  {profileStats.profileViews}
+                </h3>
+                <p className="text-sm" style={{ color: "var(--cn-text-3)" }}>
+                  Profile Views
+                </p>
+              </div>
+              <div className="h-12 w-12 rounded-full flex items-center justify-center" style={{ background: "rgba(39,187,210,0.1)" }}>
+                <User className="h-6 w-6 text-[#27bbd2]" />
+              </div>
+            </div>
+          </div>
+          
+          <div className="rounded-2xl p-6" style={{ 
+            background: "var(--cn-surface)", 
+            border: "1px solid var(--cn-border)",
+            boxShadow: "var(--cn-card-shadow)",
+            position: "relative",
+            zIndex: 5
+          }}>
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-2xl font-bold" style={{ color: "var(--cn-text-1)" }}>
+                  {profileStats.jobMatches}
+                </h3>
+                <p className="text-sm" style={{ color: "var(--cn-text-3)" }}>
+                  Job Matches
+                </p>
+              </div>
+              <div className="h-12 w-12 rounded-full flex items-center justify-center" style={{ background: "rgba(39,187,210,0.1)" }}>
+                <Briefcase className="h-6 w-6 text-[#27bbd2]" />
               </div>
             </div>
           </div>

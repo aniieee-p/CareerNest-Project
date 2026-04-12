@@ -82,11 +82,22 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
     const formData = new FormData();
 
     if (includeAllFields) {
+      console.log('Adding to FormData:');
+      console.log('- fullname:', input.fullname);
+      console.log('- email:', input.email);
+      console.log('- phonenumber:', input.phoneNumber);
+      console.log('- bio:', input.bio);
+      console.log('- skills array:', skillTags);
+      console.log('- skills string:', skillTags.join(','));
+      
       formData.append('fullname', input.fullname);
       formData.append('email', input.email);
       formData.append('phonenumber', input.phoneNumber);
       formData.append('bio', input.bio);
-      formData.append('skills', skillTags.join(','));
+      // Always send skills field - use space for empty to ensure backend processes it
+      const skillsValue = skillTags.length > 0 ? skillTags.join(',') : ' ';
+      formData.append('skills', skillsValue);
+      console.log('Final skills value being sent:', skillsValue);
       if (input.file) formData.append('file', input.file);
       if (input.photo) formData.append('photo', input.photo);
     }
@@ -207,6 +218,10 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
   const submitHandler = async (e) => {
     e.preventDefault();
 
+    console.log('=== UPDATE PROFILE DEBUG ===');
+    console.log('Current skillTags:', skillTags);
+    console.log('Skills to send:', skillTags.join(','));
+
     try {
       await persistProfile({
         removePhoto: input.removePhoto,
@@ -217,7 +232,8 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
       });
       revokeObjectUrl(previewObjectUrlRef.current);
       previewObjectUrlRef.current = null;
-    } catch {
+    } catch (error) {
+      console.error('Update failed:', error);
       // Error toast is handled in persistProfile.
     }
   };
@@ -331,7 +347,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
                   {skillTags.map((skill) => (
                     <span
                       key={skill}
-                      className="flex items-center gap-1 text-xs px-2 py-1 rounded-full"
+                      className="flex items-center gap-1.5 text-xs px-2.5 py-1.5 rounded-full cursor-pointer hover:opacity-80 transition-opacity"
                       style={{
                         background: 'rgba(39,187,210,0.1)',
                         color: '#27bbd2',
@@ -339,7 +355,15 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
                       }}
                     >
                       {skill}
-                      <X size={12} className="cursor-pointer" onClick={() => removeSkill(skill)} />
+                      <X 
+                        size={14} 
+                        className="cursor-pointer hover:bg-red-100 hover:text-red-600 rounded-full p-0.5 transition-colors" 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          removeSkill(skill);
+                        }}
+                        title={`Remove ${skill}`}
+                      />
                     </span>
                   ))}
                 </div>

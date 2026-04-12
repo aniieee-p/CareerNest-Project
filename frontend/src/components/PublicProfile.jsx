@@ -18,6 +18,13 @@ const PublicProfile = () => {
 
     useEffect(() => {
         if (!id) return;
+        
+        // If viewing own profile, redirect to /profile
+        if (currentUser && id === currentUser._id) {
+            navigate('/profile', { replace: true });
+            return;
+        }
+        
         const fetch = async () => {
             try {
                 await api.post(`${PROFILE_VIEW_API}/${id}`, {});
@@ -27,7 +34,7 @@ const PublicProfile = () => {
             finally { setLoading(false); }
         };
         fetch();
-    }, [id]);
+    }, [id, currentUser, navigate]);
 
     return (
         <div className="min-h-screen" style={{ background: "var(--cn-profile-bg)" }}>
