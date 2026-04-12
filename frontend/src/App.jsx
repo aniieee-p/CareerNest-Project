@@ -1,33 +1,45 @@
 import { createBrowserRouter, RouterProvider, Navigate, Outlet } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, Suspense, lazy } from "react";
 import { useDispatch } from "react-redux";
 import { setUser } from "./redux/authSlice";
 import useGetSavedJobs from "./hooks/useGetSavedJobs";
 import { PulseIQRouteTracker } from "./hooks/usePulseIQ";
-import Login from './components/auth/Login';
-import Signup from './components/auth/Signup'
-import ResetPassword from './components/auth/ResetPassword';
-import Home from "./components/Home";
-import Jobs from "./components/Jobs";
-import Browse from "./components/Browse";
-import Profile from "./components/Profile";
-import JobDescription from "./components/JobDescription";
-import Companies from "./components/admin/Companies";
-import CompanyCreate from "./components/admin/CompanyCreate";
-import CompanySetup from "./components/admin/CompanySetup";
-import AdminJobs from "./components/admin/AdminJobs";
-import PostJob from "./components/admin/PostJob";
-import Applicants from "./components/admin/Applicants";
-import ApplicantsTable from "./components/admin/ApplicantsTable";
-import RecruiterProfile from "./components/admin/RecruiterProfile";
-import CareerAdvice from "./components/CareerAdvice";
-import SavedJobs from "./components/SavedJobs";
-import RecruitmentSolutions from "./components/RecruitmentSolutions";
-import ContactSupport from "./components/ContactSupport";
-import ProtectedRoute from "./components/admin/ProtectedRoute";
-import StudentRoute from "./components/auth/StudentRoute";
-import PublicProfile from "./components/PublicProfile";
-import NotFound from "./components/NotFound";
+
+// Lazy load all components
+const Login = lazy(() => import('./components/auth/Login'));
+const Signup = lazy(() => import('./components/auth/Signup'));
+const ResetPassword = lazy(() => import('./components/auth/ResetPassword'));
+const Home = lazy(() => import("./components/Home"));
+const Jobs = lazy(() => import("./components/Jobs"));
+const Browse = lazy(() => import("./components/Browse"));
+const Profile = lazy(() => import("./components/Profile"));
+const JobDescription = lazy(() => import("./components/JobDescription"));
+const Companies = lazy(() => import("./components/admin/Companies"));
+const CompanyCreate = lazy(() => import("./components/admin/CompanyCreate"));
+const CompanySetup = lazy(() => import("./components/admin/CompanySetup"));
+const AdminJobs = lazy(() => import("./components/admin/AdminJobs"));
+const PostJob = lazy(() => import("./components/admin/PostJob"));
+const Applicants = lazy(() => import("./components/admin/Applicants"));
+const ApplicantsTable = lazy(() => import("./components/admin/ApplicantsTable"));
+const RecruiterProfile = lazy(() => import("./components/admin/RecruiterProfile"));
+const CareerAdvice = lazy(() => import("./components/CareerAdvice"));
+const SavedJobs = lazy(() => import("./components/SavedJobs"));
+const RecruitmentSolutions = lazy(() => import("./components/RecruitmentSolutions"));
+const ContactSupport = lazy(() => import("./components/ContactSupport"));
+const ProtectedRoute = lazy(() => import("./components/admin/ProtectedRoute"));
+const StudentRoute = lazy(() => import("./components/auth/StudentRoute"));
+const PublicProfile = lazy(() => import("./components/PublicProfile"));
+const NotFound = lazy(() => import("./components/NotFound"));
+
+// Loading spinner component
+const LoadingSpinner = () => (
+  <div className="min-h-screen flex items-center justify-center" style={{ background: "var(--cn-page)" }}>
+    <div className="flex flex-col items-center gap-4">
+      <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+      <p className="text-sm" style={{ color: "var(--cn-text-2)" }}>Loading...</p>
+    </div>
+  </div>
+);
 
 function AppShell() {
   return (
@@ -46,95 +58,95 @@ const appRouter = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Home />
+        element: <Suspense fallback={<LoadingSpinner />}><Home /></Suspense>
       },
       {
         path: 'login',
-        element: <Login />
+        element: <Suspense fallback={<LoadingSpinner />}><Login /></Suspense>
       },
       {
         path: 'signup',
-        element: <Signup />
+        element: <Suspense fallback={<LoadingSpinner />}><Signup /></Suspense>
       },
       {
         path: 'reset-password/:token',
-        element: <ResetPassword />
+        element: <Suspense fallback={<LoadingSpinner />}><ResetPassword /></Suspense>
       },
       {
         path: 'jobs',
-        element: <StudentRoute><Jobs /></StudentRoute>
+        element: <Suspense fallback={<LoadingSpinner />}><StudentRoute><Jobs /></StudentRoute></Suspense>
       },
       {
         path: 'description/:id',
-        element: <JobDescription />
+        element: <Suspense fallback={<LoadingSpinner />}><JobDescription /></Suspense>
       },
       {
         path: 'browse',
-        element: <Browse />
+        element: <Suspense fallback={<LoadingSpinner />}><Browse /></Suspense>
       },
       {
         path: 'profile',
-        element: <StudentRoute><Profile /></StudentRoute>
+        element: <Suspense fallback={<LoadingSpinner />}><StudentRoute><Profile /></StudentRoute></Suspense>
       },
       {
         path: 'profile/:id',
-        element: <PublicProfile />
+        element: <Suspense fallback={<LoadingSpinner />}><PublicProfile /></Suspense>
       },
       {
         path: 'admin/companies',
-        element: <ProtectedRoute><Companies /></ProtectedRoute>
+        element: <Suspense fallback={<LoadingSpinner />}><ProtectedRoute><Companies /></ProtectedRoute></Suspense>
       },
       {
         path: 'admin/profile',
-        element: <ProtectedRoute><RecruiterProfile /></ProtectedRoute>
+        element: <Suspense fallback={<LoadingSpinner />}><ProtectedRoute><RecruiterProfile /></ProtectedRoute></Suspense>
       },
       {
         path: 'admin/companies/create',
-        element: <ProtectedRoute><CompanyCreate /></ProtectedRoute>
+        element: <Suspense fallback={<LoadingSpinner />}><ProtectedRoute><CompanyCreate /></ProtectedRoute></Suspense>
       },
       {
         path: 'admin/companies/:id',
-        element: <ProtectedRoute><CompanySetup /></ProtectedRoute>
+        element: <Suspense fallback={<LoadingSpinner />}><ProtectedRoute><CompanySetup /></ProtectedRoute></Suspense>
       },
       {
         path: 'admin/jobs',
-        element: <ProtectedRoute><AdminJobs /></ProtectedRoute>
+        element: <Suspense fallback={<LoadingSpinner />}><ProtectedRoute><AdminJobs /></ProtectedRoute></Suspense>
       },
       {
         path: 'admin/jobs/create',
-        element: <ProtectedRoute><PostJob /></ProtectedRoute>
+        element: <Suspense fallback={<LoadingSpinner />}><ProtectedRoute><PostJob /></ProtectedRoute></Suspense>
       },
       {
         path: 'admin/jobs/:id/applicants',
-        element: <ProtectedRoute><Applicants /></ProtectedRoute>
+        element: <Suspense fallback={<LoadingSpinner />}><ProtectedRoute><Applicants /></ProtectedRoute></Suspense>
       },
       {
         path: 'admin/ApplicantsTable',
-        element: <ProtectedRoute><ApplicantsTable /></ProtectedRoute>
+        element: <Suspense fallback={<LoadingSpinner />}><ProtectedRoute><ApplicantsTable /></ProtectedRoute></Suspense>
       },
       {
         path: 'career-advice',
-        element: <CareerAdvice />
+        element: <Suspense fallback={<LoadingSpinner />}><CareerAdvice /></Suspense>
       },
       {
         path: 'saved-jobs',
-        element: <StudentRoute><SavedJobs /></StudentRoute>
+        element: <Suspense fallback={<LoadingSpinner />}><StudentRoute><SavedJobs /></StudentRoute></Suspense>
       },
       {
         path: 'recruitment',
-        element: <RecruitmentSolutions />
+        element: <Suspense fallback={<LoadingSpinner />}><RecruitmentSolutions /></Suspense>
       },
       {
         path: 'contact',
-        element: <ContactSupport />
+        element: <Suspense fallback={<LoadingSpinner />}><ContactSupport /></Suspense>
       },
       {
         path: 'admin/*',
-        element: <ProtectedRoute><Navigate to="/admin/jobs" replace /></ProtectedRoute>
+        element: <Suspense fallback={<LoadingSpinner />}><ProtectedRoute><Navigate to="/admin/jobs" replace /></ProtectedRoute></Suspense>
       },
       {
         path: "*",
-        element: <NotFound />
+        element: <Suspense fallback={<LoadingSpinner />}><NotFound /></Suspense>
       },
     ],
   },
