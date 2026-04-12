@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { LogOut, User, BookmarkIcon, Building2, Menu, X, Moon, Sun } from "lucide-react";
+import { LogOut, User, BookmarkIcon, Building2, Menu, X, Moon, Sun, Briefcase } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { setUser } from "../../redux/authSlice";
@@ -100,11 +100,7 @@ const Navbar = () => {
                   background: "linear-gradient(135deg,#27bbd2,#6366f1)", 
                   boxShadow: "0 0 20px rgba(39,187,210,0.3)" 
                 }}>
-                <img 
-                  src="/careernest-favicon-glass.svg" 
-                  alt="CareerNest Logo" 
-                  className="h-4 w-4 text-white"
-                />
+                <Briefcase size={17} className="text-white" />
               </div>
               <span className="text-xl font-extrabold hidden sm:block tracking-[-0.02em]">
                 <span style={{ color: 'var(--cn-text-1)' }}>Career</span>
