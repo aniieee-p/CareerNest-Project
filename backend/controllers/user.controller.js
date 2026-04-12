@@ -399,10 +399,10 @@ export const forgotPassword = async (req, res) => {
         console.log("Generated reset URL:", resetUrl);
         console.log("FRONTEND_URL env var:", process.env.FRONTEND_URL);
 
-        // Send email with timeout to prevent hanging
+        // Send email with extended timeout for Render cold starts
         const emailPromise = sendResetEmail({ email: user.email, resetUrl });
         const timeoutPromise = new Promise((_, reject) => 
-            setTimeout(() => reject(new Error('Email service timeout after 10 seconds')), 10000)
+            setTimeout(() => reject(new Error('Email service timeout - server may be starting up')), 30000)
         );
 
         try {
@@ -430,7 +430,7 @@ export const forgotPassword = async (req, res) => {
             // Check if it's a timeout error
             if (mailError.message.includes('timeout')) {
                 return res.status(408).json({ 
-                    message: "Email service is temporarily slow. Please try again in a moment.", 
+                    message: "Server is starting up, please wait 30 seconds and try again.", 
                     success: false 
                 });
             }

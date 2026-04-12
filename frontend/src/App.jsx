@@ -6,7 +6,6 @@ import useGetSavedJobs from "./hooks/useGetSavedJobs";
 import { PulseIQRouteTracker } from "./hooks/usePulseIQ";
 import Login from './components/auth/Login';
 import Signup from './components/auth/Signup'
-import ForgotPassword from './components/auth/ForgotPassword';
 import ResetPassword from './components/auth/ResetPassword';
 import Home from "./components/Home";
 import Jobs from "./components/Jobs";
@@ -56,10 +55,6 @@ const appRouter = createBrowserRouter([
       {
         path: 'signup',
         element: <Signup />
-      },
-      {
-        path: 'forgot-password',
-        element: <ForgotPassword />
       },
       {
         path: 'reset-password/:token',
