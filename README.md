@@ -12,7 +12,11 @@ This platform simplifies the hiring process by offering **job posting, applicati
 
 # 🖥️ Demo Preview
 
-Coming Soon 🚧
+🚀 **Live Demo**: [CareerNest Live](https://careernest-anisha.netlify.app)
+
+📱 **Backend API**: [API Documentation](https://careernest-y43o.onrender.com)
+
+> **Note**: The backend may take 30-60 seconds to wake up on first request due to free hosting limitations.
 
 ---
 
@@ -71,72 +75,65 @@ Coming Soon 🚧
 # 📁 Project Structure
 
 ```
-CareerNest
+CareerNest/
 │
-├── client/        # React Frontend
+├── backend/           # Node.js Express API
+│   ├── controllers/   # Business logic
+│   ├── models/        # Database schemas
+│   ├── routes/        # API endpoints
+│   ├── middlewares/   # Auth & validation
+│   ├── utils/         # Helper functions
+│   └── .env.example   # Environment template
 │
-├── server/        # Backend API
+├── frontend/          # React Frontend
+│   ├── src/
+│   │   ├── components/    # UI components
+│   │   ├── hooks/         # Custom hooks
+│   │   ├── redux/         # State management
+│   │   └── utils/         # Helper functions
+│   └── .env.example   # Environment template
 │
-├── models/        # Database models
-│
-├── routes/        # API routes
-│
-├── controllers/   # Business logic
-│
+├── DEPLOYMENT.md      # Deployment guide
 └── README.md
 ```
 
 ---
 
-# ⚡ Installation Guide
+# ⚡ Quick Start
 
 ### 1️⃣ Clone the repository
 
 ```bash
 git clone https://github.com/aniieee-p/CareerNest.git
-```
-
----
-
-### 2️⃣ Navigate into the project
-
-```bash
 cd CareerNest
 ```
 
----
-
-### 3️⃣ Install dependencies
-
-Backend
+### 2️⃣ Setup Backend
 
 ```bash
-cd server
+cd backend
 npm install
-```
-
-Frontend
-
-```bash
-cd client
-npm install
-```
-
----
-
-# ▶️ Run the Application
-
-Start the backend server
-
-```bash
-npm start
-```
-
-Start the frontend
-
-```bash
+cp .env.example .env
+# Configure your .env file with required credentials
 npm run dev
 ```
+
+### 3️⃣ Setup Frontend
+
+```bash
+cd frontend
+npm install
+cp .env.example .env
+# Configure your .env file
+npm run dev
+```
+
+### 4️⃣ Access the Application
+
+- **Frontend**: http://localhost:5173
+- **Backend API**: http://localhost:3000
+
+📖 **For detailed deployment instructions, see [DEPLOYMENT.md](./DEPLOYMENT.md)**
 
 ---
 

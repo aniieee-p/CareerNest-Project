@@ -218,9 +218,11 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
   const submitHandler = async (e) => {
     e.preventDefault();
 
-    console.log('=== UPDATE PROFILE DEBUG ===');
-    console.log('Current skillTags:', skillTags);
-    console.log('Skills to send:', skillTags.join(','));
+    if (process.env.NODE_ENV === 'development') {
+      console.log('=== UPDATE PROFILE DEBUG ===');
+      console.log('Current skillTags:', skillTags);
+      console.log('Skills to send:', skillTags.join(','));
+    }
 
     try {
       await persistProfile({

@@ -1,13 +1,15 @@
 {
-  "name": "frontend",
+  "name": "careernest-frontend",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "CareerNest Frontend Application",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "echo \"Tests not implemented yet\" && exit 0"
   },
   "dependencies": {
     "@fontsource-variable/geist": "^5.2.8",

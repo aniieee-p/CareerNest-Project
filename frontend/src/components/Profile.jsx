@@ -71,8 +71,10 @@ const Profile = () => {
     };
 
     const calculateJobMatches = () => {
-      console.log('=== JOB MATCHES CALCULATION DEBUG ===');
-      console.log('User skills from Redux:', user?.profile?.skills);
+      if (process.env.NODE_ENV === 'development') {
+        console.log('=== JOB MATCHES CALCULATION DEBUG ===');
+        console.log('User skills from Redux:', user?.profile?.skills);
+      }
       
       const rawSkills = user?.profile?.skills || [];
       // Filter out empty strings and whitespace-only strings

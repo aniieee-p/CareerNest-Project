@@ -382,11 +382,9 @@ export const forgotPassword = async (req, res) => {
         }
 
         const normalizedEmail = email?.toLowerCase().trim();
-        console.log("Forgot password request for:", normalizedEmail);
         
         const user = await User.findOne({ email: normalizedEmail });
         if (!user) {
-            console.log("No user found with email:", normalizedEmail);
             return res.status(404).json({ message: "No account found with that email", success: false });
         }
 
@@ -397,7 +395,6 @@ export const forgotPassword = async (req, res) => {
 
         // Validate FRONTEND_URL environment variable
         if (!process.env.FRONTEND_URL) {
-            console.error("FRONTEND_URL environment variable not configured");
             return res.status(500).json({ 
                 message: "Server configuration error. Please contact support.", 
                 success: false 
@@ -405,8 +402,6 @@ export const forgotPassword = async (req, res) => {
         }
 
         const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${token}`;
-        console.log("Generated reset URL:", resetUrl);
-        console.log("FRONTEND_URL env var:", process.env.FRONTEND_URL);
 
         // Send email with extended timeout for Render cold starts
         const emailPromise = sendResetEmail({ email: user.email, resetUrl });
@@ -415,23 +410,13 @@ export const forgotPassword = async (req, res) => {
         );
 
         try {
-            console.log("Attempting to send reset email to:", user.email);
             await Promise.race([emailPromise, timeoutPromise]);
-            console.log("Reset email sent successfully to:", user.email);
             
             return res.status(200).json({ 
                 message: "Password reset link sent to your email", 
                 success: true 
             });
         } catch (mailError) {
-            console.error("Failed to send reset email:", mailError);
-            console.error("Mail error details:", {
-                code: mailError.code,
-                command: mailError.command,
-                response: mailError.response,
-                responseCode: mailError.responseCode
-            });
-            
             // Clean up the reset token since email failed
             try {
                 user.resetPasswordToken = undefined;
@@ -452,7 +437,6 @@ export const forgotPassword = async (req, res) => {
             
             // Check for authentication errors
             if (mailError.code === 'EAUTH' || mailError.responseCode === 535) {
-                console.error("SMTP Authentication failed - check EMAIL_USER and EMAIL_PASS");
                 return res.status(503).json({ 
                     message: "Email service configuration error. Please contact support.", 
                     success: false 
@@ -483,7 +467,6 @@ export const forgotPassword = async (req, res) => {
             });
         }
     } catch (error) {
-        console.error("Forgot password error:", error);
         return res.status(500).json({ 
             message: "Server error", 
             success: false,

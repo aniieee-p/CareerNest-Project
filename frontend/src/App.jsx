@@ -151,7 +151,7 @@ function App() {
       localStorage.removeItem("token");
       dispatch(setUser(null));
     }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [dispatch]);
 
   return (
     <div style={{ background: "var(--cn-page)", minHeight: "100vh" }}>

@@ -12,7 +12,6 @@ router.post('/send', async (req, res) => {
         await sendContactEmail({ name, email, message });
         return res.status(200).json({ message: 'Message sent successfully.', success: true });
     } catch (error) {
-        console.log('Mailer error:', error.message);
         return res.status(500).json({ message: 'Failed to send message.', success: false });
     }
 });

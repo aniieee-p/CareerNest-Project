@@ -219,7 +219,7 @@ const Login = () => {
       {/* ══ LEFT PANEL ══ */}
       <motion.div
         style={{ x: leftX, y: leftY }}
-        className="hidden lg:flex flex-col justify-between w-[52%] relative overflow-hidden p-12 sticky top-0 h-screen"
+        className="hidden lg:flex flex-col justify-between w-[52%] overflow-hidden p-12 sticky top-0 h-screen"
         initial={{ opacity: 0, x: -40 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
@@ -343,7 +343,7 @@ const Login = () => {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.45, delay: 0.15, ease: "easeOut" }}
-            className="w-full max-w-[28.5rem] rounded-[1.75rem] p-6 sm:p-7"
+            className="w-full max-w-md rounded-[1.75rem] p-6 sm:p-7"
             style={{
               background: "var(--cn-auth-card)",
               border: "1px solid var(--cn-border)",

@@ -12,7 +12,6 @@ router.post('/', async (req, res) => {
         await sendSubscriptionConfirmEmail({ email });
         return res.status(200).json({ message: 'Subscribed successfully.', success: true });
     } catch (error) {
-        console.log('Subscribe mailer error:', error.message);
         return res.status(500).json({ message: 'Failed to subscribe.', success: false });
     }
 });
