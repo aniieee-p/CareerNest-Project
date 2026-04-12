@@ -162,13 +162,13 @@ export const sendContactEmail = async ({ name, email, message }) => {
     });
 };
 
-export const sendApplicationStatusEmail = async ({ email, applicantName, jobTitle, status }) => {
+export const sendApplicationStatusEmail = async ({ email, applicantName, jobTitle, companyName, status }) => {
     const statusConfig = {
         accepted: {
             emoji: "🎉",
             subject: `Congratulations! Your application for "${jobTitle}" was accepted`,
             heading: "You got accepted!",
-            body: `Great news, <strong style="color:#0f172a;">${applicantName}</strong>! Your application for <strong style="color:#0f172a;">${jobTitle}</strong> has been <strong style="color:#10b981;">accepted</strong>. The recruiter will be in touch with next steps soon.`,
+            body: `Great news, <strong style="color:#0f172a;">${applicantName}</strong>! Your application for <strong style="color:#0f172a;">${jobTitle}</strong> at <strong style="color:#0f172a;">${companyName}</strong> has been <strong style="color:#10b981;">accepted</strong>. The recruiter will be in touch with next steps soon.`,
             badgeColor: "#10b981",
             badgeBg: "rgba(16,185,129,0.1)",
             badgeText: "Accepted",
@@ -177,7 +177,7 @@ export const sendApplicationStatusEmail = async ({ email, applicantName, jobTitl
             emoji: "📋",
             subject: `Update on your application for "${jobTitle}"`,
             heading: "Application update",
-            body: `Hi <strong style="color:#0f172a;">${applicantName}</strong>, thank you for applying for <strong style="color:#0f172a;">${jobTitle}</strong>. After careful consideration, the team has decided not to move forward with your application at this time. Don't be discouraged — keep applying!`,
+            body: `Hi <strong style="color:#0f172a;">${applicantName}</strong>, thank you for applying for <strong style="color:#0f172a;">${jobTitle}</strong> at <strong style="color:#0f172a;">${companyName}</strong>. After careful consideration, the team has decided not to move forward with your application at this time. Don't be discouraged — keep applying!`,
             badgeColor: "#ef4444",
             badgeBg: "rgba(239,68,68,0.1)",
             badgeText: "Not Selected",
@@ -186,7 +186,7 @@ export const sendApplicationStatusEmail = async ({ email, applicantName, jobTitl
             emoji: "⭐",
             subject: `You've been shortlisted for "${jobTitle}"`,
             heading: "You're shortlisted!",
-            body: `Hi <strong style="color:#0f172a;">${applicantName}</strong>, exciting news — you've been <strong style="color:#6366f1;">shortlisted</strong> for <strong style="color:#0f172a;">${jobTitle}</strong>. Stay tuned, the recruiter will reach out with further details.`,
+            body: `Hi <strong style="color:#0f172a;">${applicantName}</strong>, exciting news — you've been <strong style="color:#6366f1;">shortlisted</strong> for <strong style="color:#0f172a;">${jobTitle}</strong> at <strong style="color:#0f172a;">${companyName}</strong>. Stay tuned, the recruiter will reach out with further details.`,
             badgeColor: "#6366f1",
             badgeBg: "rgba(99,102,241,0.1)",
             badgeText: "Shortlisted",
@@ -197,7 +197,7 @@ export const sendApplicationStatusEmail = async ({ email, applicantName, jobTitl
         emoji: "🔔",
         subject: `Your application status was updated`,
         heading: "Application update",
-        body: `Hi <strong style="color:#0f172a;">${applicantName}</strong>, your application for <strong style="color:#0f172a;">${jobTitle}</strong> has been updated to <strong>${status}</strong>.`,
+        body: `Hi <strong style="color:#0f172a;">${applicantName}</strong>, your application for <strong style="color:#0f172a;">${jobTitle}</strong> at <strong style="color:#0f172a;">${companyName}</strong> has been updated to <strong>${status}</strong>.`,
         badgeColor: "#64748b",
         badgeBg: "rgba(100,116,139,0.1)",
         badgeText: status,

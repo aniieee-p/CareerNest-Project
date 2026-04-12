@@ -33,7 +33,8 @@ export const applyJob = async (req, res) => {
         });
         return res.status(201).json({ message: "Application submitted successfully.", success: true, application });
     } catch (error) {
-        console.error(error.message);
+        console.error(error);
+        return res.status(500).json({ success: false, message: "Internal server error" });
     }
 };
 
@@ -49,7 +50,8 @@ export const getAppliedJobs = async (req, res) => {
         }
         return res.status(200).json({ message: "Applied jobs retrieved successfully.", success: true, applications });
     } catch (error) {
-        console.error(error.message);
+        console.error(error);
+        return res.status(500).json({ success: false, message: "Internal server error" });
     }
 };
 
@@ -66,7 +68,8 @@ export const getApplicants = async (req, res) => {
         }
         return res.status(200).json({ job, success: true });
     } catch (error) {
-        console.error(error.message);
+        console.error(error);
+        return res.status(500).json({ success: false, message: "Internal server error" });
     }
 };
 
@@ -83,11 +86,20 @@ export const updateStatus = async (req, res) => {
         }
         application.status = status.toLowerCase();
         await application.save();
+        
         // notify applicant about status change
         const populated = await application.populate([
-            { path: "job", select: "title" },
+            { 
+                path: "job", 
+                select: "title",
+                populate: {
+                    path: "company",
+                    select: "name"
+                }
+            },
             { path: "applicant", select: "fullname email" },
         ]);
+        
         const statusMsg = {
             accepted: `Congratulations! Your application for "${populated.job?.title}" was accepted.`,
             rejected: `Your application for "${populated.job?.title}" was not selected this time.`,
@@ -96,17 +108,20 @@ export const updateStatus = async (req, res) => {
         const msg = statusMsg[status.toLowerCase()] || `Your application status was updated to "${status}".`;
         await Notification.create({ userId: application.applicant, message: msg, type: "application", jobId: populated.job?._id });
 
-        // send email notification
+        // send email notification with company name
         if (populated.applicant?.email) {
             sendApplicationStatusEmail({
                 email: populated.applicant.email,
                 applicantName: populated.applicant.fullname || "there",
                 jobTitle: populated.job?.title || "the position",
+                companyName: populated.job?.company?.name || "the company",
                 status: status.toLowerCase(),
             }).catch(err => console.error("Status email error:", err.message));
         }
+        
         return res.status(200).json({ message: "Application status updated successfully.", success: true });
     } catch (error) {
-        console.error(error.message);
+        console.error(error);
+        return res.status(500).json({ success: false, message: "Internal server error" });
     }
 };
