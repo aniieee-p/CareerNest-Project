@@ -5,7 +5,7 @@ import { USER_API_END_POINT } from "@/utils/constant";
 import { toast } from "sonner";
 import {
   Loader2, Eye, EyeOff, Lock, ArrowRight, Briefcase,
-  CheckCircle2, TrendingUp, Zap, Sparkles, ShieldCheck,
+  CheckCircle2, Zap, Sparkles, ShieldCheck,
 } from "lucide-react";
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from "framer-motion";
 

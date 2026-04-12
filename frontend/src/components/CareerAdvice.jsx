@@ -80,7 +80,7 @@ const AdviceCard = ({ icon: Icon, color, bg, border, tag, title, desc }) => {
       onMouseLeave={e => { e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,0,0,0.04)"; }}
     >
       <div ref={cardRef} className="relative rounded-[21px] p-6 overflow-hidden h-full flex flex-col"
-        style={{ background: "linear-gradient(160deg,#ffffff 0%,rgba(39,187,210,0.02) 100%)" }}
+        style={{ background: "var(--cn-surface)" }}
         onMouseMove={onMove} onMouseLeave={onLeave}>
         <div ref={spotRef} className="absolute inset-0 pointer-events-none rounded-[21px] transition-opacity duration-300" style={{ opacity: 0 }} />
         <div className="absolute top-0 left-8 right-8 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-500"
@@ -94,8 +94,8 @@ const AdviceCard = ({ icon: Icon, color, bg, border, tag, title, desc }) => {
               <Icon size={18} style={{ color }} />
             </motion.div>
           </div>
-          <h2 className="font-extrabold text-[#0f172a] text-[15.5px] tracking-[-0.02em] leading-snug mb-2">{title}</h2>
-          <p className="text-[13px] text-[#64748b] leading-[1.7] font-[450] flex-1">{desc}</p>
+          <h2 className="font-extrabold tracking-[-0.02em] leading-snug mb-2 text-[15.5px]" style={{ color: "var(--cn-text-1)" }}>{title}</h2>
+          <p className="text-[13px] leading-[1.7] font-[450] flex-1" style={{ color: "var(--cn-text-2)" }}>{desc}</p>
           <div className="flex items-center gap-1.5 text-[12.5px] font-semibold mt-5 opacity-0 group-hover:opacity-100 transition-opacity duration-200" style={{ color }}>
             Read more <ArrowRight size={12} strokeWidth={2.5} />
           </div>
@@ -129,7 +129,7 @@ const RoleCard = ({ role, why, skills, salary, index }) => {
       style={{ background: `linear-gradient(145deg,${border},rgba(99,102,241,0.06),${border})`, boxShadow: `0 4px 24px ${color}18` }}
     >
       <div className="rounded-[21px] p-6 h-full flex flex-col"
-        style={{ background: "rgba(255,255,255,0.72)", backdropFilter: "blur(16px)" }}>
+        style={{ background: "var(--cn-surface)" }}>
 
         {/* role name */}
         <div className="flex items-start justify-between gap-3 mb-4">
@@ -142,14 +142,14 @@ const RoleCard = ({ role, why, skills, salary, index }) => {
           </span>
         </div>
 
-        <h3 className="text-[16px] font-extrabold text-[#0f172a] tracking-[-0.02em] mb-2">{role}</h3>
-        <p className="text-[13px] text-[#64748b] leading-[1.65] mb-4 flex-1">{why}</p>
+        <h3 className="text-[16px] font-extrabold tracking-[-0.02em] mb-2" style={{ color: "var(--cn-text-1)" }}>{role}</h3>
+        <p className="text-[13px] leading-[1.65] mb-4 flex-1" style={{ color: "var(--cn-text-2)" }}>{why}</p>
 
         {/* skills */}
         <div className="mb-4">
           <div className="flex items-center gap-1.5 mb-2">
             <Zap size={12} style={{ color }} />
-            <span className="text-[11px] font-bold uppercase tracking-wider text-[#94a3b8]">Skills to learn</span>
+            <span className="text-[11px] font-bold uppercase tracking-wider" style={{ color: "var(--cn-text-3)" }}>Skills to learn</span>
           </div>
           <div className="flex flex-wrap gap-1.5">
             {skills.map(s => (
@@ -163,7 +163,7 @@ const RoleCard = ({ role, why, skills, salary, index }) => {
         <div className="flex items-center gap-2 pt-3 mb-4" style={{ borderTop: `1px solid ${border}` }}>
           <DollarSign size={13} style={{ color }} />
           <span className="text-[12.5px] font-bold" style={{ color }}>{salary}</span>
-          <span className="text-[11px] text-[#94a3b8]">avg. in India</span>
+          <span className="text-[11px]" style={{ color: "var(--cn-text-3)" }}>avg. in India</span>
         </div>
 
         {/* find jobs button */}
@@ -229,15 +229,15 @@ const CareerQuiz = () => {
             <Brain size={15} style={{ color: "#6366f1" }} />
           </div>
           <div>
-            <h2 className="text-[19px] font-extrabold text-[#0f172a] tracking-[-0.02em]">Career Role Matcher</h2>
-            <p className="text-[13px] text-[#94a3b8]">5 quick questions · AI-powered results</p>
+            <h2 className="text-[19px] font-extrabold tracking-[-0.02em]" style={{ color: "var(--cn-text-1)" }}>Career Role Matcher</h2>
+            <p className="text-[13px]" style={{ color: "var(--cn-text-3)" }}>5 quick questions · AI-powered results</p>
           </div>
         </div>
       </FadeUp>
 
       <FadeUp delay={0.05}>
         <div className="rounded-[24px] overflow-hidden"
-          style={{ background: "rgba(255,255,255,0.6)", backdropFilter: "blur(20px)", border: "1px solid rgba(99,102,241,0.15)", boxShadow: "0 8px 40px rgba(99,102,241,0.08)" }}>
+          style={{ background: "var(--cn-surface)", border: "1px solid rgba(99,102,241,0.15)", boxShadow: "0 8px 40px rgba(99,102,241,0.08)" }}>
 
           {/* progress bar */}
           {step < 5 && (
@@ -267,13 +267,13 @@ const CareerQuiz = () => {
                     </span>
                     {step > 0 && (
                       <button onClick={() => setStep(step - 1)}
-                        className="text-[12px] text-[#94a3b8] hover:text-[#6366f1] transition-colors flex items-center gap-1">
+                        className="text-[12px] hover:text-[#6366f1] transition-colors flex items-center gap-1" style={{ color: "var(--cn-text-3)" }}>
                         ← Back
                       </button>
                     )}
                   </div>
 
-                  <h3 className="text-[20px] font-extrabold text-[#0f172a] tracking-[-0.02em] mb-6">
+                  <h3 className="text-[20px] font-extrabold tracking-[-0.02em] mb-6" style={{ color: "var(--cn-text-1)" }}>
                     {current.label}
                   </h3>
 
@@ -284,7 +284,7 @@ const CareerQuiz = () => {
                         whileTap={{ scale: 0.97 }}
                         onClick={() => pick(opt)}
                         className="relative px-4 py-3.5 rounded-2xl text-[13.5px] font-semibold text-left transition-all duration-200 group"
-                        style={{ background: answers[current.key] === opt ? "linear-gradient(135deg,#27bbd2,#6366f1)" : "rgba(248,250,252,0.8)", color: answers[current.key] === opt ? "#fff" : "#334155", border: answers[current.key] === opt ? "1px solid transparent" : "1px solid rgba(99,102,241,0.15)", boxShadow: "0 2px 8px rgba(0,0,0,0.04)" }}>
+                        style={{ background: answers[current.key] === opt ? "linear-gradient(135deg,#27bbd2,#6366f1)" : "var(--cn-surface)", color: answers[current.key] === opt ? "#fff" : "var(--cn-text-1)", border: answers[current.key] === opt ? "1px solid transparent" : "1px solid rgba(99,102,241,0.15)", boxShadow: "0 2px 8px rgba(0,0,0,0.04)" }}>
                         <span className="flex items-center justify-between">
                           {opt}
                           <ChevronRight size={14} className="opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -306,8 +306,8 @@ const CareerQuiz = () => {
                     style={{ background: "linear-gradient(135deg,#27bbd2,#6366f1)" }}>
                     <Loader2 size={26} color="#fff" className="animate-spin" />
                   </div>
-                  <p className="text-[15px] font-bold text-[#0f172a]">Analyzing your profile…</p>
-                  <p className="text-[13px] text-[#94a3b8]">Claude AI is finding your best-fit roles</p>
+                  <p className="text-[15px] font-bold" style={{ color: "var(--cn-text-1)" }}>Analyzing your profile…</p>
+                  <p className="text-[13px]" style={{ color: "var(--cn-text-3)" }}>Claude AI is finding your best-fit roles</p>
                 </motion.div>
               )}
 
@@ -318,8 +318,8 @@ const CareerQuiz = () => {
                   transition={{ duration: 0.4 }}>
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
                     <div>
-                      <h3 className="text-[18px] font-extrabold text-[#0f172a] tracking-[-0.02em]">Your Top Role Matches</h3>
-                      <p className="text-[13px] text-[#94a3b8] mt-0.5">Based on your answers · Powered by Claude AI</p>
+                      <h3 className="text-[18px] font-extrabold tracking-[-0.02em]" style={{ color: "var(--cn-text-1)" }}>Your Top Role Matches</h3>
+                      <p className="text-[13px] mt-0.5" style={{ color: "var(--cn-text-3)" }}>Based on your answers · Powered by Claude AI</p>
                     </div>
                     <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
                       onClick={reset}
@@ -346,7 +346,7 @@ const CareerQuiz = () => {
 // ── page ──────────────────────────────────────────────────────────────────────
 
 const CareerAdvice = () => (
-  <div className="min-h-screen" style={{ background: "#f8fafc" }}>
+  <div className="min-h-screen" style={{ background: "var(--cn-page-alt)" }}>
     <Navbar />
 
     {/* Hero */}
@@ -367,7 +367,7 @@ const CareerAdvice = () => (
         </FadeUp>
 
         <FadeUp delay={0.08}>
-          <h1 className="text-[clamp(2.2rem,5vw,3.4rem)] font-extrabold text-[#0f172a] tracking-[-0.03em] leading-[1.1] mb-5">
+          <h1 className="text-[clamp(2.2rem,5vw,3.4rem)] font-extrabold tracking-[-0.03em] leading-[1.1] mb-5" style={{ color: "var(--cn-text-1)" }}>
             Practical{" "}
             <span style={{ background: "linear-gradient(90deg,#27bbd2,#6366f1)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Career</span>{" "}
             <span className="relative inline-block">
@@ -381,7 +381,7 @@ const CareerAdvice = () => (
         </FadeUp>
 
         <FadeUp delay={0.13}>
-          <p className="text-[15.5px] text-[#64748b] max-w-lg mx-auto leading-relaxed mb-10">
+          <p className="text-[15.5px] max-w-lg mx-auto leading-relaxed mb-10" style={{ color: "var(--cn-text-2)" }}>
             Actionable guidance from industry experts to help you land your dream role and grow your career.
           </p>
         </FadeUp>
@@ -390,12 +390,12 @@ const CareerAdvice = () => (
           <div className="flex flex-wrap justify-center gap-3">
             {stats.map(({ value, label }) => (
               <div key={label} className="flex items-center gap-2.5 px-4 py-2.5 rounded-2xl"
-                style={{ background: "rgba(255,255,255,0.85)", backdropFilter: "blur(12px)", border: "1px solid rgba(39,187,210,0.15)", boxShadow: "0 2px 12px rgba(39,187,210,0.07)" }}>
+                style={{ background: "var(--cn-surface)", border: "1px solid rgba(39,187,210,0.15)", boxShadow: "0 2px 12px rgba(39,187,210,0.07)" }}>
                 <span className="text-[17px] font-extrabold"
                   style={{ background: "linear-gradient(90deg,#27bbd2,#6366f1)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
                   {value}
                 </span>
-                <span className="text-[12.5px] text-[#64748b] font-medium">{label}</span>
+                <span className="text-[12.5px] font-medium" style={{ color: "var(--cn-text-2)" }}>{label}</span>
               </div>
             ))}
           </div>
@@ -419,8 +419,8 @@ const CareerAdvice = () => (
             <Star size={15} style={{ color: "#27bbd2" }} />
           </div>
           <div>
-            <h2 className="text-[19px] font-extrabold text-[#0f172a] tracking-[-0.02em]">Top Career Tips</h2>
-            <p className="text-[13px] text-[#94a3b8]">Hover each card to explore</p>
+            <h2 className="text-[19px] font-extrabold tracking-[-0.02em]" style={{ color: "var(--cn-text-1)" }}>Top Career Tips</h2>
+            <p className="text-[13px]" style={{ color: "var(--cn-text-3)" }}>Hover each card to explore</p>
           </div>
         </div>
       </FadeUp>
