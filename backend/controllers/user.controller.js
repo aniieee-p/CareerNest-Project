@@ -375,23 +375,87 @@ export const updateProfile = async (req, res) => {
 export const forgotPassword = async (req, res) => {
     try {
         const { email } = req.body;
-        const user = await User.findOne({ email: email?.toLowerCase().trim() });
-        if (!user) return res.status(404).json({ message: "No account found with that email", success: false });
+        
+        // Validate email input
+        if (!email) {
+            return res.status(400).json({ message: "Email is required", success: false });
+        }
+
+        const normalizedEmail = email?.toLowerCase().trim();
+        console.log("Forgot password request for:", normalizedEmail);
+        
+        const user = await User.findOne({ email: normalizedEmail });
+        if (!user) {
+            console.log("No user found with email:", normalizedEmail);
+            return res.status(404).json({ message: "No account found with that email", success: false });
+        }
 
         const token = crypto.randomBytes(32).toString("hex");
         user.resetPasswordToken = token;
-        user.resetPasswordExpiry = Date.now() + 60 * 60 * 1000;
+        user.resetPasswordExpiry = Date.now() + 60 * 60 * 1000; // 1 hour
         await user.save();
 
         const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${token}`;
+        console.log("Generated reset URL:", resetUrl);
+        console.log("FRONTEND_URL env var:", process.env.FRONTEND_URL);
+
+        // Send email with timeout to prevent hanging
+        const emailPromise = sendResetEmail({ email: user.email, resetUrl });
+        const timeoutPromise = new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('Email service timeout after 10 seconds')), 10000)
+        );
+
         try {
-            await sendResetEmail({ email: user.email, resetUrl });
+            console.log("Attempting to send reset email to:", user.email);
+            await Promise.race([emailPromise, timeoutPromise]);
+            console.log("Reset email sent successfully to:", user.email);
+            
+            return res.status(200).json({ 
+                message: "Password reset link sent to your email", 
+                success: true 
+            });
         } catch (mailError) {
-            return res.status(500).json({ message: "Failed to send reset email. Please try again.", success: false });
+            console.error("Failed to send reset email:", mailError);
+            
+            // Clean up the reset token since email failed
+            try {
+                user.resetPasswordToken = undefined;
+                user.resetPasswordExpiry = undefined;
+                await user.save();
+                console.log("Reset token cleaned up after email failure");
+            } catch (cleanupError) {
+                console.error("Failed to cleanup reset token:", cleanupError);
+            }
+            
+            // Check if it's a timeout error
+            if (mailError.message.includes('timeout')) {
+                return res.status(408).json({ 
+                    message: "Email service is temporarily slow. Please try again in a moment.", 
+                    success: false 
+                });
+            }
+            
+            // Check for specific SMTP errors
+            if (mailError.code === 'ECONNECTION' || mailError.code === 'ETIMEDOUT') {
+                return res.status(503).json({ 
+                    message: "Email service is temporarily unavailable. Please try again later.", 
+                    success: false 
+                });
+            }
+            
+            return res.status(500).json({ 
+                message: "Failed to send reset email. Please try again.", 
+                success: false,
+                error: process.env.NODE_ENV === 'development' ? mailError.message : undefined
+            });
         }
-        return res.status(200).json({ message: "Password reset link sent to your email", success: true });
     } catch (error) {
-        return res.status(500).json({ message: "Server error", success: false });
+        console.error("Forgot password error:", error);
+        return res.status(500).json({ 
+            message: "Server error", 
+            success: false,
+            error: process.env.NODE_ENV === 'development' ? error.message : undefined
+        });
     }
 };
 

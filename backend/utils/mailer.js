@@ -5,6 +5,9 @@ const getTransporter = () => nodemailer.createTransport({
     port: 587,
     secure: false,
     family: 4,
+    connectionTimeout: 10000, // 10 seconds
+    greetingTimeout: 5000,    // 5 seconds
+    socketTimeout: 10000,     // 10 seconds
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
@@ -65,31 +68,42 @@ const emailWrapper = (content) => `
 </html>`;
 
 export const sendResetEmail = async ({ email, resetUrl }) => {
-    await getTransporter().sendMail({
-        from: `"CareerNest" <${process.env.EMAIL_USER}>`,
-        to: email,
-        subject: 'Reset your CareerNest password',
-        html: emailWrapper(`
-            <h2 style="margin:0 0 8px;font-size:24px;font-weight:800;color:#0f172a;letter-spacing:-0.5px;">Reset your password 🔐</h2>
-            <p style="margin:0 0 24px;font-size:15px;color:#64748b;line-height:1.6;">
-                We received a request to reset your password. Click the button below — this link expires in <strong style="color:#0f172a;">1 hour</strong>.
-            </p>
-            <table cellpadding="0" cellspacing="0" style="margin-bottom:28px;">
-              <tr>
-                <td style="border-radius:12px;background:linear-gradient(135deg,#27bbd2,#6366f1);">
-                  <a href="${resetUrl}" style="display:inline-block;padding:14px 32px;font-size:15px;font-weight:700;color:#ffffff;text-decoration:none;letter-spacing:-0.2px;">
-                    Reset Password →
-                  </a>
-                </td>
-              </tr>
-            </table>
-            <div style="background:#f8fafc;border-radius:12px;padding:16px 20px;border:1px solid #e2e8f0;">
-              <p style="margin:0;font-size:13px;color:#94a3b8;">
-                If you didn't request a password reset, you can safely ignore this email. Your password won't change.
-              </p>
-            </div>
-        `)
-    });
+    try {
+        console.log(`Attempting to send reset email to: ${email}`);
+        const transporter = getTransporter();
+        
+        const result = await transporter.sendMail({
+            from: `"CareerNest" <${process.env.EMAIL_USER}>`,
+            to: email,
+            subject: 'Reset your CareerNest password',
+            html: emailWrapper(`
+                <h2 style="margin:0 0 8px;font-size:24px;font-weight:800;color:#0f172a;letter-spacing:-0.5px;">Reset your password 🔐</h2>
+                <p style="margin:0 0 24px;font-size:15px;color:#64748b;line-height:1.6;">
+                    We received a request to reset your password. Click the button below — this link expires in <strong style="color:#0f172a;">1 hour</strong>.
+                </p>
+                <table cellpadding="0" cellspacing="0" style="margin-bottom:28px;">
+                  <tr>
+                    <td style="border-radius:12px;background:linear-gradient(135deg,#27bbd2,#6366f1);">
+                      <a href="${resetUrl}" style="display:inline-block;padding:14px 32px;font-size:15px;font-weight:700;color:#ffffff;text-decoration:none;letter-spacing:-0.2px;">
+                        Reset Password →
+                      </a>
+                    </td>
+                  </tr>
+                </table>
+                <div style="background:#f8fafc;border-radius:12px;padding:16px 20px;border:1px solid #e2e8f0;">
+                  <p style="margin:0;font-size:13px;color:#94a3b8;">
+                    If you didn't request a password reset, you can safely ignore this email. Your password won't change.
+                  </p>
+                </div>
+            `)
+        });
+        
+        console.log(`Reset email sent successfully. Message ID: ${result.messageId}`);
+        return result;
+    } catch (error) {
+        console.error(`Failed to send reset email to ${email}:`, error);
+        throw error;
+    }
 };
 
 export const sendSubscriptionConfirmEmail = async ({ email }) => {
