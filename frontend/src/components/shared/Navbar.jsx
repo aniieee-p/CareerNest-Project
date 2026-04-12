@@ -95,14 +95,26 @@ const Navbar = () => {
           {/* Left: Logo */}
           <div className="flex items-center">
             <Link to="/" className="flex items-center space-x-3 group">
-              <img 
-                src="/careernest-favicon-glass.svg" 
-                alt="CareerNest Logo" 
-                className="h-8 w-8 transition-transform duration-200 group-hover:scale-105"
-              />
-              <span className="text-xl font-semibold hidden sm:block">
+              <div className="p-2 rounded-xl transition-transform duration-200 group-hover:scale-105" 
+                style={{ 
+                  background: "linear-gradient(135deg,#27bbd2,#6366f1)", 
+                  boxShadow: "0 0 20px rgba(39,187,210,0.3)" 
+                }}>
+                <img 
+                  src="/careernest-favicon-glass.svg" 
+                  alt="CareerNest Logo" 
+                  className="h-4 w-4 text-white"
+                />
+              </div>
+              <span className="text-xl font-extrabold hidden sm:block tracking-[-0.02em]">
                 <span style={{ color: 'var(--cn-text-1)' }}>Career</span>
-                <span className="text-[#27bbd2]">Nest</span>
+                <span style={{ 
+                  background: "linear-gradient(90deg,#27bbd2,#6366f1)", 
+                  WebkitBackgroundClip: "text", 
+                  WebkitTextFillColor: "transparent" 
+                }}>
+                  Nest
+                </span>
               </span>
             </Link>
           </div>
