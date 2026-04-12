@@ -1,18 +1,29 @@
 import nodemailer from 'nodemailer';
 
-const getTransporter = () => nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 587,
-    secure: false,
-    family: 4,
-    connectionTimeout: 10000, // 10 seconds
-    greetingTimeout: 5000,    // 5 seconds
-    socketTimeout: 10000,     // 10 seconds
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-    }
-});
+const getTransporter = () => {
+    // Log environment variables for debugging (without exposing sensitive data)
+    console.log("EMAIL_USER configured:", !!process.env.EMAIL_USER);
+    console.log("EMAIL_PASS configured:", !!process.env.EMAIL_PASS);
+    console.log("EMAIL_USER value:", process.env.EMAIL_USER ? `${process.env.EMAIL_USER.substring(0, 3)}***` : 'undefined');
+    
+    return nodemailer.createTransport({
+        host: 'smtp.gmail.com',
+        port: 587,
+        secure: false,
+        family: 4,
+        connectionTimeout: 30000, // Match controller timeout
+        greetingTimeout: 10000,   // Increased
+        socketTimeout: 30000,     // Match controller timeout
+        auth: {
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS,
+        },
+        // Add additional Gmail-specific settings
+        tls: {
+            rejectUnauthorized: false
+        }
+    });
+};
 
 const emailWrapper = (content) => `
 <!DOCTYPE html>
@@ -70,7 +81,19 @@ const emailWrapper = (content) => `
 export const sendResetEmail = async ({ email, resetUrl }) => {
     try {
         console.log(`Attempting to send reset email to: ${email}`);
+        console.log(`Reset URL: ${resetUrl}`);
+        
+        // Validate environment variables
+        if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+            throw new Error('EMAIL_USER or EMAIL_PASS environment variables not configured');
+        }
+        
         const transporter = getTransporter();
+        
+        // Test the connection first
+        console.log('Testing SMTP connection...');
+        await transporter.verify();
+        console.log('SMTP connection verified successfully');
         
         const result = await transporter.sendMail({
             from: `"CareerNest" <${process.env.EMAIL_USER}>`,
@@ -99,9 +122,13 @@ export const sendResetEmail = async ({ email, resetUrl }) => {
         });
         
         console.log(`Reset email sent successfully. Message ID: ${result.messageId}`);
+        console.log(`Email response:`, result.response);
         return result;
     } catch (error) {
         console.error(`Failed to send reset email to ${email}:`, error);
+        console.error(`Error code: ${error.code}`);
+        console.error(`Error message: ${error.message}`);
+        console.error(`Error stack: ${error.stack}`);
         throw error;
     }
 };

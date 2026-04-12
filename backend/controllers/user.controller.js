@@ -395,6 +395,15 @@ export const forgotPassword = async (req, res) => {
         user.resetPasswordExpiry = Date.now() + 60 * 60 * 1000; // 1 hour
         await user.save();
 
+        // Validate FRONTEND_URL environment variable
+        if (!process.env.FRONTEND_URL) {
+            console.error("FRONTEND_URL environment variable not configured");
+            return res.status(500).json({ 
+                message: "Server configuration error. Please contact support.", 
+                success: false 
+            });
+        }
+
         const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${token}`;
         console.log("Generated reset URL:", resetUrl);
         console.log("FRONTEND_URL env var:", process.env.FRONTEND_URL);
@@ -416,6 +425,12 @@ export const forgotPassword = async (req, res) => {
             });
         } catch (mailError) {
             console.error("Failed to send reset email:", mailError);
+            console.error("Mail error details:", {
+                code: mailError.code,
+                command: mailError.command,
+                response: mailError.response,
+                responseCode: mailError.responseCode
+            });
             
             // Clean up the reset token since email failed
             try {
@@ -435,10 +450,28 @@ export const forgotPassword = async (req, res) => {
                 });
             }
             
+            // Check for authentication errors
+            if (mailError.code === 'EAUTH' || mailError.responseCode === 535) {
+                console.error("SMTP Authentication failed - check EMAIL_USER and EMAIL_PASS");
+                return res.status(503).json({ 
+                    message: "Email service configuration error. Please contact support.", 
+                    success: false 
+                });
+            }
+            
             // Check for specific SMTP errors
             if (mailError.code === 'ECONNECTION' || mailError.code === 'ETIMEDOUT') {
                 return res.status(503).json({ 
                     message: "Email service is temporarily unavailable. Please try again later.", 
+                    success: false 
+                });
+            }
+            
+            // Check for missing environment variables
+            if (mailError.message.includes('EMAIL_USER') || mailError.message.includes('EMAIL_PASS')) {
+                console.error("Missing email configuration environment variables");
+                return res.status(503).json({ 
+                    message: "Email service is not properly configured. Please contact support.", 
                     success: false 
                 });
             }
