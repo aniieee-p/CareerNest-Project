@@ -94,7 +94,7 @@ const Navbar = () => {
           
           {/* Left: Logo */}
           <div className="flex items-center">
-            <Link to="/" className="flex items-center space-x-3 group">
+            <Link to={user?.role === "recruiter" ? "/admin/companies" : "/"} className="flex items-center space-x-3 group">
               <div className="p-2 rounded-xl transition-transform duration-200 group-hover:scale-105" 
                 style={{ 
                   background: "linear-gradient(135deg,#27bbd2,#6366f1)", 
