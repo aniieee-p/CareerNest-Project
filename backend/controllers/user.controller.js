@@ -5,7 +5,7 @@ import crypto from "crypto";
 import { OAuth2Client } from "google-auth-library";
 import getDataUri from "../utils/datauri.js";
 import cloudinary from "../utils/cloudinary.js";
-import { sendResetEmail } from "../utils/mailer.js";
+import { sendResetEmail } from "../utils/sendgrid-mailer.js";
 
 const googleClient = new OAuth2Client();
 const GOOGLE_ONLY_MESSAGE = "This account uses Google sign-in. Please continue with Google.";
