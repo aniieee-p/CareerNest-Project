@@ -3,25 +3,23 @@ import nodemailer from 'nodemailer';
 const getTransporter = () => {
     // Validate environment variables
     if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+        console.error('EMAIL_USER or EMAIL_PASS environment variables not configured');
         throw new Error('EMAIL_USER or EMAIL_PASS environment variables not configured');
     }
     
+    console.log('Creating transporter with EMAIL_USER:', process.env.EMAIL_USER);
+    
     return nodemailer.createTransport({
-        host: 'smtp.gmail.com',
-        port: 587,
-        secure: false,
-        family: 4,
-        connectionTimeout: 30000, // Match controller timeout
-        greetingTimeout: 10000,   // Increased
-        socketTimeout: 30000,     // Match controller timeout
+        service: 'gmail', // Use Gmail service instead of manual config
         auth: {
             user: process.env.EMAIL_USER,
             pass: process.env.EMAIL_PASS,
         },
-        // Add additional Gmail-specific settings
-        tls: {
-            rejectUnauthorized: false
-        }
+        // Add additional settings for better reliability
+        pool: true,
+        maxConnections: 1,
+        rateDelta: 20000,
+        rateLimit: 5,
     });
 };
 
@@ -126,42 +124,58 @@ export const sendResetEmail = async ({ email, resetUrl }) => {
 };
 
 export const sendSubscriptionConfirmEmail = async ({ email }) => {
-    await getTransporter().sendMail({
-        from: `"CareerNest" <${process.env.EMAIL_USER}>`,
-        to: email,
-        subject: "You're subscribed to CareerNest updates!",
-        html: emailWrapper(`
-            <div style="text-align:center;margin-bottom:28px;">
-              <div style="display:inline-block;background:linear-gradient(135deg,rgba(39,187,210,0.12),rgba(99,102,241,0.12));border-radius:50%;padding:18px;margin-bottom:16px;">
-                <span style="font-size:36px;">🎉</span>
-              </div>
-              <h2 style="margin:0 0 8px;font-size:24px;font-weight:800;color:#0f172a;letter-spacing:-0.5px;">You're in!</h2>
-              <p style="margin:0;font-size:15px;color:#64748b;line-height:1.6;">
-                Thanks for subscribing to <strong style="color:#0f172a;">CareerNest</strong> updates.
-              </p>
-            </div>
+    try {
+        console.log('Attempting to send subscription email to:', email);
+        const transporter = getTransporter();
+        
+        // Test the connection first
+        await transporter.verify();
+        console.log('SMTP connection verified successfully');
+        
+        const result = await transporter.sendMail({
+            from: `"CareerNest" <${process.env.EMAIL_USER}>`,
+            to: email,
+            subject: "You're subscribed to CareerNest updates!",
+            html: emailWrapper(`
+                <div style="text-align:center;margin-bottom:28px;">
+                  <div style="display:inline-block;background:linear-gradient(135deg,rgba(39,187,210,0.12),rgba(99,102,241,0.12));border-radius:50%;padding:18px;margin-bottom:16px;">
+                    <span style="font-size:36px;">🎉</span>
+                  </div>
+                  <h2 style="margin:0 0 8px;font-size:24px;font-weight:800;color:#0f172a;letter-spacing:-0.5px;">You're in!</h2>
+                  <p style="margin:0;font-size:15px;color:#64748b;line-height:1.6;">
+                    Thanks for subscribing to <strong style="color:#0f172a;">CareerNest</strong> updates.
+                  </p>
+                </div>
 
-            <div style="background:#f8fafc;border-radius:14px;padding:20px 24px;margin-bottom:24px;border:1px solid #e2e8f0;">
-              <p style="margin:0 0 12px;font-size:13px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.8px;">What to expect</p>
-              <table cellpadding="0" cellspacing="0" width="100%">
-                ${[
-                  ["🚀", "New job opportunities tailored to your skills"],
-                  ["💡", "Career tips and industry insights"],
-                  ["🔔", "Platform updates and new features"],
-                ].map(([icon, text]) => `
-                  <tr>
-                    <td style="padding:6px 0;vertical-align:top;width:28px;font-size:15px;">${icon}</td>
-                    <td style="padding:6px 0;font-size:14px;color:#475569;line-height:1.5;">${text}</td>
-                  </tr>
-                `).join("")}
-              </table>
-            </div>
+                <div style="background:#f8fafc;border-radius:14px;padding:20px 24px;margin-bottom:24px;border:1px solid #e2e8f0;">
+                  <p style="margin:0 0 12px;font-size:13px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.8px;">What to expect</p>
+                  <table cellpadding="0" cellspacing="0" width="100%">
+                    ${[
+                      ["🚀", "New job opportunities tailored to your skills"],
+                      ["💡", "Career tips and industry insights"],
+                      ["🔔", "Platform updates and new features"],
+                    ].map(([icon, text]) => `
+                      <tr>
+                        <td style="padding:6px 0;vertical-align:top;width:28px;font-size:15px;">${icon}</td>
+                        <td style="padding:6px 0;font-size:14px;color:#475569;line-height:1.5;">${text}</td>
+                      </tr>
+                    `).join("")}
+                  </table>
+                </div>
 
-            <p style="margin:0;font-size:12px;color:#cbd5e1;text-align:center;">
-              Didn't subscribe? You can safely ignore this email.
-            </p>
-        `)
-    });
+                <p style="margin:0;font-size:12px;color:#cbd5e1;text-align:center;">
+                  Didn't subscribe? You can safely ignore this email.
+                </p>
+            `)
+        });
+        
+        console.log('Subscription email sent successfully:', result.messageId);
+        return result;
+    } catch (error) {
+        console.error('Failed to send subscription email:', error.message);
+        console.error('Error details:', error);
+        throw error;
+    }
 };
 
 export const sendContactEmail = async ({ name, email, message }) => {
