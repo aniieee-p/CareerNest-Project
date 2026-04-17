@@ -6,19 +6,52 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
+// Simple in-memory rate limiting (for production, use Redis)
+const rateLimitMap = new Map();
+const RATE_LIMIT_WINDOW = 60000; // 1 minute
+const MAX_REQUESTS_PER_IP = 5; // 5 requests per minute per IP
+
+const checkRateLimit = (ip) => {
+  const now = Date.now();
+  const userRequests = rateLimitMap.get(ip) || [];
+  
+  // Remove old requests outside the window
+  const recentRequests = userRequests.filter(time => now - time < RATE_LIMIT_WINDOW);
+  
+  if (recentRequests.length >= MAX_REQUESTS_PER_IP) {
+    return false; // Rate limited
+  }
+  
+  // Add current request
+  recentRequests.push(now);
+  rateLimitMap.set(ip, recentRequests);
+  
+  return true; // Allow request
+};
+
 const SYSTEM_PROMPT =
   "You are CareerNest AI, a helpful career assistant. Help job seekers with resume tips, interview preparation, job search strategies, salary negotiation, and career guidance. Be concise, friendly, and practical.";
 
 // ================= CHAT =================
 export const chat = async (req, res) => {
   try {
+    // Server-side rate limiting
+    const clientIP = req.ip || req.connection.remoteAddress || 'unknown';
+    if (!checkRateLimit(clientIP)) {
+      return res.status(429).json({ 
+        success: false, 
+        message: "Too many requests. Please wait a minute before trying again! 🕐",
+        retryAfter: 60
+      });
+    }
+
     const { messages } = req.body;
     if (!messages || !Array.isArray(messages) || messages.length === 0) {
       return res.status(400).json({ success: false, message: "messages array is required." });
     }
 
     const model = genAI.getGenerativeModel({
-      model: "gemini-2.0-flash-lite",
+     model: "gemini-2.0-flash",
       systemInstruction: SYSTEM_PROMPT,
     });
 
@@ -31,32 +64,63 @@ export const chat = async (req, res) => {
     const lastMessage = messages[messages.length - 1];
 
     const chatSession = model.startChat({ history });
-    const result = await chatSession.sendMessage(lastMessage.content);
+    
+    // Add timeout to prevent hanging requests
+    const timeoutPromise = new Promise((_, reject) => 
+      setTimeout(() => reject(new Error('Request timeout')), 30000)
+    );
+    
+    const result = await Promise.race([
+      chatSession.sendMessage(lastMessage.content),
+      timeoutPromise
+    ]);
+    
     const reply = result.response.text();
 
     return res.status(200).json({ success: true, reply });
   } catch (error) {
     console.error("Gemini chat error:", error.message);
+    console.error("Error details:", error);
     
     // Handle specific Gemini API errors
-    if (error.message.includes("429") || error.message.includes("quota") || error.message.includes("rate limit")) {
+    if (error.message.includes("429") || error.message.includes("quota") || error.message.includes("rate limit") || error.message.includes("RATE_LIMIT_EXCEEDED")) {
       return res.status(429).json({ 
         success: false, 
-        message: "Rate limit exceeded. Please wait a moment and try again.",
+        message: "I'm getting a lot of requests right now. Please wait a minute and try again! 🕐",
         retryAfter: 60 // seconds
       });
     }
     
-    if (error.message.includes("403") || error.message.includes("API key")) {
+    if (error.message.includes("403") || error.message.includes("API key") || error.message.includes("PERMISSION_DENIED")) {
       return res.status(403).json({ 
         success: false, 
-        message: "API key issue. Please contact support." 
+        message: "There's an issue with the AI service. Please contact support if this persists." 
       });
     }
     
-    return res.status(500).json({ 
-      success: false, 
-      message: "AI service temporarily unavailable. Please try again later." 
+    if (error.message.includes("timeout") || error.message.includes("Request timeout")) {
+      return res.status(408).json({ 
+        success: false, 
+        message: "The AI is taking too long to respond. Please try a shorter question or try again later." 
+      });
+    }
+    
+    // Provide helpful fallback response instead of generic error
+    const userMessage = req.body.messages[req.body.messages.length - 1]?.content?.toLowerCase() || "";
+    let fallbackResponse = "I'm having trouble connecting to my AI brain right now. Here are some things I can help with:\n\n• Job search tips and strategies\n• Resume writing advice\n• Interview preparation\n• Career guidance\n• Salary negotiation tips\n\nTry asking me something specific like 'How to improve my resume?' or 'Tips for job interviews'";
+    
+    // Smart fallback based on user query
+    if (userMessage.includes("job") || userMessage.includes("find")) {
+      fallbackResponse = "I'm temporarily unavailable, but here are quick job search tips:\n\n• Use specific keywords in your search\n• Check company career pages directly\n• Network on LinkedIn\n• Tailor your resume for each application\n• Follow up after applying\n\nTry asking me again in a few minutes!";
+    } else if (userMessage.includes("resume")) {
+      fallbackResponse = "I'm having connection issues, but here are key resume tips:\n\n• Keep it to 1-2 pages\n• Use action verbs (achieved, developed, led)\n• Quantify your accomplishments\n• Tailor it to each job\n• Include relevant keywords\n\nI'll be back online shortly to help more!";
+    } else if (userMessage.includes("interview")) {
+      fallbackResponse = "I'm temporarily down, but here are interview essentials:\n\n• Research the company thoroughly\n• Prepare STAR method examples\n• Ask thoughtful questions\n• Practice common questions\n• Arrive 10-15 minutes early\n\nTry me again in a few minutes for more detailed help!";
+    }
+    
+    return res.status(200).json({ 
+      success: true, 
+      reply: fallbackResponse
     });
   }
 };

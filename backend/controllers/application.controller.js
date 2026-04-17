@@ -1,7 +1,7 @@
 import { Application } from "../models/application.model.js";
 import { Job } from "../models/job.model.js";
 import { Notification } from "../models/notification.model.js";
-import { sendApplicationStatusEmail } from "../utils/mailer.js";
+import { sendApplicationStatusEmail } from "../utils/sendgrid-mailer.js";
 
 export const applyJob = async (req, res) => {
     try {

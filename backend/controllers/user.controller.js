@@ -5,7 +5,7 @@ import crypto from "crypto";
 import { OAuth2Client } from "google-auth-library";
 import getDataUri from "../utils/datauri.js";
 import cloudinary from "../utils/cloudinary.js";
-import { sendResetEmail } from "../utils/mailer.js";
+import { sendResetEmail } from "../utils/sendgrid-mailer.js";
 
 const googleClient = new OAuth2Client();
 const GOOGLE_ONLY_MESSAGE = "This account uses Google sign-in. Please continue with Google.";
@@ -372,105 +372,180 @@ export const updateProfile = async (req, res) => {
 };
 
 // ================= FORGOT PASSWORD =================
+// export const forgotPassword = async (req, res) => {
+//     try {
+//         const { email } = req.body;
+        
+//         // Validate email input
+//         if (!email) {
+//             return res.status(400).json({ message: "Email is required", success: false });
+//         }
+
+//         const normalizedEmail = email?.toLowerCase().trim();
+        
+//         const user = await User.findOne({ email: normalizedEmail });
+//         if (!user) {
+//             return res.status(404).json({ message: "No account found with that email", success: false });
+//         }
+
+//         const token = crypto.randomBytes(32).toString("hex");
+//         user.resetPasswordToken = token;
+//         user.resetPasswordExpiry = Date.now() + 60 * 60 * 1000; // 1 hour
+//         await user.save();
+
+//         // Validate FRONTEND_URL environment variable
+//         if (!process.env.FRONTEND_URL) {
+//             return res.status(500).json({ 
+//                 message: "Server configuration error. Please contact support.", 
+//                 success: false 
+//             });
+//         }
+
+//         const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${token}`;
+
+//         // Send email with extended timeout for Render cold starts
+//         const emailPromise = sendResetEmail({ email: user.email, resetUrl });
+//         const timeoutPromise = new Promise((_, reject) => 
+//             setTimeout(() => reject(new Error('Email service timeout - server may be starting up')), 30000)
+//         );
+
+//         try {
+//             await Promise.race([emailPromise, timeoutPromise]);
+            
+//             return res.status(200).json({ 
+//                 message: "Password reset link sent to your email", 
+//                 success: true 
+//             });
+//         } catch (mailError) {
+//             // Clean up the reset token since email failed
+//             try {
+//                 user.resetPasswordToken = undefined;
+//                 user.resetPasswordExpiry = undefined;
+//                 await user.save();
+//                 console.log("Reset token cleaned up after email failure");
+//             } catch (cleanupError) {
+//                 console.error("Failed to cleanup reset token:", cleanupError);
+//             }
+            
+//             // Check if it's a timeout error
+//             if (mailError.message.includes('timeout')) {
+//                 return res.status(408).json({ 
+//                     message: "Server is starting up, please wait 30 seconds and try again.", 
+//                     success: false 
+//                 });
+//             }
+            
+//             // Check for authentication errors
+//             if (mailError.code === 'EAUTH' || mailError.responseCode === 535) {
+//                 return res.status(503).json({ 
+//                     message: "Email service configuration error. Please contact support.", 
+//                     success: false 
+//                 });
+//             }
+            
+//             // Check for specific SMTP errors
+//             if (mailError.code === 'ECONNECTION' || mailError.code === 'ETIMEDOUT') {
+//                 return res.status(503).json({ 
+//                     message: "Email service is temporarily unavailable. Please try again later.", 
+//                     success: false 
+//                 });
+//             }
+            
+//             // Check for missing environment variables
+//             if (mailError.message.includes('EMAIL_USER') || mailError.message.includes('EMAIL_PASS')) {
+//                 console.error("Missing email configuration environment variables");
+//                 return res.status(503).json({ 
+//                     message: "Email service is not properly configured. Please contact support.", 
+//                     success: false 
+//                 });
+//             }
+            
+//             return res.status(500).json({ 
+//                 message: "Failed to send reset email. Please try again.", 
+//                 success: false,
+//                 error: process.env.NODE_ENV === 'development' ? mailError.message : undefined
+//             });
+//         }
+//     } catch (error) {
+//         return res.status(500).json({ 
+//             message: "Server error", 
+//             success: false,
+//             error: process.env.NODE_ENV === 'development' ? error.message : undefined
+//         });
+//     }
+// };
+
 export const forgotPassword = async (req, res) => {
     try {
         const { email } = req.body;
-        
-        // Validate email input
+
         if (!email) {
-            return res.status(400).json({ message: "Email is required", success: false });
+            return res.status(400).json({
+                message: "Email is required",
+                success: false
+            });
         }
 
-        const normalizedEmail = email?.toLowerCase().trim();
-        
+        const normalizedEmail = email.toLowerCase().trim();
         const user = await User.findOne({ email: normalizedEmail });
+
         if (!user) {
-            return res.status(404).json({ message: "No account found with that email", success: false });
+            return res.status(404).json({
+                message: "No account found with that email",
+                success: false
+            });
         }
 
+        // ✅ Generate token
         const token = crypto.randomBytes(32).toString("hex");
+
         user.resetPasswordToken = token;
         user.resetPasswordExpiry = Date.now() + 60 * 60 * 1000; // 1 hour
         await user.save();
 
-        // Validate FRONTEND_URL environment variable
         if (!process.env.FRONTEND_URL) {
-            return res.status(500).json({ 
-                message: "Server configuration error. Please contact support.", 
-                success: false 
+            return res.status(500).json({
+                message: "Frontend URL not configured",
+                success: false
             });
         }
 
         const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${token}`;
 
-        // Send email with extended timeout for Render cold starts
-        const emailPromise = sendResetEmail({ email: user.email, resetUrl });
-        const timeoutPromise = new Promise((_, reject) => 
-            setTimeout(() => reject(new Error('Email service timeout - server may be starting up')), 30000)
-        );
-
         try {
-            await Promise.race([emailPromise, timeoutPromise]);
-            
-            return res.status(200).json({ 
-                message: "Password reset link sent to your email", 
-                success: true 
+            // ✅ Send email via SendGrid
+            await sendResetEmail({
+                email: user.email,
+                resetUrl
             });
+
+            return res.status(200).json({
+                message: "Password reset link sent to your email",
+                success: true
+            });
+
         } catch (mailError) {
-            // Clean up the reset token since email failed
-            try {
-                user.resetPasswordToken = undefined;
-                user.resetPasswordExpiry = undefined;
-                await user.save();
-                console.log("Reset token cleaned up after email failure");
-            } catch (cleanupError) {
-                console.error("Failed to cleanup reset token:", cleanupError);
-            }
-            
-            // Check if it's a timeout error
-            if (mailError.message.includes('timeout')) {
-                return res.status(408).json({ 
-                    message: "Server is starting up, please wait 30 seconds and try again.", 
-                    success: false 
-                });
-            }
-            
-            // Check for authentication errors
-            if (mailError.code === 'EAUTH' || mailError.responseCode === 535) {
-                return res.status(503).json({ 
-                    message: "Email service configuration error. Please contact support.", 
-                    success: false 
-                });
-            }
-            
-            // Check for specific SMTP errors
-            if (mailError.code === 'ECONNECTION' || mailError.code === 'ETIMEDOUT') {
-                return res.status(503).json({ 
-                    message: "Email service is temporarily unavailable. Please try again later.", 
-                    success: false 
-                });
-            }
-            
-            // Check for missing environment variables
-            if (mailError.message.includes('EMAIL_USER') || mailError.message.includes('EMAIL_PASS')) {
-                console.error("Missing email configuration environment variables");
-                return res.status(503).json({ 
-                    message: "Email service is not properly configured. Please contact support.", 
-                    success: false 
-                });
-            }
-            
-            return res.status(500).json({ 
-                message: "Failed to send reset email. Please try again.", 
-                success: false,
-                error: process.env.NODE_ENV === 'development' ? mailError.message : undefined
+            console.error(
+                "SendGrid ERROR:",
+                mailError.response?.body || mailError.message
+            );
+
+            // cleanup token
+            user.resetPasswordToken = undefined;
+            user.resetPasswordExpiry = undefined;
+            await user.save();
+
+            return res.status(500).json({
+                message: "Failed to send reset email",
+                success: false
             });
         }
+
     } catch (error) {
-        return res.status(500).json({ 
-            message: "Server error", 
-            success: false,
-            error: process.env.NODE_ENV === 'development' ? error.message : undefined
+        console.error(error.message);
+        return res.status(500).json({
+            message: "Server error",
+            success: false
         });
     }
 };
