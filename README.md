@@ -337,6 +337,36 @@ docker-compose up -d
 
 ---
 
+# 🛠️ Troubleshooting
+
+## Common Setup Issues
+
+**❌ MongoDB Connection Failed**
+```bash
+Error: MongoNetworkError: failed to connect to server
+```
+**✅ Solution:** Verify MongoDB URI in `.env` and ensure IP is whitelisted in MongoDB Atlas
+
+**❌ Environment Variables Not Loading**
+```bash
+Error: Cannot read properties of undefined
+```
+**✅ Solution:** Ensure `.env` files exist in both frontend and backend directories
+
+**❌ CORS Error**
+```bash
+Error: Access to fetch blocked by CORS policy
+```
+**✅ Solution:** Verify `VITE_API_URL` in frontend `.env` matches backend server URL
+
+**❌ Cloudinary Upload Failed**
+```bash
+Error: Invalid API key or secret
+```
+**✅ Solution:** Check Cloudinary credentials in backend `.env` file
+
+---
+
 # 🌱 Future Enhancements
 
 CareerNest is designed for continuous improvement. Here are planned features and enhancements:
