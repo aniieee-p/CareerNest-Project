@@ -38,6 +38,27 @@
 
 > **Note**: The backend may take 30-60 seconds to wake up on first request due to free hosting limitations.
 
+## 📸 Screenshots
+
+<div align="center">
+
+### 🏠 Hero Section
+![Hero Section](screenshots/hero.png)
+
+### ✨ Features Overview
+![Features Overview](screenshots/features.png)
+
+### 🔍 Job Listings (Browse)
+![Browse Jobs](screenshots/browse.png)
+
+### 🔎 Find Jobs with Filters
+![Find Jobs](screenshots/find-jobs.png)
+
+### 💡 Career Advice
+![Career Advice](screenshots/career-advice.png)
+
+</div>
+
 ---
 
 # ✨ Key Features
