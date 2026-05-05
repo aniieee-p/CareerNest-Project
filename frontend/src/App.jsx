@@ -3,7 +3,6 @@ import { useEffect, Suspense, lazy } from "react";
 import { useDispatch } from "react-redux";
 import { setUser } from "./redux/authSlice";
 import useGetSavedJobs from "./hooks/useGetSavedJobs";
-import { PulseIQRouteTracker } from "./hooks/usePulseIQ";
 
 // Lazy load all components
 const Login = lazy(() => import('./components/auth/Login'));
@@ -44,7 +43,6 @@ const LoadingSpinner = () => (
 function AppShell() {
   return (
     <div className="min-h-screen flex flex-col">
-      <PulseIQRouteTracker />
       <div className="flex-1">
         <Outlet />
       </div>

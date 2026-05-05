@@ -88,8 +88,7 @@
 - ⚡ **High Performance** - Optimized APIs with rate limiting and caching
 - 📱 **Responsive Design** - Mobile-first approach with Tailwind CSS
 - 🌙 **Dark Mode Support** - Toggle between light and dark themes
-- � **Real-time Analytics** - PulseIQ integration for user behavior tracking
-- � **File Management** - Cloudinary integration for resume and image uploads
+- ☁️ **File Management** - Cloudinary integration for resume and image uploads
 - 🔎 **Advanced Search** - Full-text search with multiple filter options
 - � **Email System** - Automated notifications and communication
 - 🤖 **AI Integration** - Google Gemini for intelligent features
@@ -128,7 +127,6 @@
 - **� Nodemailer** - Email service integration
 - **☁️ Cloudinary** - Cloud-based image and video management
 - **🤖 Google Generative AI** - AI-powered features
-- **📊 PulseIQ** - Analytics and tracking
 - **🛡️ Express Rate Limit** - API rate limiting
 
 ### 🔧 Development Tools
@@ -170,8 +168,7 @@ CareerNest/
 │   │   ├── cloudinary.js              # Image/file upload service
 │   │   ├── datauri.js                 # File format conversion
 │   │   ├── db.js                      # Database connection
-│   │   ├── mailer.js                  # Email service
-│   │   └── pulseiq.js                 # Analytics integration
+│   │   └── mailer.js                  # Email service
 │   │
 │   ├── 📄 .env.example         # Environment variables template
 │   ├── 📄 package.json         # Dependencies & scripts
@@ -187,8 +184,7 @@ CareerNest/
 │   │   │
 │   │   ├── 📁 hooks/           # Custom React hooks
 │   │   │   ├── useGetAllJobs.jsx      # Job fetching hook
-│   │   │   ├── useGetNotifications.jsx # Notification management
-│   │   │   └── usePulseIQ.jsx         # Analytics tracking hook
+│   │   │   └── useGetNotifications.jsx # Notification management
 │   │   │
 │   │   ├── 📁 redux/           # State management
 │   │   │   ├── authSlice.js           # Authentication state
@@ -198,8 +194,7 @@ CareerNest/
 │   │   │
 │   │   ├── 📁 utils/           # Helper functions
 │   │   │   ├── axiosInstance.js       # API client configuration
-│   │   │   ├── constant.js            # App constants
-│   │   │   └── pulseiq.js             # Analytics utilities
+│   │   │   └── constant.js            # App constants
 │   │   │
 │   │   ├── 📄 App.jsx          # Main application component
 │   │   ├── 📄 main.jsx         # React entry point
@@ -227,7 +222,6 @@ CareerNest/
 - **File Storage**: Cloudinary for scalable media management
 - **State Management**: Redux Toolkit with persistence
 - **Styling**: Tailwind CSS with shadcn/ui components
-- **Analytics**: PulseIQ integration for user behavior tracking
 
 ---
 
@@ -286,10 +280,6 @@ GEMINI_API_KEY=your_gemini_api_key
 # Google OAuth
 GOOGLE_CLIENT_ID=your_google_client_id
 GOOGLE_CLIENT_SECRET=your_google_client_secret
-
-# Analytics (Optional)
-PULSEIQ_API_KEY=your_pulseiq_api_key
-PULSEIQ_PROJECT_ID=your_project_id
 ```
 
 **Start Backend Server:**
@@ -317,10 +307,6 @@ VITE_API_URL=http://localhost:3000/api/v1
 
 # Google OAuth
 VITE_GOOGLE_CLIENT_ID=your_google_client_id
-
-# Analytics (Optional)
-VITE_PULSEIQ_API_KEY=your_pulseiq_api_key
-VITE_PULSEIQ_PROJECT_ID=your_project_id
 ```
 
 **Start Frontend Development Server:**
@@ -354,7 +340,6 @@ docker-compose up -d
 2. **Cloudinary** - File storage and image optimization
 3. **Gmail App Password** - Email notifications
 4. **Google Cloud Console** - OAuth and Gemini AI
-5. **PulseIQ** (Optional) - Analytics tracking
 
 ---
 
