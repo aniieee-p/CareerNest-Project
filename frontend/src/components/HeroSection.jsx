@@ -102,7 +102,7 @@ const HeroSection = () => {
 
   return (
     <section className="relative overflow-hidden flex items-center"
-      style={{ minHeight: "100svh", background: "linear-gradient(135deg,#060d1f 0%,#0d1535 25%,#1a1040 55%,#0a2a4a 100%)" }}>
+      style={{ minHeight: "max(600px, 85vh)", background: "linear-gradient(135deg,#060d1f 0%,#0d1535 25%,#1a1040 55%,#0a2a4a 100%)" }}>
 
       {/* Orbs */}
       <motion.div animate={{ scale: [1, 1.14, 1], opacity: [0.16, 0.26, 0.16] }}

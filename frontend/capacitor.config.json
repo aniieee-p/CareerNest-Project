@@ -1,0 +1,8 @@
+{
+  "appId": "com.careernest.app",
+  "appName": "CareerNest",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https"
+  }
+}

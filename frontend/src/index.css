@@ -262,6 +262,19 @@
   .dark ::-webkit-scrollbar-track { background: #0f172a; }
   .dark ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
   .dark ::-webkit-scrollbar-thumb:hover { background: #475569; }
+  
+  /* Mobile drawer solid background - override all transitions */
+  .mobile-drawer-solid {
+    background-color: #ffffff !important;
+    background: #ffffff !important;
+    opacity: 1 !important;
+  }
+  
+  .dark .mobile-drawer-solid {
+    background-color: #0f172a !important;
+    background: #0f172a !important;
+    opacity: 1 !important;
+  }
 }
 
 @keyframes marquee {

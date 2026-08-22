@@ -271,39 +271,67 @@ const Navbar = () => {
       </div>
 
       {/* Mobile Slide-in Drawer */}
-      <div className={`fixed inset-0 z-40 md:hidden ${mobileMenuOpen ? 'pointer-events-auto' : 'pointer-events-none'}`}>
-        {/* Backdrop */}
-        <div 
-          className={`fixed inset-0 bg-black/20 backdrop-blur-sm transition-opacity duration-300 ${
-            mobileMenuOpen ? 'opacity-100' : 'opacity-0'
-          }`}
-          onClick={() => setMobileMenuOpen(false)}
-        />
-        
-        {/* Drawer */}
-        <div className={`fixed right-0 top-0 h-full w-80 max-w-[85vw] backdrop-blur-md shadow-xl transform transition-transform duration-300 ease-out ${
-          mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
-        }`} style={{ 
-          backgroundColor: 'var(--cn-mobile-drawer)', 
-          borderLeft: '1px solid var(--cn-border)' 
-        }}>
-          {/* Drawer Header */}
-          <div className="flex items-center justify-between p-4 border-b" style={{ borderColor: 'var(--cn-border)' }}>
-            <span className="text-lg font-semibold text-[#27bbd2]">
-              Menu
-            </span>
-            <button
-              onClick={() => setMobileMenuOpen(false)}
-              className="p-2 rounded-lg transition-colors duration-200 hover:bg-gray-100/50 dark:hover:bg-white/5"
-              style={{ color: 'var(--cn-text-2)' }}
-            >
-              <X className="h-5 w-5" />
-            </button>
-          </div>
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 md:hidden" style={{ zIndex: 9999 }}>
+          {/* Backdrop */}
+          <div 
+            className="fixed inset-0 bg-black/40 transition-opacity duration-300"
+            onClick={() => setMobileMenuOpen(false)}
+            aria-hidden="true"
+          />
+          
+          {/* Drawer */}
+          <div 
+            className="fixed right-0 top-0 h-full w-80 max-w-[85vw] shadow-2xl flex flex-col mobile-drawer-solid"
+            style={{ 
+              borderLeft: '1px solid var(--cn-border)',
+              zIndex: 10000,
+              transform: mobileMenuOpen ? 'translateX(0)' : 'translateX(100%)',
+              transition: 'transform 300ms ease-out'
+            }}
+          >
+            {/* Drawer Header - Fixed */}
+            <div className="flex-shrink-0 flex items-center justify-between p-4 border-b" style={{ borderColor: 'var(--cn-border)' }}>
+              {user ? (
+                <Link
+                  to={user.role === "recruiter" ? "/admin/profile" : "/profile"}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center space-x-3 flex-1 min-w-0 hover:opacity-80 transition-opacity"
+                >
+                  <Avatar className="h-10 w-10 flex-shrink-0">
+                    <AvatarImage
+                      src={user?.profile?.profilePhoto}
+                      alt={user?.fullname}
+                    />
+                    <AvatarFallback className="bg-[#27bbd2] text-white text-sm">
+                      {user?.fullname?.charAt(0)?.toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold truncate" style={{ color: 'var(--cn-text-1)' }}>
+                      {user?.fullname}
+                    </p>
+                    <p className="text-xs truncate" style={{ color: 'var(--cn-text-3)' }}>
+                      {user?.email}
+                    </p>
+                  </div>
+                </Link>
+              ) : (
+                <span className="text-lg font-semibold text-[#27bbd2]">
+                  Menu
+                </span>
+              )}
+              <button
+                onClick={() => setMobileMenuOpen(false)}
+                className="p-2 rounded-lg transition-colors duration-200 hover:bg-gray-100/50 dark:hover:bg-white/5 flex-shrink-0"
+                style={{ color: 'var(--cn-text-2)' }}
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
 
-          {/* Drawer Content */}
-          <div className="flex flex-col h-full">
-            <div className="flex-1 p-4 space-y-6">
+            {/* Drawer Content - Scrollable */}
+            <div className="flex-1 overflow-y-auto p-4 space-y-6">
               {/* Navigation Links */}
               <div className="space-y-1">
                 {navItems.map((item) => (
@@ -325,58 +353,36 @@ const Navbar = () => {
                 ))}
               </div>
 
-              {/* User Section (if logged in) */}
+              {/* User Actions (if logged in) */}
               {user && (
-                <div className="pt-4 border-t" style={{ borderColor: 'var(--cn-border)' }}>
-                  <div className="flex items-center p-3 rounded-lg mb-3" style={{ backgroundColor: 'var(--cn-surface-hover)' }}>
-                    <Avatar className="h-10 w-10">
-                      <AvatarImage
-                        src={user?.profile?.profilePhoto}
-                        alt={user?.fullname}
-                      />
-                      <AvatarFallback className="bg-[#27bbd2] text-white">
-                        {user?.fullname?.charAt(0)?.toUpperCase()}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="ml-3 flex-1 min-w-0">
-                      <p className="text-sm font-medium truncate" style={{ color: 'var(--cn-text-1)' }}>
-                        {user?.fullname}
-                      </p>
-                      <p className="text-xs truncate" style={{ color: 'var(--cn-text-3)' }}>
-                        {user?.email}
-                      </p>
-                    </div>
-                  </div>
+                <div className="pt-4 border-t space-y-1" style={{ borderColor: 'var(--cn-border)' }}>
+                  <Link
+                    to={user.role === "recruiter" ? "/admin/profile" : "/profile"}
+                    className="flex items-center px-3 py-3 text-base font-medium rounded-lg transition-colors duration-200 hover:bg-gray-100/50 dark:hover:bg-white/5"
+                    style={{ color: 'var(--cn-text-2)' }}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <User className="mr-3 h-5 w-5" />
+                    Profile
+                  </Link>
                   
-                  <div className="space-y-1">
+                  {user.role === "student" && (
                     <Link
-                      to={user.role === "recruiter" ? "/admin/profile" : "/profile"}
+                      to="/saved-jobs"
                       className="flex items-center px-3 py-3 text-base font-medium rounded-lg transition-colors duration-200 hover:bg-gray-100/50 dark:hover:bg-white/5"
                       style={{ color: 'var(--cn-text-2)' }}
                       onClick={() => setMobileMenuOpen(false)}
                     >
-                      <User className="mr-3 h-5 w-5" />
-                      Profile
+                      <BookmarkIcon className="mr-3 h-5 w-5" />
+                      Saved Jobs
                     </Link>
-                    
-                    {user.role === "student" && (
-                      <Link
-                        to="/saved-jobs"
-                        className="flex items-center px-3 py-3 text-base font-medium rounded-lg transition-colors duration-200 hover:bg-gray-100/50 dark:hover:bg-white/5"
-                        style={{ color: 'var(--cn-text-2)' }}
-                        onClick={() => setMobileMenuOpen(false)}
-                      >
-                        <BookmarkIcon className="mr-3 h-5 w-5" />
-                        Saved Jobs
-                      </Link>
-                    )}
-                  </div>
+                  )}
                 </div>
               )}
             </div>
 
-            {/* Drawer Footer */}
-            <div className="p-4 border-t" style={{ borderColor: 'var(--cn-border)' }}>
+            {/* Drawer Footer - Fixed */}
+            <div className="flex-shrink-0 p-4 border-t" style={{ borderColor: 'var(--cn-border)' }}>
               {!user ? (
                 <div className="space-y-3">
                   <Link to="/login" onClick={() => setMobileMenuOpen(false)}>
@@ -405,7 +411,7 @@ const Navbar = () => {
             </div>
           </div>
         </div>
-      </div>
+      )}
     </nav>
   );
 };

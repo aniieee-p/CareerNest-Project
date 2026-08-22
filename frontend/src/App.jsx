@@ -3,6 +3,9 @@ import { useEffect, Suspense, lazy } from "react";
 import { useDispatch } from "react-redux";
 import { setUser } from "./redux/authSlice";
 import useGetSavedJobs from "./hooks/useGetSavedJobs";
+import PWAUpdatePrompt from "./components/PWAUpdatePrompt";
+import OfflineIndicator from "./components/OfflineIndicator";
+import InstallPWA from "./components/InstallPWA";
 
 // Lazy load all components
 const Login = lazy(() => import('./components/auth/Login'));
@@ -165,7 +168,10 @@ function App() {
 
   return (
     <div style={{ background: "var(--cn-page)", minHeight: "100vh" }}>
-      <RouterProvider router ={appRouter} />
+      <OfflineIndicator />
+      <RouterProvider router={appRouter} />
+      <PWAUpdatePrompt />
+      <InstallPWA />
     </div>
   )
 }
