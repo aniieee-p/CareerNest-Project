@@ -1,4 +1,6 @@
-const BASE = import.meta.env.VITE_API_URL || "http://localhost:3000/api/v1";
+const BASE =
+  import.meta.env.VITE_API_URL ||
+  "https://careernest-y430.onrender.com/api/v1";
 
 export const USER_API_END_POINT        = `${BASE}/user`;
 export const JOB_API_END_POINT         = `${BASE}/job`;
