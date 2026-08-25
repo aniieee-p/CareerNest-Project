@@ -40,3 +40,5 @@ dist-ssr/
 
 # Android release signing key
 frontend/android/*.jks
+
+frontend/android/app/keystore.properties
